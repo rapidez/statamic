@@ -12,11 +12,11 @@ composer require rapidez/statamic
 
 ### Routing
 
-As Rapidez uses route fallbacks to allow routes to be added with lower priority then Magento routes, this package is used to fix this, as statamic routes on itself will overwrite your Magento routes. Make sure default Statamic routing is disabled in `config/statamic/routes.php`.
+As Rapidez uses route fallbacks to allow routes to be added with lower priority then Magento routes, this package is used to fix this, as statamic routes on itself will overwrite your Magento routes. Make sure default Statamic routing is disabled in `config/statamic/routes.php`:
 
 ```php
 
-	'enabled' => false,
+'enabled' => false,
 
 ```
 

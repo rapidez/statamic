@@ -7,6 +7,4 @@ if ($entry = Data::findByRequestUrl(request()->url())) {
     } else if (View::exists(str($entry->structure()->handle())->singular()->toString())) {
         echo view(str($entry->structure()->handle())->singular()->toString(), $entry->data());
     }
-} else {
-    abort(404);
 }

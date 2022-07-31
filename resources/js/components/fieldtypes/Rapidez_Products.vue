@@ -1,9 +1,10 @@
 <template>
     <div>
         <div class="relative">
-            <svg v-if="isOpen" @click="close()" class="h-5 w-5 absolute top-1/4 right-2 cursor-pointer" :class="{'top-[15%]': selected.length}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 19"><path fill="none" stroke="currentColor" stroke-width="2" d="M17 1.545 1.16 17.384m15.84 0L1.16 1.545"/></svg>
-            <text-input v-on:focus="onFocus" @input="search" />
-            <!-- <text-input :value="value" classes="hidden" disabled /> -->
+            <div class="relative">
+                <svg v-if="isOpen" @click="close()" class="h-5 w-5 absolute top-1/4 right-2 cursor-pointer" :class="{'top-[23%]': selected.length}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 19"><path fill="none" stroke="currentColor" stroke-width="2" d="M17 1.545 1.16 17.384m15.84 0L1.16 1.545"/></svg>
+                <text-input @input="search" />
+            </div>
             <div class="flex flex-wrap items-center gap-1 mt-1">
                 <span v-for="item in selected" class="inline-flex rounded-full items-center py-0.5 pl-2.5 pr-1 text-sm font-medium bg-primary text-white">
                     {{ item }}
@@ -50,6 +51,7 @@
         mounted() {
             this.selected = this.value.split(',')
         },
+
         watch: {
             selected(newSel, oldSel) {
                 this.value = newSel.toString()
@@ -61,11 +63,8 @@
         methods: {
             close() {
                 this.isOpen = !this.isOpen
-                this.onBlur()
             },
-            onBlur() {
-                this.value = this.selected.toString()
-            },
+
             getImageForItem(item) {
                 return process.env.MIX_MAGENTO_URL + '/media/catalog/product/' + item.custom_attributes.find((attr) => attr.attribute_code == 'image')
             },
@@ -79,6 +78,7 @@
                     this.selected.push(sku)
                 }
             },
+
             async search(value) {
                 this.loading = true
                 this.isOpen = true
@@ -102,6 +102,5 @@
                     })
             }
         }
-
 };
 </script>

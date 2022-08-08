@@ -1,0 +1,49 @@
+title: 'Product list'
+fields:
+  -
+    handle: products
+    field:
+      display: Products
+      type: rapidez_products
+      icon: rapidez_products
+      listable: hidden
+      instructions_position: above
+      visibility: visible
+  -
+    handle: title
+    field:
+      input_type: text
+      antlers: false
+      display: Title
+      type: text
+      icon: text
+      listable: hidden
+      instructions_position: above
+      visibility: visible
+  -
+    handle: tag
+    field:
+      options:
+        h1: H1
+        h2: H2
+        h3: H3
+        h4: H4
+        h5: H5
+        h6: H6
+        span: Span
+        p: P
+        strong: Strong
+      multiple: false
+      max_items: 1
+      clearable: false
+      searchable: true
+      taggable: false
+      push_tags: false
+      cast_booleans: false
+      default: h1
+      display: Tag
+      type: select
+      icon: select
+      listable: hidden
+      instructions_position: above
+      visibility: visible

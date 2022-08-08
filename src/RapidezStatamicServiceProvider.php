@@ -5,6 +5,8 @@ namespace Rapidez\Statamic;
 use Illuminate\Support\ServiceProvider;
 use TorMorten\Eventy\Facades\Eventy;
 use Rapidez\Statamic\Fieldtypes\RapidezProducts;
+use Rapidez\Core\Http\ViewComposers\ConfigComposer;
+use Illuminate\Support\Facades\View;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
@@ -12,8 +14,23 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     {
         $this->bootEventyFilters()
             ->bootStatamicFieldTypes()
-            ->bootConfig();
+            ->bootConfig()
+            ->bootViews();
     }
+
+    protected function bootViews(): self
+    {
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'rapidez');
+
+        $this->publishes([
+                __DIR__.'/../resources/views' => resource_path('views/vendor/rapidez/statamic'),
+            ], 'views');
+
+        View::composer('statamic::layout', ConfigComposer::class);
+
+        return $this;
+    }
+
 
     public function bootConfig() : self
     {
@@ -29,6 +46,10 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     {
         if (config('rapidez.statamic.field_types')) {
             RapidezProducts::register();
+
+            $this->publishes([
+                __DIR__.'/../resources/fieldsets/' => resource_path('fieldsets'),
+            ], 'fieldsets');
         }
 
         return $this;

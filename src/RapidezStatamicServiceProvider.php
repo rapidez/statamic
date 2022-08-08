@@ -4,6 +4,8 @@ namespace Rapidez\Statamic;
 
 use Illuminate\Support\ServiceProvider;
 use TorMorten\Eventy\Facades\Eventy;
+use Statamic\Facades\GlobalSet;
+use Illuminate\Support\Facades\View;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {

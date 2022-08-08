@@ -9,6 +9,23 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 {
     public function boot()
     {
+        $this->bootRoutes()
+            ->bootGlobals();
+    }
+
+    public function bootRoutes() : self
+    {
         Eventy::addFilter('routes', fn ($routes) => array_merge($routes ?: [], [__DIR__.'/../routes/fallback.php']));
+
+        return $this;
+    }
+
+    public function bootGlobals() : self
+    {
+        View::composer('*', function ($view) {
+            GlobalSet::all()->each(fn ($set) => $view->with($set->handle(), $set->inCurrentSite()));
+        });
+
+        return $this;
     }
 }

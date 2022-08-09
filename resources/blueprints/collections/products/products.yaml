@@ -1,0 +1,41 @@
+sections:
+  main:
+    display: Main
+    fields:
+      -
+        handle: title
+        field:
+          type: text
+          required: true
+          visibility: read_only
+          validate:
+            - required
+      -
+        handle: slug
+        field:
+          type: slug
+          localizable: true
+          visibility: read_only
+      -
+        handle: sku
+        field:
+          input_type: text
+          antlers: false
+          display: Sku
+          type: text
+          icon: text
+          listable: true
+          instructions_position: above
+          visibility: read_only
+      -
+        handle: store
+        field:
+          input_type: text
+          antlers: false
+          display: Store
+          type: text
+          icon: text
+          listable: hidden
+          instructions_position: above
+          visibility: read_only
+title: Products

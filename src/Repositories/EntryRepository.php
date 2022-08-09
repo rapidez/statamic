@@ -14,12 +14,12 @@ class EntryRepository extends StatamicEntryRepository
 
         if ($entry) {
             $entry->data($product)->save();
+            $entry->publish();
             return $entry;
         }
 
         $entry = Entry::make()
                 ->collection('products')
-                ->slug($product['slug'] . '-' .$product['store'])
                 ->blueprint('products')
                 ->data($product);
         $entry->save();

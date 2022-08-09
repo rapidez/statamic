@@ -16,18 +16,20 @@ class SyncProductsCommand extends Command
 
     public function handle()
     {
+        $this->call('cache:clear');
+        $this->call('config:clear');
         $productModel = config('rapidez.models.product');
         $storeModel = config('rapidez.models.store');
         $stores = $this->argument('store') ? $storeModel::where('store_id', $this->argument('store'))->get() : $storeModel::all();
 
         foreach($stores as $store) {
             config()->set('rapidez.store', $store->store_id);
+
             $products = $productModel::selectAttributes(['sku', 'name', 'url_key'])->get();
 
             foreach($products->map(fn ($product) => [
                 'sku' => $product->sku,
                 'title' => $product->name,
-                'slug' => $product->url_key,
                 'store' => config('rapidez.store')
             ]) as $product) {
                 $product = Entry::updateOrCreate($product);
@@ -37,11 +39,15 @@ class SyncProductsCommand extends Command
             $statSkus = Entry::whereCollection('products')->map(fn ($entry) => $entry->sku);
 
             foreach ($statSkus->diff($magSkus) as $sku) {
-                $entry = Entry::query()->where('sku', $sku)->first();
-                if ($entry) {
-                    $entry->unpublish();
+                $entries = Entry::query()->where('sku', $sku);
+                foreach($entries as $entry) {
+                    if ($entry) {
+                        $entry->unpublish();
+                    }
                 }
             }
+
+
         }
 
     }

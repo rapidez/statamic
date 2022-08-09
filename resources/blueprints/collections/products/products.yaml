@@ -14,8 +14,9 @@ sections:
         handle: slug
         field:
           type: slug
+          listable: hidden
           localizable: true
-          visibility: read_only
+          visibility: hidden
       -
         handle: sku
         field:

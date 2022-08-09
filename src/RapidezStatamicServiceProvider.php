@@ -9,6 +9,9 @@ use Statamic\Facades\Entry;
 use Statamic\Stache\Repositories\EntryRepository as StatamicEntryRepository;
 use Rapidez\Statamic\Repositories\EntryRepository;
 use Statamic\Statamic;
+use Illuminate\Support\Facades\View;
+use Illuminate\View\View as RenderedView;
+
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
@@ -17,7 +20,8 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         $this->bootCommands()
             ->bootRepositories()
             ->bootPublishables()
-            ->bootFilters();
+            ->bootFilters()
+            ->bootComposers();
     }
 
     public function bootFilters() : self
@@ -32,6 +36,16 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         $this->commands([
             SyncProductsCommand::class
         ]);
+
+        return $this;
+    }
+
+    public function bootComposers() : self
+    {
+        View::composer('rapidez::product.overview', function (RenderedView $view) {
+            $entry = Entry::whereCollection('products')->where('sku', config('frontend.product')['sku'])->first();
+            $view->with('content', $entry->data());
+        });
 
         return $this;
     }

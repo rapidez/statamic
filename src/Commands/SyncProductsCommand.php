@@ -12,19 +12,16 @@ class SyncProductsCommand extends Command
 
     protected $description = 'Sync the Magento products to Statamic.';
 
-    protected int $chunkSize = 500;
-
     public function handle()
     {
         $this->call('cache:clear');
-        $this->call('config:clear');
+
         $productModel = config('rapidez.models.product');
         $storeModel = config('rapidez.models.store');
         $stores = $this->argument('store') ? $storeModel::where('store_id', $this->argument('store'))->get() : $storeModel::all();
 
         foreach($stores as $store) {
             config()->set('rapidez.store', $store->store_id);
-
             $products = $productModel::selectAttributes(['sku', 'name', 'url_key'])->get();
 
             foreach($products->map(fn ($product) => [
@@ -46,7 +43,6 @@ class SyncProductsCommand extends Command
                     }
                 }
             }
-
 
         }
 

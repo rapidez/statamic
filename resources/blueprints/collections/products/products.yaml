@@ -1,6 +1,6 @@
 sections:
-  main:
-    display: Main
+  magento_information:
+    display: 'Magento Information'
     fields:
       -
         handle: title
@@ -10,13 +10,6 @@ sections:
           visibility: read_only
           validate:
             - required
-      -
-        handle: slug
-        field:
-          type: slug
-          listable: hidden
-          localizable: true
-          visibility: hidden
       -
         handle: sku
         field:
@@ -39,4 +32,20 @@ sections:
           listable: hidden
           instructions_position: above
           visibility: read_only
+      -
+        handle: id
+        field:
+          input_type: text
+          antlers: false
+          display: id
+          type: text
+          icon: text
+          listable: hidden
+          instructions_position: above
+          visibility: read_only
+          validate:
+            - 'unique_entry_value:{collection},{id},{site}'
+  content:
+    display: Content
+    fields: {  }
 title: Products

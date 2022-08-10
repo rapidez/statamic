@@ -77,6 +77,14 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             __DIR__.'/../resources/content/collections/products.yaml' => base_path('content/collections/products.yaml'),
         ], 'rapidez-collections');
 
+        $this->publishes([
+            __DIR__.'/../resources/blueprints/collections/stores/stores.yaml' => resource_path('blueprints/collections/stores/stores.yaml'),
+        ], 'rapidez-collections');
+
+        $this->publishes([
+            __DIR__.'/../resources/content/collections/stores.yaml' => base_path('content/collections/stores.yaml'),
+        ], 'rapidez-collections');
+
         return $this;
     }
     public function bootGlobals() : self

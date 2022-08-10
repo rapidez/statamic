@@ -15,9 +15,6 @@ class SyncStoresCommand extends Command
     public function handle()
     {
         $this->call('cache:clear');
-
-        $productModel = config('rapidez.models.product');
-        $storeModel = config('rapidez.models.store');
         $stores = DB::table('store')->whereNot('store_id', 0)->get();
 
         foreach($stores->map(fn ($store) => [
@@ -28,7 +25,6 @@ class SyncStoresCommand extends Command
             ]) as $store) {
             Entry::updateOrCreate($store, 'stores', 'store_id');
         }
-
     }
 
 

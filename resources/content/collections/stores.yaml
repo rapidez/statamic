@@ -1,1 +1,7 @@
 title: Stores
+revisions: false
+slugs: false
+sort_dir: asc
+date_behavior:
+  past: public
+  future: private

@@ -8,6 +8,7 @@ sections:
           type: text
           required: true
           visibility: read_only
+          listable: true
           validate:
             - required
       -
@@ -19,17 +20,6 @@ sections:
           type: text
           icon: text
           listable: true
-          instructions_position: above
-          visibility: read_only
-      -
-        handle: store
-        field:
-          input_type: text
-          antlers: false
-          display: Store
-          type: text
-          icon: text
-          listable: hidden
           instructions_position: above
           visibility: read_only
       -
@@ -45,6 +35,20 @@ sections:
           visibility: read_only
           validate:
             - 'unique_entry_value:{collection},{id},{site}'
+      -
+        handle: store
+        field:
+          max_items: 1
+          mode: select
+          create: false
+          collections:
+            - stores
+          display: Store
+          type: entries
+          icon: entries
+          listable: hidden
+          instructions_position: above
+          visibility: visible
   content:
     display: Content
     fields: {  }

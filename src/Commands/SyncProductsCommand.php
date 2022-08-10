@@ -31,7 +31,7 @@ class SyncProductsCommand extends Command
             foreach($products->map(fn ($product) => [
                 'sku' => $product->sku,
                 'title' => $product->name,
-                'store' => (new EntryCollection())->add($store->id())
+                'store' => $store->id()
             ]) as $product) {
                 $product = Entry::updateOrCreate($product, 'products', 'sku');
             }

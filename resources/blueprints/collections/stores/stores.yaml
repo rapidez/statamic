@@ -1,0 +1,64 @@
+sections:
+  statamic_information:
+    display: 'Statamic Information'
+    fields:
+      -
+        handle: title
+        field:
+          type: text
+          required: true
+          generate: false
+          instructions_position: above
+          listable: true
+          visibility: visible
+          input_type: text
+          antlers: false
+      -
+        handle: url
+        field:
+          input_type: text
+          antlers: false
+          display: Url
+          type: text
+          icon: text
+          listable: hidden
+          instructions_position: above
+          visibility: visible
+          instructions: 'Can be a absolute and a relative path.'
+      -
+        handle: locale
+        field:
+          input_type: text
+          antlers: false
+          display: Locale
+          type: text
+          icon: text
+          listable: true
+          instructions_position: above
+          visibility: read_only
+  magento_information:
+    display: 'Magento Information'
+    fields:
+      -
+        handle: store_id
+        field:
+          input_type: text
+          antlers: false
+          display: 'store id'
+          type: text
+          icon: text
+          listable: hidden
+          instructions_position: above
+          visibility: read_only
+      -
+        handle: store_code
+        field:
+          input_type: text
+          antlers: false
+          display: 'store code'
+          type: text
+          icon: text
+          listable: true
+          instructions_position: above
+          visibility: read_only
+title: Stores

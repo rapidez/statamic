@@ -25,7 +25,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
     public function bootGlobals() : self
     {
-        View::composer('*', function ($view) {
+        View::composer('rapidez::layouts.app', function ($view) {
             foreach (GlobalSet::all() as $set) {
                 foreach ($set->localizations() as $locale => $variables) {
                     if ($locale == Site::current()->handle()) {

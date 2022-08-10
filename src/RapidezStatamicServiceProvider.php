@@ -29,12 +29,12 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             foreach (GlobalSet::all() as $set) {
                 foreach ($set->localizations() as $locale => $variables) {
                     if ($locale == Site::current()->handle()) {
-                        $data[$set->handle()] = $variables->data()->toArray();
+                        $data[$set->handle()] = $variables;
                     }
                 }
             }
 
-            $view->with('globals', json_decode(json_encode($data)));
+            $view->with('globals', (object)$data);
         });
 
         return $this;

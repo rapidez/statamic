@@ -6,13 +6,14 @@ use Illuminate\Support\ServiceProvider;
 use TorMorten\Eventy\Facades\Eventy;
 use Statamic\Facades\GlobalSet;
 use Illuminate\Support\Facades\View;
+use Statamic\Facades\Site;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
     public function boot()
     {
         $this->bootRoutes()
-            ->bootGlobals();
+        ->bootGlobals();
     }
 
     public function bootRoutes() : self
@@ -25,7 +26,15 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootGlobals() : self
     {
         View::composer('*', function ($view) {
-            GlobalSet::all()->each(fn ($set) => $view->with($set->handle(), $set->inCurrentSite()));
+            foreach (GlobalSet::all() as $set) {
+                foreach ($set->localizations() as $locale => $variables) {
+                    if ($locale == Site::current()->handle()) {
+                        $data[$set->handle()] = $variables->data()->toArray();
+                    }
+                }
+            }
+
+            $view->with('globals', json_decode(json_encode($data)));
         });
 
         return $this;

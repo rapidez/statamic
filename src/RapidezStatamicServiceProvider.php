@@ -22,11 +22,10 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->bootCommands()
-        ->bootRepositories()
-        ->bootPublishables()
-        ->bootFilters()
-        ->bootComposers()
-        ->bootGlobals();
+            ->bootRepositories()
+            ->bootPublishables()
+            ->bootFilters()
+            ->bootComposers();
     }
 
     public function bootFilters() : self
@@ -54,6 +53,18 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             $view->with('content', $entry);
         });
 
+        View::composer('rapidez::layouts.app', function ($view) {
+            foreach (GlobalSet::all() as $set) {
+                foreach ($set->localizations() as $locale => $variables) {
+                    if ($locale == Site::current()->handle()) {
+                        $data[$set->handle()] = $variables;
+                    }
+                }
+            }
+
+            $view->with('globals', (object)$data);
+        });
+
         return $this;
     }
 
@@ -66,6 +77,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
         return $this;
     }
+
 
     public function bootPublishables() : self
     {
@@ -86,22 +98,5 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         ], 'rapidez-collections');
 
         return $this;
-    }
-    public function bootGlobals() : self
-    {
-        View::composer('rapidez::layouts.app', function ($view) {
-            foreach (GlobalSet::all() as $set) {
-                foreach ($set->localizations() as $locale => $variables) {
-                    if ($locale == Site::current()->handle()) {
-                        $data[$set->handle()] = $variables;
-                    }
-                }
-            }
-
-            $view->with('globals', (object)$data);
-        });
-
-        return $this;
-
     }
 }

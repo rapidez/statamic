@@ -26,7 +26,7 @@ class CreateStores
             ->orderByDesc('scope_id')
             ->get()
             ->firstOrFail();
-        
+
         return $store->value;
     }
 }

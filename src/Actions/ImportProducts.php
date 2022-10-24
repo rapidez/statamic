@@ -30,7 +30,7 @@ class ImportProducts
             $storeModel = Entry::whereCollection('stores')->where('store_id', $storeModel->store_id)->first();
 
             $products = $this->createProducts->create($products, $storeModel->id());
-            $this->deleteProducts->delete($products);
+            $this->deleteProducts->delete($products, $storeModel->id);
         }
 
         ProductsImportedEvent::dispatch();

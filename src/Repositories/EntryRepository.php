@@ -13,6 +13,9 @@ class EntryRepository extends StatamicEntryRepository
         $entry = Entry::whereCollection($collection)->where($identifier, $data[$identifier])->first();
 
         if ($entry) {
+            $entry->data($data)
+                ->save();
+            
             return $entry;
         }
 

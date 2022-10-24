@@ -7,16 +7,20 @@ use Illuminate\Support\Collection;
 
 class DeleteProducts
 {
-    public function delete(Collection $products): void
+    public function delete(Collection $products, ?string $storeId): void
     {
         if (!$products) {
             return;
         }
 
         $magentoSkus = $products->map(fn ($product) => $product['sku']);
-        $statamicSkus = Entry::whereCollection('products')->map(fn ($entry) => $entry->sku);
 
-        $entries = Entry::query()->whereIn('sku', $statamicSkus->diff($magentoSkus)->toArray())->get();
-        $entries->each(fn ($entry) => $entry->delete());
+        $deletedProducts = Entry::whereCollection('products')->filter(function ($deletedProduct) use ($magentoSkus, $storeId) {
+            return !$magentoSkus->contains($deletedProduct->sku) && $deletedProduct->values()->get('store') == $storeId;
+        });
+
+        $deletedProducts->each(function ($deletedProduct) {
+            $deletedProduct->delete();
+        });
     }
 }

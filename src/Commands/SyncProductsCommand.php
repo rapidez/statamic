@@ -7,7 +7,7 @@ use Rapidez\Statamic\Jobs\ImportProductsJob;
 
 class SyncProductsCommand extends Command
 {
-    protected $signature = 'rapidez:statamic:sync {store?}';
+    protected $signature = 'rapidez:statamic:sync:products {store?}';
 
     protected $description = 'Sync the Magento products to Statamic.';
 

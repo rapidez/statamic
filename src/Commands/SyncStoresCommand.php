@@ -3,6 +3,7 @@
 namespace Rapidez\Statamic\Commands;
 
 use Illuminate\Console\Command;
+use Rapidez\Statamic\Jobs\ImportStoresJob;
 use Statamic\Facades\Entry;
 use Illuminate\Support\Facades\DB;
 
@@ -14,26 +15,8 @@ class SyncStoresCommand extends Command
 
     public function handle()
     {
-        $this->call('cache:clear');
-        $stores = DB::table('store')->whereNot('store_id', 0)->get();
+        ImportStoresJob::dispatch();
 
-        foreach($stores->map(fn ($store) => [
-                'store_code' => $store->code,
-                'store_id' => $store->store_id,
-                'title' => $store->name,
-                'locale' => $this->determineLocale($store),
-            ]) as $store) {
-            Entry::updateOrCreate($store, 'stores', 'store_id');
-        }
-    }
-
-
-    public function determineLocale(object $store)
-    {
-        return match (true) {
-            str_contains($store->code, 'uk') => 'en_UK',
-            str_contains($store->code, 'nl') => 'nl_NL',
-            default => 'en_UK'
-        };
+        return static::SUCCESS;
     }
 }

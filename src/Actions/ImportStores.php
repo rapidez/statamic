@@ -19,8 +19,8 @@ class ImportStores
     ): void
     {
         $stores = DB::table('store')
-            ->join()
-            ->whereNot('store_id', 0)->get();
+            ->whereNot('store_id', 0)
+            ->get();
         $this->createStores->create($stores);
         StoresImportedEvent::dispatch();
     }

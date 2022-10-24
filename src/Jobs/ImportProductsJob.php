@@ -16,7 +16,7 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
     use Queueable;
 
     public function __construct(
-        public string $store
+        public ?string $store = null
     ){
     }
 

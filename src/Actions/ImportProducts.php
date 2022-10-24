@@ -7,10 +7,6 @@ use Rapidez\Statamic\Events\ProductsImportedEvent;
 
 class ImportProducts
 {
-    public function __construct(
-    ) {
-    }
-
     public function import(
         ?string $store = null
     ): void

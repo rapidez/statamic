@@ -10,7 +10,6 @@ class EntryRepository extends StatamicEntryRepository
 {
     public function updateOrCreate(array $data, string $collection, string $identifier) : StatamicEntry
     {
-        // dd($data,$collection, $identifier);
         $entry = Entry::whereCollection($collection)->where($identifier, $data[$identifier])->first();
 
         if ($entry) {
@@ -21,6 +20,7 @@ class EntryRepository extends StatamicEntryRepository
                 ->collection($collection)
                 ->blueprint($collection)
                 ->data($data);
+
         $entry->save();
 
         return $entry;

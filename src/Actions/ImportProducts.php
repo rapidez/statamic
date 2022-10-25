@@ -11,7 +11,8 @@ class ImportProducts
 {
     public function __construct(
         public CreateProducts $createProducts,
-        public DeleteProducts $deleteProducts
+        public DeleteProducts $deleteProducts,
+        protected int $chunkSize = 200
     ) {
     }
 
@@ -25,12 +26,17 @@ class ImportProducts
 
         foreach($storeModels as $storeModel) {
             config()->set('rapidez.store', $storeModel->store_id);
-
-            $products = $productModel::selectAttributes(['sku', 'name', 'url_key'])->get();
+            
+            $productSkus = collect();
+            $productQuery = $productModel::selectAttributes(['sku', 'name', 'url_key']);
             $storeModel = Entry::whereCollection('stores')->where('store_id', $storeModel->store_id)->first();
 
-            $products = $this->createProducts->create($products, $storeModel->id());
-            $this->deleteProducts->deleteOldProducts($products, $storeModel->id);
+            $productQuery->chunk($this->chunkSize, function ($products) use ($storeModel, &$productSkus) {
+                $products = $this->createProducts->create($products, $storeModel->id());
+                $productSkus = $productSkus->merge($products->map(fn ($product) => $product['sku']));
+            });
+
+            $this->deleteProducts->deleteOldProducts($productSkus, $storeModel->id);
         }
 
         ProductsImportedEvent::dispatch();

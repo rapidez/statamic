@@ -22,10 +22,18 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->bootCommands()
+            ->bootConfig()
             ->bootRepositories()
             ->bootPublishables()
             ->bootFilters()
             ->bootComposers();
+    }
+
+    public function bootConfig() : self
+    {
+        $this->mergeConfigFrom(__DIR__.'/../config/statamic.php', 'statamic');
+
+        return $this;
     }
 
     public function bootFilters() : self
@@ -48,10 +56,12 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
     public function bootComposers() : self
     {
-        View::composer('rapidez::product.overview', function (RenderedView $view) {
-            $entry = Entry::whereCollection('products')->where('sku', config('frontend.product')['sku'])->first();
-            $view->with('content', $entry);
-        });
+        if (config('statamic.render_product_views')) {
+            View::composer('rapidez::product.overview', function (RenderedView $view) {
+                $entry = Entry::whereCollection('products')->where('sku', config('frontend.product')['sku'])->first();
+                $view->with('content', $entry);
+            });
+        }
 
         View::composer('rapidez::layouts.app', function ($view) {
             foreach (GlobalSet::all() as $set) {
@@ -87,6 +97,10 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             __DIR__.'/../resources/blueprints/collections/stores/stores.yaml' => resource_path('blueprints/collections/stores/stores.yaml'),
             __DIR__.'/../resources/content/collections/stores.yaml' => base_path('content/collections/stores.yaml'),
         ], 'rapidez-collections');
+
+        $this->publishes([
+            __DIR__.'/../config/statamic.php' => config_path('statamic.php'),
+        ], 'config');
 
         return $this;
     }

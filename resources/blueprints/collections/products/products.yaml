@@ -1,0 +1,55 @@
+sections:
+  magento_information:
+    display: 'Magento Information'
+    fields:
+      -
+        handle: title
+        field:
+          type: text
+          required: true
+          visibility: read_only
+          listable: true
+          validate:
+            - required
+      -
+        handle: sku
+        field:
+          input_type: text
+          antlers: false
+          display: Sku
+          type: text
+          icon: text
+          listable: true
+          instructions_position: above
+          visibility: read_only
+      -
+        handle: id
+        field:
+          input_type: text
+          antlers: false
+          display: id
+          type: text
+          icon: text
+          listable: hidden
+          instructions_position: above
+          visibility: read_only
+          validate:
+            - 'unique_entry_value:{collection},{id},{site}'
+      -
+        handle: store
+        field:
+          max_items: 1
+          mode: select
+          create: false
+          collections:
+            - stores
+          display: Store
+          type: entries
+          icon: entries
+          listable: hidden
+          instructions_position: above
+          visibility: visible
+  content:
+    display: Content
+    fields: {  }
+title: Products

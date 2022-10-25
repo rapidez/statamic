@@ -20,6 +20,26 @@ As Rapidez uses route fallbacks to allow routes to be added with lower priority 
 
 ```
 
+### Commands
+
+There are 2 commands that trigger 2 seperate jobs. One is for importing the stores from Magento and the other is for importing the products from Magento.
+
+#### Store import
+```
+php artisan rapidez:statamic:sync:stores
+```
+
+#### Product import
+```
+php artisan rapidez:statamic:sync:products
+```
+
+### Publish
+
+```
+php artisan vendor:publish --provider="Rapidez\Statamic\RapidezStatamicServiceProvider"
+```
+
 ## License
 
 GNU General Public License v3. Please see [License File](LICENSE) for more information.

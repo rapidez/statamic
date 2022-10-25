@@ -56,7 +56,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
     public function bootComposers() : self
     {
-        if (config('statamic.render_product_views')) {
+        if (config('statamic.get_product_collection_on_product_page')) {
             View::composer('rapidez::product.overview', function (RenderedView $view) {
                 $entry = Entry::whereCollection('products')->where('sku', config('frontend.product')['sku'])->first();
                 $view->with('content', $entry);

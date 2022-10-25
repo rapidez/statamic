@@ -26,11 +26,11 @@ class ImportProducts
         foreach($storeModels as $storeModel) {
             config()->set('rapidez.store', $storeModel->store_id);
 
-            $products = $productModel::selectAttributes(['sku', 'name', 'url_key'])->where('catalog_product_flat_'.config('rapidez.store').'.visibility', 4)->get();
+            $products = $productModel::selectAttributes(['sku', 'name', 'url_key'])->get();
             $storeModel = Entry::whereCollection('stores')->where('store_id', $storeModel->store_id)->first();
 
             $products = $this->createProducts->create($products, $storeModel->id());
-            $this->deleteProducts->delete($products, $storeModel->id);
+            $this->deleteProducts->deleteOldProducts($products, $storeModel->id);
         }
 
         ProductsImportedEvent::dispatch();

@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 
 class DeleteProducts
 {
-    public function delete(Collection $products, ?string $storeId): void
+    public function deleteOldProducts(Collection $products, ?string $storeId): void
     {
         if (!$products) {
             return;

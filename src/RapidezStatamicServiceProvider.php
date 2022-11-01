@@ -63,7 +63,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             });
         }
 
-        View::composer('rapidez::layouts.app', function ($view) {
+        View::composer('*', function ($view) {
             foreach (GlobalSet::all() as $set) {
                 foreach ($set->localizations() as $locale => $variables) {
                     if ($locale == Site::current()->handle()) {

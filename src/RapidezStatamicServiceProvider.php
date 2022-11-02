@@ -69,7 +69,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                 }
             }
 
-            $view->with('globals', (object)$data);
+            $view->with('globals', (object)($data ?? []));
         });
 
         return $this;

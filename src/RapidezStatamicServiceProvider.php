@@ -61,7 +61,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
     private function getGlobals() : array
     {
-        return Cache::rememberForever('statamic-globals', function() {
+        return Cache::rememberForever('statamic-globals-'.Site::current()->handle(), function() {
             foreach (GlobalSet::all() as $set) {
                 foreach ($set->localizations() as $locale => $variables) {
                     if ($locale == Site::current()->handle()) {
@@ -92,7 +92,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootListeners() : self
     {
         Event::listen([GlobalSetSaved::class, GlobalSetDeleted::class], function() {
-            Cache::forget("statamic-globals");
+            Cache::forget('statamic-globals-'.Site::current()->handle());
         });
 
         return $this;

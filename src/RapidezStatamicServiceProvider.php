@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\View;
 use Illuminate\View\View as RenderedView;
 use Statamic\Facades\GlobalSet;
 use Statamic\Facades\Site;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Event;
+use Statamic\Events\GlobalSetSaved;
+use Statamic\Events\GlobalSetDeleted;
 use Validator;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
@@ -26,7 +30,8 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootRepositories()
             ->bootPublishables()
             ->bootFilters()
-            ->bootComposers();
+            ->bootComposers()
+            ->bootListeners();
     }
 
     public function bootConfig() : self
@@ -54,6 +59,20 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         return $this;
     }
 
+    private function getGlobals() : array
+    {
+        return Cache::rememberForever('statamic-globals', function() {
+            foreach (GlobalSet::all() as $set) {
+                foreach ($set->localizations() as $locale => $variables) {
+                    if ($locale == Site::current()->handle()) {
+                        $data[$set->handle()] = $variables;
+                    }
+                }
+            }
+            return $data;
+        });
+    }
+
     public function bootComposers() : self
     {
         if (config('statamic.get_product_collection_on_product_page')) {
@@ -63,16 +82,17 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             });
         }
 
-        View::composer('*', function ($view) {
-            foreach (GlobalSet::all() as $set) {
-                foreach ($set->localizations() as $locale => $variables) {
-                    if ($locale == Site::current()->handle()) {
-                        $data[$set->handle()] = $variables;
-                    }
-                }
-            }
+        View::composer('rapidez::*', function ($view) {
+            $view->with('globals', (object)$this->getGlobals());
+        });
 
-            $view->with('globals', (object)$data);
+        return $this;
+    }
+
+    public function bootListeners() : self
+    {
+        Event::listen([GlobalSetSaved::class, GlobalSetDeleted::class], function() {
+            Cache::forget("statamic-globals");
         });
 
         return $this;

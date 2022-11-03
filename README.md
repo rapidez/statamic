@@ -40,6 +40,23 @@ php artisan rapidez:statamic:sync:products
 php artisan vendor:publish --provider="Rapidez\Statamic\RapidezStatamicServiceProvider"
 ```
 
+### Multisite
+
+When configuring your multisite for Statamic in `config/statamic/sites.php`, it is important to add the Magento store ID in the attributes section.
+
+```php
+'sites' => [
+    'default' => [
+        'name' => config('app.name'),
+        'locale' => 'nl_NL',
+        'url' => '/',
+        'attributes' => [
+            'magento_store_id' => 1,
+        ]
+    ],
+]
+```
+
 ## License
 
 GNU General Public License v3. Please see [License File](LICENSE) for more information.

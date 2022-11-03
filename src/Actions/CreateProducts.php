@@ -7,16 +7,17 @@ use Illuminate\Database\Eloquent\Collection;
 
 class CreateProducts
 {
-    public function create(Collection $products, string $storeId): \Illuminate\Support\Collection
+    public function create(Collection $products, string $storeCode): \Illuminate\Support\Collection
     {
-        if (!$products) {
+        if ($products->isEmpty()) {
             return new Collection();
         }
 
         return $products->map(fn ($product) => [
             'sku' => $product->sku,
-            'title' => $product->name,
-            'store' => $storeId
-        ])->each(fn ($product) => Entry::updateOrCreate($product, 'products', 'sku'));
+            'title' => $product->name
+        ])->each(function ($product) use ($storeCode) {
+            Entry::updateOrCreate($product, 'products', 'sku', $storeCode);
+        });
     }
 }

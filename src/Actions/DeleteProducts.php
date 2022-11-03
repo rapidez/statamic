@@ -7,14 +7,14 @@ use Illuminate\Support\Collection;
 
 class DeleteProducts
 {
-    public function deleteOldProducts(Collection $productSkus, ?string $storeId): void
+    public function deleteOldProducts(Collection $productSkus, ?string $storeCode): void
     {
         if ($productSkus->isEmpty()) {
             return;
         }
 
-        $deletedProducts = Entry::whereCollection('products')->filter(function ($deletedProduct) use ($productSkus, $storeId) {
-            return !$productSkus->contains($deletedProduct->sku) && $deletedProduct->values()->get('store') == $storeId;
+        $deletedProducts = Entry::whereCollection('products')->where('locale', $storeCode)->filter(function ($deletedProduct) use ($productSkus, $storeCode) {
+            return !$productSkus->contains($deletedProduct->sku);
         });
 
         $deletedProducts->each(function ($deletedProduct) {

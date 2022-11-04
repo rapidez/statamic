@@ -1,9 +1,9 @@
 <?php
 
-namespace Rapidez\Statamic\Actions;
+namespace Rapidez\Statamic\Actions\Products;
 
-use Statamic\Facades\Entry;
 use Illuminate\Support\Collection;
+use Statamic\Facades\Entry;
 
 class DeleteProducts
 {

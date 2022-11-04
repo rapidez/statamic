@@ -1,9 +1,7 @@
 <?php
 
-namespace Rapidez\Statamic\Actions;
+namespace Rapidez\Statamic\Actions\Products;
 
-use Rapidez\Statamic\Actions\CreateProducts;
-use Rapidez\Statamic\Actions\DeleteProducts;
 use Rapidez\Statamic\Events\ProductsImportedEvent;
 use Statamic\Facades\Site;
 
@@ -33,7 +31,6 @@ class ImportProducts
 
             $productSkus = collect();
             $productQuery = $productModel::selectAttributes(['sku', 'name', 'url_key']);
-
 
             $productQuery->chunk($this->chunkSize, function ($products) use ($site, &$productSkus) {
                 $products = $this->createProducts->create($products, $site->handle());

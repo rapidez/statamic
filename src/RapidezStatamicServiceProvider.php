@@ -5,6 +5,7 @@ namespace Rapidez\Statamic;
 use Illuminate\Support\ServiceProvider;
 use TorMorten\Eventy\Facades\Eventy;
 use Rapidez\Statamic\Commands\SyncProductsCommand;
+use Rapidez\Statamic\Commands\SyncCategoriesCommand;
 use Statamic\Facades\Entry;
 use Statamic\Stache\Repositories\EntryRepository as StatamicEntryRepository;
 use Rapidez\Statamic\Repositories\EntryRepository;
@@ -45,7 +46,8 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootCommands() : self
     {
         $this->commands([
-            SyncProductsCommand::class
+            SyncProductsCommand::class,
+            SyncCategoriesCommand::class
         ]);
 
         return $this;

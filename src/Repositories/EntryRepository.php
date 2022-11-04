@@ -26,6 +26,10 @@ class EntryRepository extends StatamicEntryRepository
                 ->locale($storeCode)
                 ->data($data);
 
+        if ($identifier == 'slug' && isset($data[$identifier])) {
+            $entry->slug($data[$identifier]);
+        }
+
         $entry->save();
 
         return $entry;

@@ -1,9 +1,9 @@
 <?php
 
-namespace Rapidez\Statamic\Actions;
+namespace Rapidez\Statamic\Actions\Products;
 
-use Statamic\Facades\Entry;
 use Illuminate\Database\Eloquent\Collection;
+use Statamic\Facades\Entry;
 
 class CreateProducts
 {

@@ -4,7 +4,7 @@ namespace Rapidez\Statamic\Events;
 
 use Illuminate\Foundation\Events\Dispatchable;
 
-class StoresImportedEvent
+class CategoriesImportedEvent
 {
     use Dispatchable;
 }

@@ -7,21 +7,16 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Rapidez\Statamic\Actions\Products\ImportProducts;
+use Rapidez\Statamic\Actions\Categories\ImportCategories;
 
-class ImportProductsJob implements ShouldQueue, ShouldBeUnique
+class ImportCategoriesJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
 
-    public function __construct(
-        public ?string $store = null
-    ){
-    }
-
-    public function handle(ImportProducts $importProducts): void
+    public function handle(ImportCategories $importCategories): void
     {
-        $importProducts->import($this->store);
+        $importCategories->import();
     }
 }

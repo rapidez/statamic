@@ -1,41 +1,52 @@
 sections:
-  magento_information:
-    display: 'Magento Information'
+  main:
+    display: Main
     fields:
       -
         handle: title
         field:
           type: text
           required: true
-          visibility: read_only
-          listable: true
           validate:
             - required
+          localizable: true
+  sidebar:
+    display: Sidebar
+    fields:
       -
-        handle: sku
+        handle: slug
         field:
           input_type: text
           antlers: false
-          display: Sku
-          type: text
-          icon: text
-          listable: true
-          instructions_position: above
-          visibility: read_only
-      -
-        handle: id
-        field:
-          input_type: text
-          antlers: false
-          display: id
+          display: Slug
           type: text
           icon: text
           listable: hidden
           instructions_position: above
           visibility: read_only
+          localizable: true
           validate:
-            - 'unique_entry_value:{collection},{id},{site}'
-  content:
-    display: Content
-    fields: {  }
-title: Products
+            - required
+      -
+        handle: magento_entity_id
+        field:
+          input_type: text
+          antlers: false
+          display: 'Magento entity ID'
+          type: text
+          icon: text
+          listable: hidden
+          instructions_position: above
+          visibility: read_only
+      -
+        handle: magento_parent_id
+        field:
+          input_type: text
+          antlers: false
+          display: 'Magento parent ID'
+          type: text
+          icon: text
+          listable: hidden
+          instructions_position: above
+          visibility: read_only
+title: Categories

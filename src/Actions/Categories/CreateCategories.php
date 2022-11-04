@@ -20,8 +20,6 @@ class CreateCategories
             'title' => $category->name,
             'slug' => Str::replace('/', '-', $category->url_path),
             'path' => $category->url_path ?? '',
-        ])->each(function ($category) use ($storeCode) {
-            Entry::updateOrCreate($category, 'categories', 'slug', $storeCode);
-        });
+        ])->each(fn ($category) => Entry::updateOrCreate($category, 'categories', 'slug', $storeCode));
     }
 }

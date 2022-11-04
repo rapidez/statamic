@@ -13,12 +13,7 @@ class DeleteProducts
             return;
         }
 
-        $deletedProducts = Entry::whereCollection('products')->where('locale', $storeCode)->filter(function ($deletedProduct) use ($productSkus, $storeCode) {
-            return !$productSkus->contains($deletedProduct->sku);
-        });
-
-        $deletedProducts->each(function ($deletedProduct) {
-            $deletedProduct->delete();
-        });
+        $deletedProducts = Entry::whereCollection('products')->where('locale', $storeCode)->filter(fn ($deletedProduct) => !$productSkus->contains($deletedProduct->sku));
+        $deletedProducts->each(fn ($deletedProduct) => $deletedProduct->delete());
     }
 }

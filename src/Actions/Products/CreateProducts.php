@@ -16,8 +16,6 @@ class CreateProducts
         return $products->map(fn ($product) => [
             'sku' => $product->sku,
             'title' => $product->name
-        ])->each(function ($product) use ($storeCode) {
-            Entry::updateOrCreate($product, 'products', 'sku', $storeCode);
-        });
+        ])->each(fn ($product) => Entry::updateOrCreate($product, 'products', 'sku', $storeCode));
     }
 }

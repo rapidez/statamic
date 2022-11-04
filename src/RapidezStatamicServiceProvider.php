@@ -82,10 +82,13 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             });
         }
 
-        View::composer('rapidez::*', function ($view) {
-            $view->with('globals', (object)$this->getGlobals());
+        View::composer('*', function ($view) {
+            if(!isset($view->globals))
+            {
+                $view->with('globals', (object)$this->getGlobals());
+            }
         });
-
+        
         return $this;
     }
 

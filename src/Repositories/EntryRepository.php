@@ -29,7 +29,7 @@ class EntryRepository extends StatamicEntryRepository
         if ($identifier == 'slug' && isset($data[$identifier])) {
             $entry->slug($data[$identifier]);
         }
-
+        
         $entry->save();
 
         return $entry;

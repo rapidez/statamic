@@ -19,10 +19,10 @@ use Validator;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
-    $this->app->singleton(StatamicDataComposer::class);
-
     public function boot()
     {
+        $this->app->singleton(StatamicDataComposer::class);
+
         $this->bootCommands()
             ->bootConfig()
             ->bootRepositories()

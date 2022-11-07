@@ -19,6 +19,8 @@ use Validator;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
+    $this->app->singleton(StatamicDataComposer::class);
+
     public function boot()
     {
         $this->bootCommands()
@@ -26,7 +28,8 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootRepositories()
             ->bootPublishables()
             ->bootFilters()
-            ->bootComposers();
+            ->bootComposers()
+            ->bootListeners();
     }
 
     public function bootConfig() : self
@@ -63,16 +66,17 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             });
         }
 
-        View::composer('rapidez::layouts.app', function ($view) {
-            foreach (GlobalSet::all() as $set) {
-                foreach ($set->localizations() as $locale => $variables) {
-                    if ($locale == Site::current()->handle()) {
-                        $data[$set->handle()] = $variables;
-                    }
-                }
-            }
+        View::composer('*', function ($view) {
+            app(StatamicDataComposer::class)->withGlobals($view);
+        });
 
-            $view->with('globals', (object)$data);
+        return $this;
+    }
+
+    public function bootListeners() : self
+    {
+        Event::listen([GlobalSetSaved::class, GlobalSetDeleted::class], function() {
+            Cache::forget('statamic-globals-'.Site::current()->handle());
         });
 
         return $this;

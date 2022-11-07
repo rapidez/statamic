@@ -5,11 +5,14 @@ namespace Rapidez\Statamic;
 use Illuminate\Support\ServiceProvider;
 use TorMorten\Eventy\Facades\Eventy;
 
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Event;
 use Rapidez\Statamic\Commands\SyncProductsCommand;
 use Rapidez\Statamic\Commands\SyncStoresCommand;
 use Statamic\Facades\Entry;
 use Statamic\Stache\Repositories\EntryRepository as StatamicEntryRepository;
 use Rapidez\Statamic\Repositories\EntryRepository;
+use Rapidez\Statamic\Http\StatamicDataComposer;
 use Statamic\Statamic;
 use Illuminate\Support\Facades\View;
 use Illuminate\View\View as RenderedView;
@@ -66,9 +69,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             });
         }
 
-        View::composer('*', function ($view) {
-            app(StatamicDataComposer::class)->withGlobals($view);
-        });
+        View::composer('*', StatamicDataComposer::class);
 
         return $this;
     }

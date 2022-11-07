@@ -10,9 +10,9 @@ class StatamicDataComposer
 {
     private $globals;
 
-    private function getGlobals() : array
+    public function __construct()
     {
-        return Cache::rememberForever('statamic-globals-'.Site::current()->handle(), function() {
+        $this->globals = Cache::rememberForever('statamic-globals-'.Site::current()->handle(), function() {
             foreach (GlobalSet::all() as $set) {
                 foreach ($set->localizations() as $locale => $variables) {
                     if ($locale == Site::current()->handle()) {
@@ -24,16 +24,11 @@ class StatamicDataComposer
         });
     }
 
-    public function withGlobals(View $view) : View
+    public function compose(View $view) : View
     {
-        if(!$this->globals) {
-            $this->globals = $this->getGlobals();
-        }
-
         if(!isset($view->globals)) {
             $view->with('globals', (object)$this->globals);
         }
-        
         return $view;
     }
 }

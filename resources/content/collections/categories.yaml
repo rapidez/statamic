@@ -1,0 +1,13 @@
+title: Categories
+propagate: false
+template: default
+layout: layout
+revisions: false
+slugs: false
+sort_dir: asc
+date_behavior:
+  past: public
+  future: private
+structure:
+  root: false
+  slugs: true

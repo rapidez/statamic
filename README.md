@@ -22,14 +22,16 @@ As Rapidez uses route fallbacks to allow routes to be added with lower priority 
 
 ### Commands
 
-There are 2 commands that trigger 2 seperate jobs. One is for importing the stores from Magento and the other is for importing the products from Magento.
+There are 2 commands that trigger 2 seperate jobs. One is for importing the categories from Magento and the other is for importing the products from Magento.
 
-#### Store import
+#### Categories import
+
 ```
-php artisan rapidez:statamic:sync:stores
+php artisan rapidez:statamic:sync:categories
 ```
 
 #### Product import
+
 ```
 php artisan rapidez:statamic:sync:products
 ```
@@ -38,6 +40,23 @@ php artisan rapidez:statamic:sync:products
 
 ```
 php artisan vendor:publish --provider="Rapidez\Statamic\RapidezStatamicServiceProvider"
+```
+
+### Multisite
+
+When configuring your multisite for Statamic in `config/statamic/sites.php`, it is important to add the Magento store ID in the attributes section.
+
+```php
+'sites' => [
+    'default' => [
+        'name' => config('app.name'),
+        'locale' => 'nl_NL',
+        'url' => '/',
+        'attributes' => [
+            'magento_store_id' => 1,
+        ]
+    ],
+]
 ```
 
 ## License

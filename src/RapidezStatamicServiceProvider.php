@@ -8,7 +8,7 @@ use TorMorten\Eventy\Facades\Eventy;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
 use Rapidez\Statamic\Commands\SyncProductsCommand;
-use Rapidez\Statamic\Commands\SyncStoresCommand;
+use Rapidez\Statamic\Commands\SyncCategoriesCommand;
 use Statamic\Facades\Entry;
 use Statamic\Stache\Repositories\EntryRepository as StatamicEntryRepository;
 use Rapidez\Statamic\Repositories\EntryRepository;
@@ -16,9 +16,10 @@ use Rapidez\Statamic\Http\StatamicDataComposer;
 use Statamic\Statamic;
 use Illuminate\Support\Facades\View;
 use Illuminate\View\View as RenderedView;
-use Statamic\Facades\GlobalSet;
 use Statamic\Facades\Site;
 use Validator;
+use Statamic\Events\GlobalSetSaved;
+use Statamic\Events\GlobalSetDeleted;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
@@ -54,7 +55,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     {
         $this->commands([
             SyncProductsCommand::class,
-            SyncStoresCommand::class
+            SyncCategoriesCommand::class
         ]);
 
         return $this;
@@ -99,8 +100,8 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../resources/blueprints/collections/products/products.yaml' => resource_path('blueprints/collections/products/products.yaml'),
             __DIR__.'/../resources/content/collections/products.yaml' => base_path('content/collections/products.yaml'),
-            __DIR__.'/../resources/blueprints/collections/stores/stores.yaml' => resource_path('blueprints/collections/stores/stores.yaml'),
-            __DIR__.'/../resources/content/collections/stores.yaml' => base_path('content/collections/stores.yaml'),
+            __DIR__.'/../resources/blueprints/collections/categories/categories.yaml' => resource_path('blueprints/collections/categories/categories.yaml'),
+            __DIR__.'/../resources/content/collections/categories.yaml' => base_path('content/collections/categories.yaml'),
         ], 'rapidez-collections');
 
         $this->publishes([

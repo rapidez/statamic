@@ -4,28 +4,36 @@ namespace Rapidez\Statamic;
 
 use Illuminate\Support\ServiceProvider;
 use TorMorten\Eventy\Facades\Eventy;
+
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Event;
 use Rapidez\Statamic\Commands\SyncProductsCommand;
 use Rapidez\Statamic\Commands\SyncCategoriesCommand;
 use Statamic\Facades\Entry;
 use Statamic\Stache\Repositories\EntryRepository as StatamicEntryRepository;
 use Rapidez\Statamic\Repositories\EntryRepository;
+use Rapidez\Statamic\Http\StatamicDataComposer;
 use Statamic\Statamic;
 use Illuminate\Support\Facades\View;
 use Illuminate\View\View as RenderedView;
-use Statamic\Facades\GlobalSet;
 use Statamic\Facades\Site;
 use Validator;
+use Statamic\Events\GlobalSetSaved;
+use Statamic\Events\GlobalSetDeleted;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
     public function boot()
     {
+        $this->app->singleton(StatamicDataComposer::class);
+
         $this->bootCommands()
             ->bootConfig()
             ->bootRepositories()
             ->bootPublishables()
             ->bootFilters()
-            ->bootComposers();
+            ->bootComposers()
+            ->bootListeners();
     }
 
     public function bootConfig() : self
@@ -62,16 +70,15 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             });
         }
 
-        View::composer('rapidez::layouts.app', function ($view) {
-            foreach (GlobalSet::all() as $set) {
-                foreach ($set->localizations() as $locale => $variables) {
-                    if ($locale == Site::current()->handle()) {
-                        $data[$set->handle()] = $variables;
-                    }
-                }
-            }
+        View::composer('*', StatamicDataComposer::class);
 
-            $view->with('globals', (object)($data ?? []));
+        return $this;
+    }
+
+    public function bootListeners() : self
+    {
+        Event::listen([GlobalSetSaved::class, GlobalSetDeleted::class], function() {
+            Cache::forget('statamic-globals-'.Site::current()->handle());
         });
 
         return $this;

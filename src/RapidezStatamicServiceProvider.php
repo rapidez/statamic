@@ -65,7 +65,11 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     {
         if (config('statamic.get_product_collection_on_product_page')) {
             View::composer('rapidez::product.overview', function (RenderedView $view) {
-                $entry = Entry::whereCollection('products')->where('sku', config('frontend.product.sku'))->first();
+                $entry = Entry::whereCollection('products')
+                    ->where('locale', config('rapidez.store_code'))
+                    ->where('sku', config('frontend.product.sku'))
+                    ->first();
+                
                 $view->with('content', $entry);
             });
         }

@@ -13,7 +13,7 @@ class EntryRepository extends StatamicEntryRepository
         $entry = Entry::whereCollection($collection)->where($identifier, $data[$identifier])->where('locale', $storeCode)->first();
 
         if ($entry) {
-            $entry->data($data)
+            $entry->merge($data)
                 ->locale($storeCode)
                 ->save();
 

@@ -19,7 +19,7 @@ class CreateCategories
             'magento_parent_id' => $category->parent_id ?? '',
             'title' => $category->name,
             'slug' => Str::replace('/', '-', $category->url_path),
-            'url_path' => $category->url_path ?? '',
+            'url_path' => $category->url_path ? '/' . $category->url_path : '',
         ])->each(fn ($category) => Entry::updateOrCreate($category, 'categories', 'slug', $storeCode));
     }
 }

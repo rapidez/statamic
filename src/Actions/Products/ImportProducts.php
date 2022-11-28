@@ -2,6 +2,7 @@
 
 namespace Rapidez\Statamic\Actions\Products;
 
+use Illuminate\Support\Facades\DB;
 use Rapidez\Statamic\Events\ProductsImportedEvent;
 use Statamic\Facades\Site;
 
@@ -30,7 +31,13 @@ class ImportProducts
             config()->set('rapidez.store', $siteAttributes['magento_store_id']);
 
             $productSkus = collect();
-            $productQuery = $productModel::selectAttributes(['sku', 'name', 'url_key']);
+            $childIds = DB::table('catalog_product_super_link')->select(['product_id'])->get();
+            $childIds = $childIds->map(fn ($item) => $item->product_id);
+            $flat = (new $productModel())->getTable();
+            $productQuery = $productModel::selectOnlyIndexable()
+                ->where($flat . '.type_id', 'configurable')
+                ->orWhereNotIn($flat . '.entity_id', $childIds->toArray())
+                ->withEventyGlobalScopes('index.product.scopes');
 
             $productQuery->chunk($this->chunkSize, function ($products) use ($site, &$productSkus) {
                 $products = $this->createProducts->create($products, $site->handle());

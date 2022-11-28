@@ -31,13 +31,12 @@ class ImportProducts
             config()->set('rapidez.store', $siteAttributes['magento_store_id']);
 
             $productSkus = collect();
-            $childIds = DB::table('catalog_product_super_link')->select(['product_id'])->get();
-            $childIds = $childIds->map(fn ($item) => $item->product_id);
+            $childIds = DB::table('catalog_product_super_link')->select(['product_id'])->get()->pluck('product_id');
             $flat = (new $productModel())->getTable();
             $productQuery = $productModel::selectOnlyIndexable()
                 ->where($flat . '.type_id', 'configurable')
                 ->orWhereNotIn($flat . '.entity_id', $childIds->toArray())
-                ->withEventyGlobalScopes('index.product.scopes');
+                ->withEventyGlobalScopes('statamic.product.scopes');
 
             $productQuery->chunk($this->chunkSize, function ($products) use ($site, &$productSkus) {
                 $products = $this->createProducts->create($products, $site->handle());

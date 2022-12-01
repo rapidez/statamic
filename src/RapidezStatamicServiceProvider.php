@@ -3,8 +3,7 @@
 namespace Rapidez\Statamic;
 
 use Illuminate\Support\ServiceProvider;
-use TorMorten\Eventy\Facades\Eventy;
-
+use Statamic\Http\Controllers\FrontendController;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
 use Rapidez\Statamic\Commands\SyncProductsCommand;
@@ -12,11 +11,12 @@ use Rapidez\Statamic\Commands\SyncCategoriesCommand;
 use Statamic\Facades\Entry;
 use Statamic\Stache\Repositories\EntryRepository as StatamicEntryRepository;
 use Rapidez\Statamic\Repositories\EntryRepository;
-use Rapidez\Statamic\Http\StatamicDataComposer;
+use Rapidez\Statamic\Http\ViewComposers\StatamicDataComposer;
 use Statamic\Statamic;
 use Illuminate\Support\Facades\View;
 use Illuminate\View\View as RenderedView;
 use Statamic\Facades\Site;
+use Rapidez\Core\Facades\Rapidez;
 use Validator;
 use Statamic\Events\GlobalSetSaved;
 use Statamic\Events\GlobalSetDeleted;
@@ -31,9 +31,18 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootConfig()
             ->bootRepositories()
             ->bootPublishables()
-            ->bootFilters()
             ->bootComposers()
-            ->bootListeners();
+            ->bootListeners()
+            ->bootRoutes();
+    }
+
+    public function bootRoutes() : self
+    {
+        if (!$this->app->routesAreCached()) {
+            Rapidez::addFallbackRoute([FrontendController::class, 'index'], 100);
+        }
+
+        return $this;
     }
 
     public function bootConfig() : self
@@ -42,14 +51,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
         return $this;
     }
-
-    public function bootFilters() : self
-    {
-        Eventy::addFilter('routes', fn ($routes) => array_merge($routes ?: [], [__DIR__.'/../routes/fallback.php']));
-
-        return $this;
-    }
-
 
     public function bootCommands() : self
     {

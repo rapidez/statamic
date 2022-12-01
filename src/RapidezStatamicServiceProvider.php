@@ -3,7 +3,6 @@
 namespace Rapidez\Statamic;
 
 use Illuminate\Support\ServiceProvider;
-use Rapidez\Statamic\Http\Controllers\StatamicRewriteController;
 use Statamic\Http\Controllers\FrontendController;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;

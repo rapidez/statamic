@@ -1,6 +1,7 @@
 <?php
 
-namespace Rapidez\Statamic\Http;
+namespace Rapidez\Statamic\Http\ViewComposers;
+
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 use Statamic\Facades\GlobalSet;

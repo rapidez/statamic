@@ -8,22 +8,28 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Enumerable;
+use Rapidez\Statamic\Actions\Products\CreateProducts;
 use Rapidez\Statamic\Actions\Products\ImportProducts;
 
-class ImportProductsJob implements ShouldQueue, ShouldBeUnique
+class CreateProductsJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
 
     public function __construct(
-        public ?Carbon $updatedAt = null,
-        public ?string $store = null,
+        public Enumerable $products,
+        public ?string $siteHandle = null,
     ){
     }
 
-    public function handle(ImportProducts $importProducts): void
+    public function handle(CreateProducts $createProducts): void
     {
-        $importProducts->import($this->updatedAt, $this->store);
+        if (!$this->products || !$this->siteHandle) {
+            return;
+        }
+
+        $createProducts->create($this->products, $this->siteHandle);
     }
 }

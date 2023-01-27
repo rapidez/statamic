@@ -2,20 +2,16 @@
 
 namespace Rapidez\Statamic\Actions\Products;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Enumerable;
 use Statamic\Facades\Entry;
 
 class CreateProducts
 {
-    public function create(Collection $products, string $storeCode): \Illuminate\Support\Collection
+    public function create(Enumerable $products, string $storeCode): Enumerable
     {
-        if ($products->isEmpty()) {
-            return new Collection();
-        }
-
-        return $products->map(fn ($product) => [
+        return $products->map(fn ($product): array => [
             'sku' => $product->sku,
-            'title' => $product->name
-        ])->each(fn ($product) => Entry::updateOrCreate($product, 'products', 'sku', $storeCode));
+            'title' => $product->name,
+        ])->each(fn (array $product) => Entry::updateOrCreate($product, 'products', 'sku', $storeCode));
     }
 }

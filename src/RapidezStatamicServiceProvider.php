@@ -3,9 +3,11 @@
 namespace Rapidez\Statamic;
 
 use Illuminate\Support\ServiceProvider;
+use Rapidez\Statamic\Http\Controllers\StatamicRewriteController;
 use Statamic\Http\Controllers\FrontendController;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
+use Rapidez\Statamic\Commands\DeleteProductsCommand;
 use Rapidez\Statamic\Commands\SyncProductsCommand;
 use Rapidez\Statamic\Commands\SyncCategoriesCommand;
 use Statamic\Facades\Entry;
@@ -20,6 +22,7 @@ use Rapidez\Core\Facades\Rapidez;
 use Validator;
 use Statamic\Events\GlobalSetSaved;
 use Statamic\Events\GlobalSetDeleted;
+use TorMorten\Eventy\Facades\Eventy;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
@@ -39,7 +42,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootRoutes() : self
     {
         if (!$this->app->routesAreCached()) {
-            Rapidez::addFallbackRoute([FrontendController::class, 'index'], 100);
+            Rapidez::addFallbackRoute(StatamicRewriteController::class, 100);
         }
 
         return $this;
@@ -56,6 +59,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     {
         $this->commands([
             SyncProductsCommand::class,
+            DeleteProductsCommand::class,
             SyncCategoriesCommand::class
         ]);
 

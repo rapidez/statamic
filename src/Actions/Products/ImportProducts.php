@@ -2,8 +2,13 @@
 
 namespace Rapidez\Statamic\Actions\Products;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Enumerable;
 use Illuminate\Support\Facades\DB;
+use Rapidez\Core\Models\Model;
 use Rapidez\Statamic\Events\ProductsImportedEvent;
+use Rapidez\Statamic\Jobs\CreateProductsJob;
 use Statamic\Facades\Site;
 
 class ImportProducts
@@ -11,41 +16,89 @@ class ImportProducts
     public function __construct(
         public CreateProducts $createProducts,
         public DeleteProducts $deleteProducts,
-        protected int $chunkSize = 200
+        protected int $chunkSize = 500
     ) {
     }
 
-    public function import(
-        ?string $store = null
-    ): void
+    public function import(?Carbon $updatedAt = null, ?string $store = null): void
     {
         $productModel = config('rapidez.models.product');
 
-        foreach(Site::all() as $site) {
+        $sites = Site::all();
+
+        if ($store !== null) {
+            $sites = collect([$store => Site::get($store)]);
+        }
+
+        $sites->each(function ($site) use ($productModel, $updatedAt) {
             $siteAttributes = $site->attributes();
 
             if (!isset($siteAttributes['magento_store_id'])) {
-                continue;
+                return;
             }
 
             config()->set('rapidez.store', $siteAttributes['magento_store_id']);
 
-            $productSkus = collect();
-            $childIds = DB::table('catalog_product_super_link')->select(['product_id'])->get()->pluck('product_id');
-            $flat = (new $productModel())->getTable();
+            $childIds = DB::table('catalog_product_super_link')->pluck('product_id');
+
+            /** @var Model $flat */
+            $flat = new $productModel();
+
             $productQuery = $productModel::selectOnlyIndexable()
-                ->where($flat . '.type_id', 'configurable')
-                ->orWhereNotIn($flat . '.entity_id', $childIds->toArray())
+                ->when($updatedAt !== null, function (Builder $builder) use ($updatedAt): void {
+                    $builder->where($builder->qualifyColumn('updated_at'), '>=', $updatedAt);
+                })
+                ->where(function (Builder $builder) use ($childIds): void {
+                    $builder
+                        ->where($builder->qualifyColumn('type_id'), 'configurable')
+                        ->orWhereNotIn($builder->qualifyColumn('entity_id'), $childIds->toArray());
+                })
                 ->withEventyGlobalScopes('statamic.product.scopes');
 
-            $productQuery->chunk($this->chunkSize, function ($products) use ($site, &$productSkus) {
-                $products = $this->createProducts->create($products, $site->handle());
-                $productSkus = $productSkus->merge($products->map(fn ($product) => $product['sku']));
+            $productQuery->chunk($this->chunkSize, function (Enumerable $products) use ($site): void {
+                CreateProductsJob::dispatch($products, $site->handle());
+            });
+        });
+
+        ProductsImportedEvent::dispatch();
+    }
+
+    public function delete(?string $store = null): void
+    {
+        $productModel = config('rapidez.models.product');
+
+        $sites = Site::all();
+
+        if ($store !== null) {
+            $sites = collect([$store => Site::get($store)]);
+        }
+
+        $sites->each(function ($site) use ($productModel) {
+            $siteAttributes = $site->attributes();
+
+            if (!isset($siteAttributes['magento_store_id'])) {
+                return;
+            }
+
+            config()->set('rapidez.store', $siteAttributes['magento_store_id']);
+
+            $childIds = DB::table('catalog_product_super_link')->pluck('product_id');
+
+            /** @var Model $flat */
+            $flat = new $productModel();
+
+            $productSkus = collect();
+
+            $productQuery = $productModel::selectOnlyIndexable()
+                ->where($flat->qualifyColumn('type_id'), 'configurable')
+                ->orWhereNotIn($flat->qualifyColumn('entity_id'), $childIds->toArray())
+                ->withEventyGlobalScopes('statamic.product.scopes');
+
+            $productQuery->chunk($this->chunkSize, function (Enumerable $products) use ($site, &$productSkus): void {
+                $productSkus = $productSkus->merge($products->map(fn($product) => $product['sku']));
             });
 
             $this->deleteProducts->deleteOldProducts($productSkus, $site->handle());
-        }
-
-        ProductsImportedEvent::dispatch();
+        });
     }
 }

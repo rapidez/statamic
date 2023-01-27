@@ -30,6 +30,7 @@ class StatamicDataComposer
         if(!isset($view->globals)) {
             $view->with('globals', (object)$this->globals);
         }
+
         return $view;
     }
 }

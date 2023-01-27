@@ -1,5 +1,13 @@
 # Changelog 
 
+## 0.8.0 - 2023-01-27
+
+## What's Changed
+* Added caching for product page entries by @kevinmeijer97 in https://github.com/rapidez/statamic/pull/17
+
+
+**Full Changelog**: https://github.com/rapidez/statamic/compare/0.7.0...0.8.0
+
 ## 0.7.0 - 2023-01-27
 
 ## What's Changed

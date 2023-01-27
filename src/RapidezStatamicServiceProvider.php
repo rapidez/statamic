@@ -4,7 +4,8 @@ namespace Rapidez\Statamic;
 
 use Illuminate\Support\ServiceProvider;
 use Rapidez\Statamic\Http\Controllers\StatamicRewriteController;
-use Statamic\Http\Controllers\FrontendController;
+use Rapidez\Statamic\Listeners\EntrySavedListener;
+use Statamic\Events\EntrySaved;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
 use Rapidez\Statamic\Commands\DeleteProductsCommand;
@@ -22,7 +23,6 @@ use Rapidez\Core\Facades\Rapidez;
 use Validator;
 use Statamic\Events\GlobalSetSaved;
 use Statamic\Events\GlobalSetDeleted;
-use TorMorten\Eventy\Facades\Eventy;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
@@ -70,11 +70,16 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     {
         if (config('statamic.get_product_collection_on_product_page')) {
             View::composer('rapidez::product.overview', function (RenderedView $view) {
-                $entry = Entry::whereCollection('products')
-                    ->where('locale', config('rapidez.store_code'))
-                    ->where('sku', config('frontend.product.sku'))
-                    ->first();
-                
+                $sku = config('frontend.product.sku');
+                $siteHandle = config('rapidez.store_code');
+
+                $entry = Cache::rememberForever('statamic-product-' . $sku . '-' . $siteHandle, function () use ($sku, $siteHandle) {
+                    return Entry::whereCollection('products')
+                        ->where('locale', $siteHandle)
+                        ->where('sku', $sku)
+                        ->first();
+                });
+
                 $view->with('content', $entry);
             });
         }
@@ -89,6 +94,8 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         Event::listen([GlobalSetSaved::class, GlobalSetDeleted::class], function() {
             Cache::forget('statamic-globals-'.Site::current()->handle());
         });
+
+        Event::listen([EntrySaved::class], EntrySavedListener::class);
 
         return $this;
     }

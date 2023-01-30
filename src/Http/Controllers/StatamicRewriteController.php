@@ -25,6 +25,6 @@ class StatamicRewriteController
 
         $template = View::exists($entry->template()) ? $entry->template() : $entry->blueprint->handle();
 
-        echo view($template, ['entry' => $entry]);
+        return view($template, ['entry' => $entry]);
     }
 }

@@ -1,5 +1,13 @@
 # Changelog 
 
+## 0.8.1 - 2023-01-30
+
+## What's Changed
+* Fixed bug with route cache and return of statamic view by @kevinmeijer97 in https://github.com/rapidez/statamic/pull/18
+
+
+**Full Changelog**: https://github.com/rapidez/statamic/compare/0.8.0...0.8.1
+
 ## 0.8.0 - 2023-01-27
 
 ## What's Changed

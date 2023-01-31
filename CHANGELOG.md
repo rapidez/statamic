@@ -18,11 +18,9 @@
 
 ## 0.7.0 - 2023-01-27
 
-## What's Changed
-* Refactored Product import and added separate delete job by @kevinmeijer97 in https://github.com/rapidez/statamic/pull/16
+### Changed
 
-
-**Full Changelog**: https://github.com/rapidez/statamic/compare/0.6.0...0.7.0
+- Refactored Product import and added separate delete job (#16)
 
 ## 0.6.0 - 2022-12-01
 

@@ -2,19 +2,15 @@
 
 ## 0.8.1 - 2023-01-30
 
-## What's Changed
-* Fixed bug with route cache and return of statamic view by @kevinmeijer97 in https://github.com/rapidez/statamic/pull/18
+### Fixed
 
-
-**Full Changelog**: https://github.com/rapidez/statamic/compare/0.8.0...0.8.1
+- Fixed bug with route cache and return of statamic view (#18)
 
 ## 0.8.0 - 2023-01-27
 
-## What's Changed
-* Added caching for product page entries by @kevinmeijer97 in https://github.com/rapidez/statamic/pull/17
+### Added
 
-
-**Full Changelog**: https://github.com/rapidez/statamic/compare/0.7.0...0.8.0
+- Added caching for product page entries (#17)
 
 ## 0.7.0 - 2023-01-27
 

@@ -20,6 +20,8 @@ class EntrySavedListener
         $siteHandle = $entry->locale();
         $sku = $entry->get('sku');
 
-        Cache::rememberForever('statamic-product-' . $sku . '-' . $siteHandle, fn() => $entry);
+        $cacheKey = 'statamic-product-' . $sku . '-' . $siteHandle;
+        Cache::forget($cacheKey);
+        Cache::rememberForever($cacheKey, fn() => $entry);
     }
 }

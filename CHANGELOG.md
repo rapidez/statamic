@@ -2,11 +2,9 @@
 
 ## 0.8.2 - 2023-02-06
 
-## What's Changed
-* Fixed cache not actually updating on save by @Jade-GG in https://github.com/rapidez/statamic/pull/19
+### Fixed
 
-
-**Full Changelog**: https://github.com/rapidez/statamic/compare/0.8.1...0.8.2
+- Fixed cache not actually updating on save (#19)
 
 ## 0.8.1 - 2023-01-30
 

@@ -5,12 +5,17 @@ namespace Rapidez\Statamic\Repositories;
 use Statamic\Facades\Entry;
 use Statamic\Entries\Entry as StatamicEntry;
 use Statamic\Stache\Repositories\EntryRepository as StatamicEntryRepository;
+use Statamic\Statamic;
 
 class EntryRepository extends StatamicEntryRepository
 {
     public function updateOrCreate(array $data, string $collection, string $identifier, string $storeCode) : StatamicEntry
     {
-        $entry = Entry::whereCollection($collection)->where($identifier, $data[$identifier])->where('locale', $storeCode)->first();
+        $entries = Statamic::tag('collection:' . $collection)->params([$identifier . ':is' => $data[$identifier], 'locale:is' => $storeCode])->fetch();
+        $entry = null;
+        if($entries && count($entries)) {
+            $entry = $entries[0];
+        }
 
         if ($entry) {
             $entry->merge($data)

@@ -1,5 +1,15 @@
 # Changelog 
 
+## 0.9.0 - 2023-02-07
+
+### Changed
+
+- Add product visibility to product import and optimized updateOrCreate (#21)
+
+### Fixed
+
+- Use Cache::forever (#20)
+
 ## 0.8.2 - 2023-02-06
 
 ### Fixed

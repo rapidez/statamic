@@ -91,11 +91,10 @@ class ImportProducts
 
             $productSkus = collect();
 
-            $productQuery = $productModel::selectOnlyIndexable()
-                ->withEventyGlobalScopes('statamic.product.scopes');
+            $productQuery = $productModel::selectAttributes(['sku', 'name']);
 
             $productQuery->chunk($this->chunkSize, function (Enumerable $products) use ($site, &$productSkus): void {
-                $productSkus = $productSkus->merge($products->map(fn($product) => $product['sku']));
+                $productSkus = $productSkus->merge($products->pluck('sku'));
             });
 
             $this->deleteProducts->deleteOldProducts($productSkus, $site->handle());

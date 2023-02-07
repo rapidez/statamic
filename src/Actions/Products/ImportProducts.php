@@ -91,7 +91,9 @@ class ImportProducts
 
             $productSkus = collect();
 
-            $productQuery = $productModel::selectAttributes(['sku', 'name']);
+            $productQuery = $productModel::selectAttributes(['sku', 'name'])
+                ->withoutGlobalScopes()
+                ->withEventyGlobalScopes('statamic.product.scopes');
 
             $productQuery->chunk($this->chunkSize, function (Enumerable $products) use ($site, &$productSkus): void {
                 $productSkus = $productSkus->merge($products->pluck('sku'));

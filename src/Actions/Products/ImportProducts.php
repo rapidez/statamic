@@ -20,7 +20,7 @@ class ImportProducts
     ) {
     }
 
-    public function import(?Carbon $updatedAt = null, ?string $store = null): void
+    public function import(?Carbon $updatedAt = null, ?string $store = null, ?bool $addHidden = false): void
     {
         $productModel = config('rapidez.models.product');
 
@@ -30,7 +30,7 @@ class ImportProducts
             $sites = collect([$store => Site::get($store)]);
         }
 
-        $sites->each(function ($site) use ($productModel, $updatedAt) {
+        $sites->each(function ($site) use ($productModel, $updatedAt, $addHidden) {
             $siteAttributes = $site->attributes();
 
             if (!isset($siteAttributes['magento_store_id'])) {
@@ -48,10 +48,12 @@ class ImportProducts
                 ->when($updatedAt !== null, function (Builder $builder) use ($updatedAt): void {
                     $builder->where($builder->qualifyColumn('updated_at'), '>=', $updatedAt);
                 })
-                ->where(function (Builder $builder) use ($childIds): void {
-                    $builder
-                        ->where($builder->qualifyColumn('type_id'), 'configurable')
-                        ->orWhereNotIn($builder->qualifyColumn('entity_id'), $childIds->toArray());
+                ->when(!$addHidden, function(Builder $builder) use ($childIds): void {
+                    $builder->where(function (Builder $builder) use ($childIds): void {
+                        $builder
+                            ->where($builder->qualifyColumn('type_id'), 'configurable')
+                            ->orWhereNotIn($builder->qualifyColumn('entity_id'), $childIds->toArray());
+                    });
                 })
                 ->withEventyGlobalScopes('statamic.product.scopes');
 
@@ -90,8 +92,6 @@ class ImportProducts
             $productSkus = collect();
 
             $productQuery = $productModel::selectOnlyIndexable()
-                ->where($flat->qualifyColumn('type_id'), 'configurable')
-                ->orWhereNotIn($flat->qualifyColumn('entity_id'), $childIds->toArray())
                 ->withEventyGlobalScopes('statamic.product.scopes');
 
             $productQuery->chunk($this->chunkSize, function (Enumerable $products) use ($site, &$productSkus): void {

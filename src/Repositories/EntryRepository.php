@@ -11,11 +11,7 @@ class EntryRepository extends StatamicEntryRepository
 {
     public function updateOrCreate(array $data, string $collection, string $identifier, string $storeCode) : StatamicEntry
     {
-        $entries = Statamic::tag('collection:' . $collection)->params([$identifier . ':is' => $data[$identifier], 'locale:is' => $storeCode])->fetch();
-        $entry = null;
-        if($entries && count($entries)) {
-            $entry = $entries[0];
-        }
+        $entry = Entry::query()->where('collection', $collection)->where($identifier, $data[$identifier])->where('locale', $storeCode)->first();
 
         if ($entry) {
             $entry->merge($data)

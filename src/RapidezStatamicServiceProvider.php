@@ -32,7 +32,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
         $this->bootCommands()
             ->bootConfig()
-            ->bootRepositories()
             ->bootPublishables()
             ->bootComposers()
             ->bootListeners()
@@ -94,16 +93,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         });
 
         Event::listen([EntrySaved::class], EntrySavedListener::class);
-
-        return $this;
-    }
-
-    public function bootRepositories() : self
-    {
-        Statamic::repository(
-            StatamicEntryRepository::class,
-            EntryRepository::class
-        );
 
         return $this;
     }

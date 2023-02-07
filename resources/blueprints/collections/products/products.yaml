@@ -35,6 +35,29 @@ sections:
           visibility: read_only
           validate:
             - 'unique_entry_value:{collection},{id},{site}'
+      -
+        handle: visibility
+        field:
+          options:
+            1: 'Not visible individually'
+            2: Catalog
+            3: Search
+            4: 'Catalog, Search'
+          multiple: false
+          clearable: false
+          searchable: true
+          taggable: false
+          push_tags: false
+          cast_booleans: false
+          default: '1'
+          display: Visibility
+          type: select
+          icon: select
+          localizable: false
+          listable: hidden
+          instructions_position: above
+          visibility: visible
+          always_save: false
   content:
     display: Content
     fields: {  }

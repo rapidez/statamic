@@ -12,6 +12,7 @@ class CreateProducts
         return $products->map(fn ($product): array => [
             'sku' => $product->sku,
             'title' => $product->name,
+            'visibility' => $product->visibility
         ])->each(fn (array $product) => Entry::updateOrCreate($product, 'products', 'sku', $storeCode));
     }
 }

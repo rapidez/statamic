@@ -19,11 +19,12 @@ class ImportProductsJob implements ShouldQueue, ShouldBeUnique
     public function __construct(
         public ?Carbon $updatedAt = null,
         public ?string $store = null,
+        public ?bool $addHidden = false,
     ){
     }
 
     public function handle(ImportProducts $importProducts): void
     {
-        $importProducts->import($this->updatedAt, $this->store);
+        $importProducts->import($this->updatedAt, $this->store, $this->addHidden);
     }
 }

@@ -1,5 +1,12 @@
 # Changelog 
 
+## 0.9.1 - 2023-02-08
+
+### Fixed
+
+- Use trait instead of overwriting the entry repository (bf44710)
+- Removed unique from CreateProducts Job (#22)
+
 ## 0.9.0 - 2023-02-07
 
 ### Changed

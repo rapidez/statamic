@@ -1,5 +1,13 @@
 # Changelog 
 
+## 0.9.2 - 2023-02-08
+
+### Fixed
+
+- Removed unused uses (#23)
+- Query with site instead of locale (d7705ef)
+- Refactored deletes (641739e)
+
 ## 0.9.1 - 2023-02-08
 
 ### Fixed

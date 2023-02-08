@@ -21,7 +21,7 @@ class CreateCategories
             'magento_entity_id' => $category->entity_id,
             'magento_parent_id' => $category->parent_id ?? '',
             'title' => $category->name,
-            'slug' => Str::replace('/', '-', $category->url_path),
+            'slug' => Str::of($category->url_path)->replace('/', '-')->trim('-'),
             'url_path' => $category->url_path ? '/' . $category->url_path : '',
         ])->each(fn ($category) => self::updateOrCreate($category, 'categories', 'slug', $storeCode));
     }

@@ -12,8 +12,6 @@ use Rapidez\Statamic\Commands\DeleteProductsCommand;
 use Rapidez\Statamic\Commands\SyncProductsCommand;
 use Rapidez\Statamic\Commands\SyncCategoriesCommand;
 use Statamic\Facades\Entry;
-use Statamic\Stache\Repositories\EntryRepository as StatamicEntryRepository;
-use Rapidez\Statamic\Repositories\EntryRepository;
 use Rapidez\Statamic\Http\ViewComposers\StatamicDataComposer;
 use Statamic\Statamic;
 use Illuminate\Support\Facades\View;

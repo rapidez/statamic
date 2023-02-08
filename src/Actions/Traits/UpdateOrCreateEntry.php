@@ -12,7 +12,7 @@ trait UpdateOrCreateEntry
         $entry = Entry::query()
             ->where('collection', $collection)
             ->where($identifier, $data[$identifier])
-            ->where('locale', $storeCode)
+            ->where('site', $storeCode)
             ->first();
 
         if ($entry) {

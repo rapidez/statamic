@@ -3,16 +3,13 @@
 namespace Rapidez\Statamic\Jobs;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Enumerable;
 use Rapidez\Statamic\Actions\Products\CreateProducts;
-use Rapidez\Statamic\Actions\Products\ImportProducts;
 
-class CreateProductsJob implements ShouldQueue, ShouldBeUnique
+class CreateProductsJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;

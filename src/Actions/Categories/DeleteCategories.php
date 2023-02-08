@@ -13,7 +13,10 @@ class DeleteCategories
             return;
         }
 
-        $deletedCategories = Entry::whereCollection('categories')->where('locale', $storeCode)->filter(fn ($deletedCategory) => !$categorySlugs->contains($deletedCategory->get('slug')));
-        $deletedCategories->each(fn ($deletedCategory) => $deletedCategory->delete());
+        Entry::query()
+            ->where('collection', 'categories')
+            ->where('site', $storeCode)
+            ->whereNotIn('slug', $categorySlugs)
+            ->delete();
     }
 }

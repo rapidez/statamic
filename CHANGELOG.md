@@ -1,5 +1,11 @@
 # Changelog 
 
+## 0.9.3 - 2023-02-08
+
+### Fixed
+
+- Slugs should not start/end with a slash (521a0b2)
+
 ## 0.9.2 - 2023-02-08
 
 ### Fixed

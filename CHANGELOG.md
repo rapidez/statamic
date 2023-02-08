@@ -1,20 +1,38 @@
 # Changelog 
 
+## 0.9.0 - 2023-02-07
+
+### Changed
+
+- Add product visibility to product import and optimized updateOrCreate (#21)
+
+### Fixed
+
+- Use Cache::forever (#20)
+
+## 0.8.2 - 2023-02-06
+
+### Fixed
+
+- Fixed cache not actually updating on save (#19)
+
+## 0.8.1 - 2023-01-30
+
+### Fixed
+
+- Fixed bug with route cache and return of statamic view (#18)
+
 ## 0.8.0 - 2023-01-27
 
-## What's Changed
-* Added caching for product page entries by @kevinmeijer97 in https://github.com/rapidez/statamic/pull/17
+### Added
 
-
-**Full Changelog**: https://github.com/rapidez/statamic/compare/0.7.0...0.8.0
+- Added caching for product page entries (#17)
 
 ## 0.7.0 - 2023-01-27
 
-## What's Changed
-* Refactored Product import and added separate delete job by @kevinmeijer97 in https://github.com/rapidez/statamic/pull/16
+### Changed
 
-
-**Full Changelog**: https://github.com/rapidez/statamic/compare/0.6.0...0.7.0
+- Refactored Product import and added separate delete job (#16)
 
 ## 0.6.0 - 2022-12-01
 

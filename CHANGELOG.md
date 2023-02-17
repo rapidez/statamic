@@ -1,5 +1,11 @@
 # Changelog 
 
+## 0.9.4 - 2023-02-17
+
+### Fixed
+
+- Query with site instead of locale (#24)
+
 ## 0.9.3 - 2023-02-08
 
 ### Fixed

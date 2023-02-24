@@ -69,7 +69,8 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                 $siteHandle = config('rapidez.store_code');
 
                 $entry = Cache::rememberForever('statamic-product-' . $sku . '-' . $siteHandle, function () use ($sku, $siteHandle) {
-                    return Entry::whereCollection('products')
+                    return Entry::query()
+                        ->where('collection', 'products')
                         ->where('locale', $siteHandle)
                         ->where('sku', $sku)
                         ->first();

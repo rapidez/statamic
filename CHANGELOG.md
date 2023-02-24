@@ -1,5 +1,11 @@
 # Changelog 
 
+## 0.9.5 - 2023-02-24
+
+### Fixed
+
+- Query instead of using a collection (#25)
+
 ## 0.9.4 - 2023-02-17
 
 ### Fixed

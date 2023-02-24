@@ -15,7 +15,7 @@ class StatamicRewriteController
 
         $entry = Entry::query()
             ->where('collection', 'pages')
-            ->where('locale', $storeCode)
+            ->where('site', $storeCode)
             ->where('slug', $request->path() == '/' ? 'home' : $request->path())
             ->first();
 

@@ -1,5 +1,25 @@
 # Changelog 
 
+## 0.9.4 - 2023-02-17
+
+### Fixed
+
+- Query with site instead of locale (#24)
+
+## 0.9.3 - 2023-02-08
+
+### Fixed
+
+- Slugs should not start/end with a slash (521a0b2)
+
+## 0.9.2 - 2023-02-08
+
+### Fixed
+
+- Removed unused uses (#23)
+- Query with site instead of locale (d7705ef)
+- Refactored deletes (641739e)
+
 ## 0.9.1 - 2023-02-08
 
 ### Fixed

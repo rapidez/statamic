@@ -3,11 +3,9 @@
 [Unreleased changes](https://github.com/rapidez/statamic/compare/0.9.6...master)
 ## [0.9.6](https://github.com/rapidez/statamic/releases/tag/0.9.6) - 2023-03-06
 
-### What's Changed
-* Fix locale -> site by @Jade-GG in https://github.com/rapidez/statamic/pull/26
+#### Fixed
 
-
-**Full Changelog**: https://github.com/rapidez/statamic/compare/0.9.5...0.9.6
+- Fix locale -> site (#26)
 
 ## [0.9.5](https://github.com/rapidez/statamic/releases/tag/0.9.5) - 2023-02-24
 

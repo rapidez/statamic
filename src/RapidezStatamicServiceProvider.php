@@ -2,38 +2,32 @@
 
 namespace Rapidez\Statamic;
 
-use Illuminate\Support\ServiceProvider;
-use Rapidez\Statamic\Http\Controllers\StatamicRewriteController;
-use Rapidez\Statamic\Listeners\EntrySavedListener;
-use Statamic\Events\EntrySaved;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
-use Rapidez\Statamic\Commands\DeleteProductsCommand;
-use Rapidez\Statamic\Commands\SyncProductsCommand;
-use Rapidez\Statamic\Commands\SyncCategoriesCommand;
-use Statamic\Facades\Entry;
-use Rapidez\Statamic\Http\ViewComposers\StatamicDataComposer;
-use Statamic\Statamic;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View as RenderedView;
-use Statamic\Facades\Site;
 use Rapidez\Core\Facades\Rapidez;
-use Validator;
-use Statamic\Events\GlobalSetSaved;
+use Rapidez\Statamic\Http\Controllers\StatamicRewriteController;
+use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
 use Statamic\Events\GlobalSetDeleted;
+use Statamic\Events\GlobalSetSaved;
+use Statamic\Facades\Entry;
+use Statamic\Facades\Site;
+use Statamic\Statamic;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        $this->app->singleton(StatamicDataComposer::class);
-
-        $this->bootCommands()
+        $this
             ->bootConfig()
+            ->bootViews()
             ->bootPublishables()
             ->bootComposers()
             ->bootListeners()
-            ->bootRoutes();
+            ->bootRoutes()
+            ->bootRunway();
     }
 
     public function bootRoutes() : self
@@ -43,44 +37,48 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         return $this;
     }
 
-    public function bootConfig() : self
+    public function bootViews() : self
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/statamic.php', 'statamic');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'rapidez-statamic');
 
         return $this;
     }
 
-    public function bootCommands() : self
+    public function bootConfig() : self
     {
-        $this->commands([
-            SyncProductsCommand::class,
-            DeleteProductsCommand::class,
-            SyncCategoriesCommand::class
-        ]);
+        $this->mergeConfigFrom(__DIR__.'/../config/rapidez-statamic.php', 'rapidez-statamic');
 
         return $this;
     }
 
     public function bootComposers() : self
     {
-        if (config('statamic.get_product_collection_on_product_page')) {
+        if (config('rapidez-statamic.fetch.product')) {
             View::composer('rapidez::product.overview', function (RenderedView $view) {
-                $sku = config('frontend.product.sku');
-                $siteHandle = config('rapidez.store_code');
-
-                $entry = Cache::rememberForever('statamic-product-' . $sku . '-' . $siteHandle, function () use ($sku, $siteHandle) {
-                    return Entry::query()
-                        ->where('collection', 'products')
-                        ->where('site', $siteHandle)
-                        ->where('sku', $sku)
-                        ->first();
-                });
+                $entry = Entry::query()
+                    ->where('collection', 'products')
+                    ->where('site', config('rapidez.store_code'))
+                    ->where('linked_product', config('frontend.product.sku'))
+                    ->first();
 
                 $view->with('content', $entry);
             });
         }
 
-        View::composer('*', StatamicDataComposer::class);
+        if (config('rapidez-statamic.fetch.category')) {
+            View::composer('rapidez::category.overview', function (RenderedView $view) {
+                $entry = Entry::query()
+                    ->where('collection', 'categories')
+                    ->where('site', config('rapidez.store_code'))
+                    ->where('linked_category', config('frontend.category.entity_id'))
+                    ->first();
+
+                $view->with('content', $entry);
+            });
+        }
+
+        $this->app->singleton(StatamicGlobalDataComposer::class);
+        View::composer('*', StatamicGlobalDataComposer::class);
 
         return $this;
     }
@@ -91,24 +89,43 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             Cache::forget('statamic-globals-'.Site::current()->handle());
         });
 
-        Event::listen([EntrySaved::class], EntrySavedListener::class);
-
         return $this;
     }
-
 
     public function bootPublishables() : self
     {
         $this->publishes([
-            __DIR__.'/../resources/blueprints/collections/products/products.yaml' => resource_path('blueprints/collections/products/products.yaml'),
+            __DIR__.'/../resources/blueprints/collections/products/product.yaml' => resource_path('blueprints/collections/products/product.yaml'),
             __DIR__.'/../resources/content/collections/products.yaml' => base_path('content/collections/products.yaml'),
-            __DIR__.'/../resources/blueprints/collections/categories/categories.yaml' => resource_path('blueprints/collections/categories/categories.yaml'),
+
+            __DIR__.'/../resources/blueprints/collections/categories/category.yaml' => resource_path('blueprints/collections/categories/category.yaml'),
             __DIR__.'/../resources/content/collections/categories.yaml' => base_path('content/collections/categories.yaml'),
+
+            __DIR__.'/../resources/blueprints/collections/pages/page.yaml' => resource_path('blueprints/collections/pages/page.yaml'),
+            __DIR__.'/../resources/content/collections/pages.yaml' => base_path('content/collections/pages.yaml'),
+
+            // TODO: Add page builder
         ], 'rapidez-collections');
 
         $this->publishes([
-            __DIR__.'/../config/statamic.php' => config_path('statamic.php'),
+            __DIR__.'/../resources/views' => resource_path('views/vendor/rapidez-statamic'),
+        ], 'views');
+
+        $this->publishes([
+            __DIR__.'/../config/rapidez-statamic.php' => config_path('rapidez-statamic.php'),
         ], 'config');
+
+        return $this;
+    }
+
+    public function bootRunway() : self
+    {
+        if (config('rapidez-statamic.runway.configure')) {
+            config(['runway.resources' => array_merge(
+                config('rapidez-statamic.runway.resources'),
+                config('runway.resources')
+            )]);
+        }
 
         return $this;
     }

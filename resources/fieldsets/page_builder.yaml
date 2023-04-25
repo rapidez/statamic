@@ -1,0 +1,16 @@
+title: 'Page builder'
+fields:
+  -
+    handle: content
+    field:
+      collapse: false
+      previews: true
+      display: Content
+      type: replicator
+      icon: replicator
+      localizable: false
+      listable: hidden
+      instructions_position: above
+      visibility: visible
+      sets:
+        # TODO, productlist + text?

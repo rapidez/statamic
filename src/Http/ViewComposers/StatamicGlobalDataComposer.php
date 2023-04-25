@@ -7,7 +7,7 @@ use Illuminate\View\View;
 use Statamic\Facades\GlobalSet;
 use Statamic\Facades\Site;
 
-class StatamicDataComposer 
+class StatamicGlobalDataComposer
 {
     private $globals;
 

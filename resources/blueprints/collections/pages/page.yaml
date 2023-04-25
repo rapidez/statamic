@@ -7,46 +7,53 @@ sections:
         field:
           type: text
           required: true
+          localizable: false
           validate:
             - required
-          localizable: true
+      -
+        import: page_builder
   sidebar:
     display: Sidebar
     fields:
       -
         handle: slug
         field:
-          input_type: text
-          antlers: false
-          display: Slug
-          type: text
-          icon: text
-          listable: hidden
-          instructions_position: above
-          visibility: read_only
+          type: slug
           localizable: true
-          validate:
-            - required
       -
-        handle: magento_entity_id
+        handle: parent
+        field:
+          type: entries
+          collections:
+            - pages
+          max_items: 1
+          listable: false
+          localizable: true
+  meta:
+    display: Meta
+    fields:
+      -
+        handle: meta_title
         field:
           input_type: text
           antlers: false
-          display: 'Magento entity ID'
+          display: 'Meta title'
           type: text
           icon: text
+          localizable: false
           listable: hidden
           instructions_position: above
-          visibility: read_only
+          visibility: visible
       -
-        handle: magento_parent_id
+        handle: meta_description
         field:
           input_type: text
           antlers: false
-          display: 'Magento parent ID'
+          display: 'Meta description'
           type: text
           icon: text
+          localizable: false
           listable: hidden
           instructions_position: above
-          visibility: read_only
-title: Categories
+          visibility: visible
+title: Page

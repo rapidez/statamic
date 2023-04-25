@@ -1,0 +1,27 @@
+sections:
+  content:
+    display: Content
+    fields:
+      -
+        handle: title
+        field:
+          type: text
+          required: true
+          localizable: false
+          validate:
+            - required
+      -
+        handle: linked_product
+        field:
+          max_items: 1
+          mode: default
+          resource: product
+          create: false
+          display: 'Linked product'
+          type: belongs_to
+          icon: belongs_to
+          localizable: false
+          listable: hidden
+          instructions_position: above
+          visibility: visible
+title: Products

@@ -6,6 +6,7 @@ This package helps you integrate Statamic within your Rapidez project by adding 
 - Products, categories and pages collections as starting point so you can extend this however you'd like
 - Route merging so Statamic routes work as fallback
 - Page builder fieldset with a productlist and text component
+- Breadcrumbs for pages
 - Globals available in all views
 
 ## Requirements

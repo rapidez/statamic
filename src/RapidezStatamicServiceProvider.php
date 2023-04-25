@@ -32,7 +32,9 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
     public function bootRoutes() : self
     {
-        Rapidez::addFallbackRoute(StatamicRewriteController::class, 100);
+        if (config('rapidez-statamic.routes')) {
+            Rapidez::addFallbackRoute(StatamicRewriteController::class, 100);
+        }
 
         return $this;
     }

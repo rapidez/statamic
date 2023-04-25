@@ -1,7 +1,8 @@
 <?php
 
 return [
-    // Enable the routes for the pages resource?
+    // Enable the routes? All Statamic routes will be enabled
+    // as fallback so first Magento routes will be used.
     'routes' => true,
 
     // Should the data from Statamic be fetched? The entry

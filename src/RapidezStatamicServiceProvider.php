@@ -22,18 +22,25 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     {
         $this
             ->bootConfig()
-            ->bootViews()
-            ->bootPublishables()
-            ->bootComposers()
-            ->bootListeners()
             ->bootRoutes()
-            ->bootRunway();
+            ->bootViews()
+            ->bootListeners()
+            ->bootRunway()
+            ->bootPublishables()
+            ->bootComposers();
+    }
+
+    public function bootConfig() : self
+    {
+        $this->mergeConfigFrom(__DIR__.'/../config/rapidez-statamic.php', 'rapidez-statamic');
+
+        return $this;
     }
 
     public function bootRoutes() : self
     {
         if (config('rapidez-statamic.routes')) {
-            Rapidez::addFallbackRoute(StatamicRewriteController::class, 100);
+            Rapidez::addFallbackRoute(StatamicRewriteController::class);
         }
 
         return $this;
@@ -46,9 +53,23 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         return $this;
     }
 
-    public function bootConfig() : self
+    public function bootListeners() : self
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/rapidez-statamic.php', 'rapidez-statamic');
+        Event::listen([GlobalSetSaved::class, GlobalSetDeleted::class], function() {
+            Cache::forget('statamic-globals-'.Site::current()->handle());
+        });
+
+        return $this;
+    }
+
+    public function bootRunway() : self
+    {
+        if (config('rapidez-statamic.runway.configure')) {
+            config(['runway.resources' => array_merge(
+                config('rapidez-statamic.runway.resources'),
+                config('runway.resources')
+            )]);
+        }
 
         return $this;
     }
@@ -85,15 +106,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         return $this;
     }
 
-    public function bootListeners() : self
-    {
-        Event::listen([GlobalSetSaved::class, GlobalSetDeleted::class], function() {
-            Cache::forget('statamic-globals-'.Site::current()->handle());
-        });
-
-        return $this;
-    }
-
     public function bootPublishables() : self
     {
         $this->publishes([
@@ -116,18 +128,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/rapidez-statamic.php' => config_path('rapidez-statamic.php'),
         ], 'config');
-
-        return $this;
-    }
-
-    public function bootRunway() : self
-    {
-        if (config('rapidez-statamic.runway.configure')) {
-            config(['runway.resources' => array_merge(
-                config('rapidez-statamic.runway.resources'),
-                config('runway.resources')
-            )]);
-        }
 
         return $this;
     }

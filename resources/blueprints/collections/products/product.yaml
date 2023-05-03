@@ -7,7 +7,6 @@ sections:
         field:
           type: text
           required: true
-          localizable: false
           validate:
             - required
       -
@@ -20,8 +19,9 @@ sections:
           display: 'Linked product'
           type: belongs_to
           icon: belongs_to
-          localizable: false
           listable: hidden
           instructions_position: above
           visibility: visible
+      -
+        import: page_builder
 title: Products

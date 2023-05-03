@@ -3,6 +3,8 @@
 return [
     // Enable the routes? All Statamic routes will be enabled
     // as fallback so first Magento routes will be used.
+    // Make sure you disabled the Statamic routing in
+    // the "config/statamic/routes.php" file!
     'routes' => true,
 
     // Should the data from Statamic be fetched? The entry
@@ -22,6 +24,13 @@ return [
 
         // The attribute id used for the brand resource.
         'brand_attribute_id' => 83,
+
+        // Only show these product visibilities.
+        // VISIBILITY_NOT_VISIBLE    = 1;
+        // VISIBILITY_IN_CATALOG     = 2;
+        // VISIBILITY_IN_SEARCH      = 3;
+        // VISIBILITY_BOTH           = 4;
+        'product_visibility' => [2, 3, 4],
 
         // The Runway resources we'll configure.
         'resources' => [

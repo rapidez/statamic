@@ -5,7 +5,8 @@ This package helps you integrate Statamic within your Rapidez project by adding 
 - Products, categories and brands are integrated through [Runway](https://github.com/duncanmcclean/runway) as read only resources so you can link them to the content
 - Products, categories and pages collections as starting point so you can extend this however you'd like
 - Route merging so Statamic routes work as fallback
-- Page builder fieldset with a productlist and text component
+- Page builder fieldset with a product slider, content and image component
+- Responsive images with [spatie/statamic-responsive-images](https://github.com/spatie/statamic-responsive-images)
 - Breadcrumbs for pages
 - Globals available in all views
 
@@ -27,23 +28,48 @@ Have a look within the `rapidez-statamic.php` config file, if you need to change
 php artisan vendor:publish --provider="Rapidez\Statamic\RapidezStatamicServiceProvider" --tag=config
 ```
 
+### Assets disk
+
+Make sure there is an assets disk within `config/filesystems.php`
+```
+'disks' => [
+    'assets' => [
+        'driver' => 'local',
+        'root' => public_path('assets'),
+        'url' => '/assets',
+        'visibility' => 'public',
+    ],
+],
+```
+
 ### Routing
 
-As Rapidez uses route fallbacks to allow routes to be added with lower priority then Magento routes, this package is used to fix this, as statamic routes on itself will overwrite your Magento routes. Make sure default Statamic routing is disabled in `config/statamic/routes.php`. We'll register the Statamic routes from this packages after the Magento routes.
+As Rapidez uses route fallbacks to allow routes to be added with lower priority than Magento routes, this package is used to fix this, as statamic routes on itself will overwrite your Magento routes. Make sure default Statamic routing is disabled in `config/statamic/routes.php`. We'll register the Statamic routes from this packages after the Magento routes.
 
 ```php
 'enabled' => false,
 ```
 
-### Publish Collections & Blueprints
+#### Homepage
+
+If you'd like to use the homepage from Statamic instead of the CMS page from Magento; just disable the homepage in Magento.
+
+### Publish Collections, Blueprints and Fieldsets
 
 ```
-php artisan vendor:publish --provider="Rapidez\Statamic\RapidezStatamicServiceProvider" --tag=rapidez-collections
+php artisan vendor:publish --provider="Rapidez\Statamic\RapidezStatamicServiceProvider" --tag=rapidez-statamic-content
 ```
+
+And if you'd like to change the views:
+
+```
+php artisan vendor:publish --provider="Rapidez\Statamic\RapidezStatamicServiceProvider" --tag=views
+```
+
 
 ### Magento Store ID
 
-It is important to add the Magento store ID in the attributes section within `config/statamic/sites.php`
+It is important to add the Magento store ID in the attributes section within `config/statamic/sites.php` for every site
 
 ```php
 'sites' => [
@@ -57,6 +83,15 @@ It is important to add the Magento store ID in the attributes section within `co
     ],
 ]
 ```
+
+### Showing content on categories and products
+
+By default you'll get the configured content on categories and products available withint the `$content` variable. This can be enabled/disabled with the `fetch` configurations within the `rapidez-statamic.php` config file. If you want to display the configured content from the default page builder you can include this in your view:
+```
+@includeWhen(isset($content), 'rapidez-statamic::page_builder', ['content' => $content?->content])
+```
+- Product: `resources/views/vendor/rapidez/product/overview.blade.php`
+- Category: `resources/views/vendor/rapidez/category/overview.blade.php`
 
 ## License
 

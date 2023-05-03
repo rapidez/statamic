@@ -7,9 +7,9 @@ sections:
         field:
           type: text
           required: true
-          localizable: false
           validate:
             - required
+          localizable: true
       -
         import: page_builder
   sidebar:
@@ -33,27 +33,5 @@ sections:
     display: Meta
     fields:
       -
-        handle: meta_title
-        field:
-          input_type: text
-          antlers: false
-          display: 'Meta title'
-          type: text
-          icon: text
-          localizable: false
-          listable: hidden
-          instructions_position: above
-          visibility: visible
-      -
-        handle: meta_description
-        field:
-          input_type: text
-          antlers: false
-          display: 'Meta description'
-          type: text
-          icon: text
-          localizable: false
-          listable: hidden
-          instructions_position: above
-          visibility: visible
+        import: meta_data
 title: Page

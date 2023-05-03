@@ -8,9 +8,23 @@ fields:
       display: Content
       type: replicator
       icon: replicator
-      localizable: false
       listable: hidden
       instructions_position: above
       visibility: visible
       sets:
-        # TODO, productlist + text?
+        content:
+          display: Content
+          fields:
+            -
+              import: content
+        product_slider:
+          display: 'Product slider'
+          fields:
+            -
+              import: product_slider
+        image:
+          display: Image
+          fields:
+            -
+              import: image
+      localizable: true

@@ -7,9 +7,9 @@ sections:
         field:
           type: text
           required: true
-          localizable: false
           validate:
             - required
+          localizable: false
       -
         handle: linked_category
         field:
@@ -20,8 +20,10 @@ sections:
           display: 'Linked category'
           type: belongs_to
           icon: belongs_to
-          localizable: false
           listable: hidden
           instructions_position: above
           visibility: visible
+          localizable: false
+      -
+        import: page_builder
 title: Categories

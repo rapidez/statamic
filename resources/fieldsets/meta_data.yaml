@@ -1,0 +1,25 @@
+title: 'Meta data'
+fields:
+  -
+    handle: meta_title
+    field:
+      input_type: text
+      antlers: false
+      display: 'Meta title'
+      type: text
+      icon: text
+      listable: hidden
+      instructions_position: above
+      visibility: visible
+      localizable: true
+  -
+    handle: meta_description
+    field:
+      antlers: false
+      display: 'Meta description'
+      type: textarea
+      icon: textarea
+      listable: hidden
+      instructions_position: above
+      visibility: visible
+      localizable: true

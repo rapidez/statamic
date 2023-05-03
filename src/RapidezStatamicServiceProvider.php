@@ -109,17 +109,11 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootPublishables() : self
     {
         $this->publishes([
-            __DIR__.'/../resources/blueprints/collections/products/product.yaml' => resource_path('blueprints/collections/products/product.yaml'),
-            __DIR__.'/../resources/content/collections/products.yaml' => base_path('content/collections/products.yaml'),
-
-            __DIR__.'/../resources/blueprints/collections/categories/category.yaml' => resource_path('blueprints/collections/categories/category.yaml'),
-            __DIR__.'/../resources/content/collections/categories.yaml' => base_path('content/collections/categories.yaml'),
-
-            __DIR__.'/../resources/blueprints/collections/pages/page.yaml' => resource_path('blueprints/collections/pages/page.yaml'),
-            __DIR__.'/../resources/content/collections/pages.yaml' => base_path('content/collections/pages.yaml'),
-
-            // TODO: Add page builder
-        ], 'rapidez-collections');
+            __DIR__.'/../resources/blueprints/collections' => resource_path('blueprints/collections'),
+            __DIR__.'/../resources/content/collections' => base_path('content/collections'),
+            __DIR__.'/../resources/content/assets' => base_path('content/assets'),
+            __DIR__.'/../resources/fieldsets' => resource_path('fieldsets'),
+        ], 'rapidez-statamic-content');
 
         $this->publishes([
             __DIR__.'/../resources/views' => resource_path('views/vendor/rapidez-statamic'),

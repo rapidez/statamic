@@ -1,8 +1,18 @@
 # Rapidez Statamic
 
+This package helps you integrate Statamic within your Rapidez project by adding some good starting points:
+
+- Products, categories and brands are integrated through [Runway](https://github.com/duncanmcclean/runway) as read only resources so you can link them to the content
+- Products, categories and pages collections as starting point so you can extend this however you'd like
+- Route merging so Statamic routes work as fallback
+- Page builder fieldset with a product slider, content and image component
+- Responsive images with [spatie/statamic-responsive-images](https://github.com/spatie/statamic-responsive-images)
+- Breadcrumbs for pages
+- Globals available in all views
+
 ## Requirements
 
-You have to have `statamic/cms` installed in your laravel application. Installation guide is found [here](https://statamic.dev/installing/laravel).
+You need to have `statamic/cms` installed in your Rapidez installation. Follow the [installation guide](https://statamic.dev/installing/laravel).
 
 ## Installation
 
@@ -10,41 +20,56 @@ You have to have `statamic/cms` installed in your laravel application. Installat
 composer require rapidez/statamic
 ```
 
+## Configuration
+
+Have a look within the `rapidez-statamic.php` config file, if you need to change something you can publish it with:
+
+```
+php artisan vendor:publish --provider="Rapidez\Statamic\RapidezStatamicServiceProvider" --tag=config
+```
+
+### Assets disk
+
+Make sure there is an assets disk within `config/filesystems.php`
+```
+'disks' => [
+    'assets' => [
+        'driver' => 'local',
+        'root' => public_path('assets'),
+        'url' => '/assets',
+        'visibility' => 'public',
+    ],
+],
+```
+
 ### Routing
 
-As Rapidez uses route fallbacks to allow routes to be added with lower priority then Magento routes, this package is used to fix this, as statamic routes on itself will overwrite your Magento routes. Make sure default Statamic routing is disabled in `config/statamic/routes.php`:
+As Rapidez uses route fallbacks to allow routes to be added with lower priority than Magento routes, this package is used to fix this, as statamic routes on itself will overwrite your Magento routes. Make sure default Statamic routing is disabled in `config/statamic/routes.php`. We'll register the Statamic routes from this packages after the Magento routes.
 
 ```php
-
 'enabled' => false,
-
 ```
 
-### Commands
+#### Homepage
 
-There are 2 commands that trigger 2 seperate jobs. One is for importing the categories from Magento and the other is for importing the products from Magento.
+If you'd like to use the homepage from Statamic instead of the CMS page from Magento; just disable the homepage in Magento.
 
-#### Categories import
-
-```
-php artisan rapidez:statamic:sync:categories
-```
-
-#### Product import
+### Publish Collections, Blueprints and Fieldsets
 
 ```
-php artisan rapidez:statamic:sync:products
+php artisan vendor:publish --provider="Rapidez\Statamic\RapidezStatamicServiceProvider" --tag=rapidez-statamic-content
 ```
 
-### Publish
+And if you'd like to change the views:
 
 ```
-php artisan vendor:publish --provider="Rapidez\Statamic\RapidezStatamicServiceProvider"
+php artisan vendor:publish --provider="Rapidez\Statamic\RapidezStatamicServiceProvider" --tag=views
 ```
 
-### Multisite
 
-When configuring your multisite for Statamic in `config/statamic/sites.php`, it is important to add the Magento store ID in the attributes section.
+### Magento Store ID
+
+It is important to add the Magento store ID in the attributes section within `config/statamic/sites.php` for every site
 
 ```php
 'sites' => [
@@ -58,6 +83,15 @@ When configuring your multisite for Statamic in `config/statamic/sites.php`, it 
     ],
 ]
 ```
+
+### Showing content on categories and products
+
+By default you'll get the configured content on categories and products available withint the `$content` variable. This can be enabled/disabled with the `fetch` configurations within the `rapidez-statamic.php` config file. If you want to display the configured content from the default page builder you can include this in your view:
+```
+@includeWhen(isset($content), 'rapidez-statamic::page_builder', ['content' => $content?->content])
+```
+- Product: `resources/views/vendor/rapidez/product/overview.blade.php`
+- Category: `resources/views/vendor/rapidez/category/overview.blade.php`
 
 ## License
 

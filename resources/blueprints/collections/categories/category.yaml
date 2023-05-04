@@ -1,0 +1,29 @@
+sections:
+  content:
+    display: Content
+    fields:
+      -
+        handle: title
+        field:
+          type: text
+          required: true
+          validate:
+            - required
+          localizable: false
+      -
+        handle: linked_category
+        field:
+          max_items: 1
+          mode: default
+          resource: category
+          create: false
+          display: 'Linked category'
+          type: belongs_to
+          icon: belongs_to
+          listable: hidden
+          instructions_position: above
+          visibility: visible
+          localizable: false
+      -
+        import: page_builder
+title: Categories

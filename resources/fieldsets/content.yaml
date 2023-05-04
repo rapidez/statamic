@@ -1,0 +1,51 @@
+title: Content
+fields:
+  -
+    handle: content
+    field:
+      collapse: false
+      always_show_set_button: false
+      previews: true
+      smart_typography: false
+      buttons:
+        - h1
+        - h2
+        - h3
+        - h4
+        - bold
+        - italic
+        - unorderedlist
+        - orderedlist
+        - removeformat
+        - quote
+        - anchor
+        - table
+        - underline
+        - strikethrough
+        - small
+      save_html: false
+      inline: false
+      toolbar_mode: fixed
+      link_noopener: false
+      link_noreferrer: false
+      target_blank: false
+      reading_time: false
+      fullscreen: true
+      allow_source: true
+      enable_input_rules: true
+      enable_paste_rules: true
+      antlers: false
+      remove_empty_nodes: false
+      display: Content
+      type: bard
+      icon: bard
+      listable: hidden
+      instructions_position: above
+      visibility: visible
+      sets:
+        image:
+          display: Image
+          fields:
+            -
+              import: image
+      localizable: true

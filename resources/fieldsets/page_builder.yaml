@@ -1,0 +1,30 @@
+title: 'Page builder'
+fields:
+  -
+    handle: content
+    field:
+      collapse: false
+      previews: true
+      display: Content
+      type: replicator
+      icon: replicator
+      listable: hidden
+      instructions_position: above
+      visibility: visible
+      sets:
+        content:
+          display: Content
+          fields:
+            -
+              import: content
+        product_slider:
+          display: 'Product slider'
+          fields:
+            -
+              import: product_slider
+        image:
+          display: Image
+          fields:
+            -
+              import: image
+      localizable: true

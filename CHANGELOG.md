@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/1.0.0...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/1.0.1...master)
+## [1.0.1](https://github.com/rapidez/statamic/releases/tag/1.0.1) - 2023-05-04
+
+#### Fixed
+
+- @includeFirst fallback (f7fcb88)
+
 ## [1.0.0](https://github.com/rapidez/statamic/releases/tag/1.0.0) - 2023-05-04
 
 #### Changed

@@ -13,13 +13,26 @@ class EntrySavedListener
         /** @var Entry $entry */
         $entry = $event->entry;
 
-        if ($entry->collectionHandle() !== 'products') {
-            return;
+        if ($entry->collectionHandle() === 'products') {
+            $this->clearProduct($entry);
+        } else if ($entry->collectionHandle() === 'categories') {
+            $this->clearCategory($entry);
         }
+    }
 
+    protected function clearProduct(Entry $entry)
+    {
         $siteHandle = $entry->locale();
         $sku = $entry->get('sku');
 
         Cache::forever('statamic-product-' . $sku . '-' . $siteHandle, $entry);
+    }
+
+    protected function clearCategory(Entry $entry)
+    {
+        $siteHandle = $entry->locale();
+        $entityId = $entry->get('magento_entity_id');
+
+        Cache::forever('statamic-category-' . $entityId . '-' . $siteHandle, $entry);
     }
 }

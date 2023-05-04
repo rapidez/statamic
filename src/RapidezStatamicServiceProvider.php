@@ -79,6 +79,22 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                 $view->with('content', $entry);
             });
         }
+        if (config('statamic.get_category_collection_on_category_page')) {
+            View::composer('rapidez::category.overview', function (RenderedView $view) {
+                $entityId = config('frontend.category.entity_id');
+                $siteHandle = config('rapidez.store_code');
+
+                $entry = Cache::rememberForever('statamic-category-' . $entityId . '-' . $siteHandle, function () use ($entityId, $siteHandle) {
+                    return Entry::query()
+                        ->where('collection', 'categories')
+                        ->where('site', $siteHandle)
+                        ->where('magento_entity_id', $entityId)
+                        ->first();
+                });
+
+                $view->with('content', $entry);
+            });
+        }
 
         View::composer('*', StatamicDataComposer::class);
 

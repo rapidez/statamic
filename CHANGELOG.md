@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/0.9.6...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/1.0.0...master)
+## [1.0.0](https://github.com/rapidez/statamic/releases/tag/1.0.0) - 2023-05-04
+
+#### Changed
+
+- Refactor (#28)
+
 ## [0.9.6](https://github.com/rapidez/statamic/releases/tag/0.9.6) - 2023-03-06
 
 #### Fixed

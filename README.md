@@ -5,7 +5,7 @@ This package helps you integrate Statamic within your Rapidez project by adding 
 - Products, categories and brands are integrated through [Runway](https://github.com/duncanmcclean/runway) as read only resources so you can link them to the content
 - Products, categories and pages collections as starting point so you can extend this however you'd like
 - Route merging so Statamic routes work as fallback
-- Page builder fieldset with a product slider, content and image component
+- Page builder fieldset with a product slider, content, image and form component
 - Responsive images with [spatie/statamic-responsive-images](https://github.com/spatie/statamic-responsive-images)
 - Breadcrumbs for pages
 - Globals available in all views
@@ -92,6 +92,10 @@ By default you'll get the configured content on categories and products availabl
 ```
 - Product: `resources/views/vendor/rapidez/product/overview.blade.php`
 - Category: `resources/views/vendor/rapidez/category/overview.blade.php`
+
+### Forms
+
+When you create a form you could use `rapidez-statamic::emails.form` as HTML template which uses the [Laravel mail template](https://laravel.com/docs/master/mail#customizing-the-components) with all fields in a table, make sure you enable markdown!
 
 ## License
 

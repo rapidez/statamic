@@ -27,4 +27,9 @@ fields:
           fields:
             -
               import: image
+        form:
+          display: Form
+          fields:
+            -
+              import: form
       localizable: true

@@ -2,6 +2,7 @@
 
 namespace Rapidez\Statamic;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\View;
@@ -26,8 +27,9 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootViews()
             ->bootListeners()
             ->bootRunway()
-            ->bootPublishables()
-            ->bootComposers();
+            ->bootComposers()
+            ->bootBladeDirectives()
+            ->bootPublishables();
     }
 
     public function bootConfig() : self
@@ -102,6 +104,25 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
         $this->app->singleton(StatamicGlobalDataComposer::class);
         View::composer('*', StatamicGlobalDataComposer::class);
+
+        return $this;
+    }
+
+    public function bootBladeDirectives() : self
+    {
+        Blade::directive('attributes', function (string $expression) {
+            return "<?php echo (new \Illuminate\View\ComponentAttributeBag)($expression); ?>";
+        });
+
+        Blade::directive('return', function () {
+            return "<?php return; ?>";
+        });
+
+        Blade::directive('includeFirstSafe', function (string $expression) {
+            $expression = Blade::stripParentheses($expression);
+
+            return "<?php try { echo \$__env->first({$expression}, \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); } catch (\InvalidArgumentException \$e) { if (!app()->environment('production')) { echo '<hr>'.__('View not found: :view', ['view' => implode(', ', [{$expression}][0])]).'<hr>'; } } ?>";
+        });
 
         return $this;
     }

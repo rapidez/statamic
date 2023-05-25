@@ -1,0 +1,13 @@
+title: 'Form'
+fields:
+  -
+    handle: form
+    field:
+      max_items: 1
+      display: Form
+      type: form
+      icon: form
+      localizable: false
+      listable: hidden
+      instructions_position: above
+      visibility: visible

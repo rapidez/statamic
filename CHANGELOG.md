@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/1.1.0...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/1.1.1...master)
+## [1.1.1](https://github.com/rapidez/statamic/releases/tag/1.1.1) - 2023-06-06
+
+### Fixed
+
+- Fallback when validation doesn't exist & rename forms to form (#33)
+
 ## [1.1.0](https://github.com/rapidez/statamic/releases/tag/1.1.0) - 2023-05-25
 
 ### Added

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rapidez\Statamic\Forms;
+namespace Rapidez\Statamic\Forms\JsDrivers;
 
 use Statamic\Forms\JsDrivers\AbstractJsDriver;
 use Statamic\Statamic;

@@ -7,11 +7,9 @@
     v-model="formData.{{ $field['handle'] }}"
 >
     @if (!($field['default'] ?? ''))
-        <option
-            value="null"
-            disabled
-            selected
-        >{{ $field['placeholder'] ?? '' }}</option>
+        <option value="null" disabled selected>
+            {{ $field['placeholder'] ?? '' }}
+        </option>
     @endif
     @foreach ($field['options'] ?? [] as $option => $label)
         <option

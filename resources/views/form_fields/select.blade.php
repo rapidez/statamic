@@ -12,9 +12,8 @@
         </option>
     @endif
     @foreach ($field['options'] ?? [] as $option => $label)
-        <option
-            value="{{ $option }}"
-            {{ $option == ($field['default'] ?? '') ? 'selected' : '' }}
-        >{{ $label }}</option>
+        <option value="{{ $option }}" @selected($option == $field['default'] ?? '')>
+            {{ $label }}
+        </option>
     @endforeach
 </x-select>

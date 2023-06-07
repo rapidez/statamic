@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/1.1.1...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/1.2.0...master)
+## [1.2.0](https://github.com/rapidez/statamic/releases/tag/1.2.0) - 2023-06-07
+
+### Added
+
+- Conditional fields support (#34)
+
 ## [1.1.1](https://github.com/rapidez/statamic/releases/tag/1.1.1) - 2023-06-06
 
 ### Fixed

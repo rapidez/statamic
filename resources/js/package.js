@@ -1,5 +1,4 @@
-import '/public/vendor/statamic/frontend/js/helpers.js'
-import Vue from 'vue'
+import 'Vendor/rapidez/core/resources/js/vue'
 
 // Ensure Vue has access to global `Statamic` component
 Vue.prototype.Statamic = window.Statamic;

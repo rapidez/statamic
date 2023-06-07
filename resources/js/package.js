@@ -5,14 +5,4 @@ import Vue from 'vue'
 Vue.prototype.Statamic = window.Statamic;
 
 // Create `<form-conditions>` component to be used with Vue JS driver
-Vue.component('form-conditions', {
-    props: ['initialData'],
-    data() {
-        return {
-            formData: this.initialData,
-        };
-    },
-    render() {
-        return this.$scopedSlots.default({ formData: this.formData });
-    },
-});
+Vue.component('form-conditions', () => import('./components/FormConditions.vue'));

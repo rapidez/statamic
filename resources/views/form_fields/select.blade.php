@@ -1,4 +1,4 @@
-<x-input.select
+<x-select
     :name="$field['handle']"
     :label="$field['display']"
     :value="$field['old'] ?: $field['default'] ?? ''"
@@ -19,4 +19,4 @@
             {{ $option == ($field['default'] ?? '') ? 'selected' : '' }}
         >{{ $label }}</option>
     @endforeach
-</x-input.select>
+</x-select>

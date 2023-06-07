@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View as RenderedView;
 use Rapidez\Core\Facades\Rapidez;
+use Rapidez\Statamic\Forms\Vue;
 use Rapidez\Statamic\Http\Controllers\StatamicRewriteController;
 use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
 use Statamic\Events\GlobalSetDeleted;
@@ -30,6 +31,8 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootComposers()
             ->bootBladeDirectives()
             ->bootPublishables();
+
+        Vue::register();
     }
 
     public function bootConfig() : self

@@ -2,12 +2,15 @@
 
 namespace Rapidez\Statamic\Models;
 
+use DoubleThreeDigital\Runway\Traits\HasRunwayResource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Statamic\Facades\Site;
 
 class Product extends Model
 {
+    use HasRunwayResource;
+    
     protected $primaryKey = 'sku';
     protected $keyType = 'string';
 

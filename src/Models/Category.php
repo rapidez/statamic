@@ -2,11 +2,14 @@
 
 namespace Rapidez\Statamic\Models;
 
+use DoubleThreeDigital\Runway\Traits\HasRunwayResource;
 use Illuminate\Database\Eloquent\Model;
 use Statamic\Facades\Site;
 
 class Category extends Model
 {
+    use HasRunwayResource;
+    
     protected $primaryKey = 'entity_id';
 
     public function getTable()

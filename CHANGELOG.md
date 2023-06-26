@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/1.2.0...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/2.0.0...master)
+## [2.0.0](https://github.com/rapidez/statamic/releases/tag/2.0.0) - 2023-06-26
+
+### Added
+
+- Statamic 4 compatibility (#35)
+
 ## [1.2.0](https://github.com/rapidez/statamic/releases/tag/1.2.0) - 2023-06-07
 
 ### Added

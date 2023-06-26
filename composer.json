@@ -19,15 +19,21 @@
             "email": "royduineveld@gmail.com",
             "homepage": "https://royduineveld.nl",
             "role": "Developer"
+        },
+        {
+            "name": "Kevin Meijer",
+            "email": "kevin@justbetter.nl",
+            "homepage": "https://justbetter.nl",
+            "role": "Developer"
         }
     ],
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
         "php": "^8.0|^8.1",
-        "doublethreedigital/runway": "^4.2",
-        "spatie/statamic-responsive-images": "^3.1",
-        "statamic/cms": "^3.3"
+        "doublethreedigital/runway": "^5.0",
+        "spatie/statamic-responsive-images": "^4.0",
+        "statamic/cms": "^4.0"
     },
     "autoload": {
         "psr-4": {

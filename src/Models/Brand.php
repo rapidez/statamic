@@ -3,12 +3,15 @@
 namespace Rapidez\Statamic\Models;
 
 use DoubleThreeDigital\Runway\Resource;
+use DoubleThreeDigital\Runway\Traits\HasRunwayResource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Statamic\Facades\Site;
 
 class Brand extends Model
 {
+    use HasRunwayResource;
+
     protected $table = 'eav_attribute_option';
 
     protected $primaryKey = 'option_id';

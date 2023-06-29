@@ -69,7 +69,7 @@ php artisan vendor:publish --provider="Rapidez\Statamic\RapidezStatamicServicePr
 
 ### Magento Store ID
 
-It is important to add the Magento store ID in the attributes section within `config/statamic/sites.php` for every site
+It is important to add the Magento store ID in the attributes section within `config/statamic/sites.php` for every site and use the store code as key. The current site will be determined based on the `MAGE_RUN_CODE`. By default Statamic uses the url for this; that's still the fallback.
 
 ```php
 'sites' => [

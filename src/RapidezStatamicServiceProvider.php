@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View as RenderedView;
 use Rapidez\Core\Facades\Rapidez;
+use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
 use Rapidez\Statamic\Forms\JsDrivers\Vue;
 use Rapidez\Statamic\Http\Controllers\StatamicRewriteController;
 use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
@@ -16,10 +17,18 @@ use Statamic\Events\GlobalSetDeleted;
 use Statamic\Events\GlobalSetSaved;
 use Statamic\Facades\Entry;
 use Statamic\Facades\Site;
+use Statamic\Sites\Sites;
 use Statamic\Statamic;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
+    public function register()
+    {
+        $this->app->extend(Sites::class, function () {
+            return new SitesLinkedToMagentoStores(config('statamic.sites'));
+        });
+    }
+
     public function boot()
     {
         $this

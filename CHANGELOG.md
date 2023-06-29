@@ -1,6 +1,13 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/2.0.0...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/2.1.0...master)
+## [2.1.0](https://github.com/rapidez/statamic/releases/tag/2.1.0) - 2023-06-29
+
+### Changed
+
+- Use Blade directives from `rapidez/blade-directives` (#36)
+- Determine the site by `MAGE_RUN_CODE` (7342d7e)
+
 ## [2.0.0](https://github.com/rapidez/statamic/releases/tag/2.0.0) - 2023-06-26
 
 ### Added

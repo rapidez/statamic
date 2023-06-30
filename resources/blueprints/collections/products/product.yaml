@@ -9,6 +9,7 @@ sections:
           required: true
           validate:
             - required
+          localizable: true
       -
         handle: linked_product
         field:
@@ -22,6 +23,7 @@ sections:
           listable: hidden
           instructions_position: above
           visibility: visible
+          localizable: true
       -
         import: page_builder
 title: Products

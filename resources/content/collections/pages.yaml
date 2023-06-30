@@ -1,5 +1,5 @@
 title: Pages
-propagate: false
+propagate: true
 template: rapidez-statamic::page
 revisions: false
 route: '/{parent_uri}/{slug}'

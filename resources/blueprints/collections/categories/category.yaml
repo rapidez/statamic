@@ -9,7 +9,7 @@ sections:
           required: true
           validate:
             - required
-          localizable: false
+          localizable: true
       -
         handle: linked_category
         field:
@@ -23,7 +23,7 @@ sections:
           listable: hidden
           instructions_position: above
           visibility: visible
-          localizable: false
+          localizable: true
       -
         import: page_builder
 title: Categories

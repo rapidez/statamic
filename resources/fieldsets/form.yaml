@@ -7,7 +7,7 @@ fields:
       display: Form
       type: form
       icon: form
-      localizable: false
+      localizable: true
       listable: hidden
       instructions_position: above
       visibility: visible

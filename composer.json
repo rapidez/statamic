@@ -33,7 +33,6 @@
         "php": "^8.0|^8.1",
         "doublethreedigital/runway": "^5.0",
         "rapidez/blade-directives": "*",
-        "rapidez/core": ">=0.90.1 <1.0.0|^1.0",
         "spatie/statamic-responsive-images": "^4.0",
         "statamic/cms": "^4.0"
     },

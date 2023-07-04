@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/2.1.1...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/2.1.2...master)
+## [2.1.2](https://github.com/rapidez/statamic/releases/tag/2.1.2) - 2023-07-04
+
+### Fixed
+
+- Overwrite the findByUrl method as it used on multiple places (589708e)
+
 ## [2.1.1](https://github.com/rapidez/statamic/releases/tag/2.1.1) - 2023-07-04
 
 ### Fixed

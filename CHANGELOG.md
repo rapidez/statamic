@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/2.1.2...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/2.2.0...master)
+## [2.2.0](https://github.com/rapidez/statamic/releases/tag/2.2.0) - 2023-07-06
+
+### Added
+
+- Automatic alternate hreflang link tags (9613e21)
+
 ## [2.1.2](https://github.com/rapidez/statamic/releases/tag/2.1.2) - 2023-07-04
 
 ### Fixed

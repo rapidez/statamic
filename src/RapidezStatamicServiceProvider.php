@@ -13,6 +13,7 @@ use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
 use Rapidez\Statamic\Forms\JsDrivers\Vue;
 use Rapidez\Statamic\Http\Controllers\StatamicRewriteController;
 use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
+use Rapidez\Statamic\Tags\Alternates;
 use Statamic\Events\GlobalSetDeleted;
 use Statamic\Events\GlobalSetSaved;
 use Statamic\Facades\Entry;
@@ -41,6 +42,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootPublishables();
 
         Vue::register();
+        Alternates::register();
     }
 
     public function bootConfig() : self

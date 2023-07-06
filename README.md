@@ -9,6 +9,7 @@ This package helps you integrate Statamic within your Rapidez project by adding 
 - Responsive images with [spatie/statamic-responsive-images](https://github.com/spatie/statamic-responsive-images)
 - Breadcrumbs for pages
 - Globals available in all views
+- Meta title, description and automatic alternate hreflang link tags
 
 ## Requirements
 
@@ -69,7 +70,7 @@ php artisan vendor:publish --provider="Rapidez\Statamic\RapidezStatamicServicePr
 
 ### Magento Store ID
 
-It is important to add the Magento store ID in the attributes section within `config/statamic/sites.php` for every site and use the store code as key. The current site will be determined based on the `MAGE_RUN_CODE`. By default Statamic uses the url for this; that's still the fallback.
+It is important to add the Magento store ID for every site in the attributes section within `config/statamic/sites.php` and use the store code as key. The current site will be determined based on the `MAGE_RUN_CODE`. By default Statamic uses the url for this; that's still the fallback. If you need to generate some urls with a multisite it's a best practice to specify the `url` per site from env variables. See the [Statamic multisite docs](https://statamic.dev/multi-site#url).
 
 ```php
 'sites' => [

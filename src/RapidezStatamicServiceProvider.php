@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View as RenderedView;
 use Rapidez\Core\Facades\Rapidez;
+use Rapidez\Statamic\Commands\ImportCategories;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
 use Rapidez\Statamic\Forms\JsDrivers\Vue;
 use Rapidez\Statamic\Http\Controllers\StatamicRewriteController;
@@ -33,6 +34,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function boot()
     {
         $this
+            ->bootCommands()
             ->bootConfig()
             ->bootRoutes()
             ->bootViews()
@@ -43,6 +45,15 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
         Vue::register();
         Alternates::register();
+    }
+
+    public function bootCommands() : self
+    {
+        $this->commands([
+            ImportCategories::class
+        ]);
+
+        return $this;
     }
 
     public function bootConfig() : self
@@ -73,6 +84,12 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         Event::listen([GlobalSetSaved::class, GlobalSetDeleted::class], function() {
             Cache::forget('statamic-globals-'.Site::current()->handle());
         });
+
+        Event::listen('rapidez-statamic:category-entry-data', fn($category) => [
+                'title' => $category->name,
+                'slug'  => trim($category->url_key),
+            ]
+        );
 
         return $this;
     }

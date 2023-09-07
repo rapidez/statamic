@@ -52,7 +52,7 @@ class ImportCategories extends Command
                 ->unless($categoryIdentifiers, fn ($query) => $query
                     ->whereNotNull('url_key')
                     ->whereNot('url_key', 'default-category')
-                    ->where('children_count', '>', 0)
+                    ->where('product_count', '>', 0)
                 )
                 ->when($categoryIdentifiers, fn ($query) => $query
                     ->whereIn($categoryModelInstance->getQualifiedKeyName(), $categoryIdentifiers)

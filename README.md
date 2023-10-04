@@ -94,6 +94,33 @@ By default you'll get the configured content on categories and products availabl
 - Product: `resources/views/vendor/rapidez/product/overview.blade.php`
 - Category: `resources/views/vendor/rapidez/category/overview.blade.php`
 
+### Importing categories from Magento
+
+To make it easier to change category content in bulk you can create category entries with content copied over in bulk.
+
+To do this run one of the following:
+
+```bash
+# Most basic, import all categories in all sites
+php artisan rapidez:statamic:import:categories --all
+
+# Import all categories in the site with handle "default" only
+php artisan rapidez:statamic:import:categories --all --site=default
+
+# import select categories in multiple sites
+php artisan rapidez:statamic:import:categories 5 8 9 category-url-key --site=default --site=another_site
+```
+
+By default the slug and title of the category are copied.
+
+If you have a custom blueprint and would like to add more data from the category you can do so by hooking into the `rapidez-statamic:category-entry-data` event:
+
+```php
+Event::listen('rapidez-statamic:category-entry-data', fn($category) => [
+        'description' => $category->description,
+    ]
+);
+```
 ### Forms
 
 When you create a form you could use `rapidez-statamic::emails.form` as HTML template which uses the [Laravel mail template](https://laravel.com/docs/master/mail#customizing-the-components) with all fields in a table, make sure you enable markdown!

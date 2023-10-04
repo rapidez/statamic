@@ -11,6 +11,10 @@
             <input type="hidden" name="{{ $name }}" value="{{ $value }}">
         @endforeach
 
+        @if($form['honeypot'] ?? false)
+            <input name="{!! $form['honeypot'] !!}" class="hidden" value="">
+        @endif
+
         <div class="grid grid-cols-12 gap-3">
             @foreach($form['fields'] as $field)
                 <div

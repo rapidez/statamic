@@ -4,7 +4,8 @@
 ## [2.3.0](https://github.com/rapidez/statamic/releases/tag/2.3.0) - 2023-09-22
 
 ### Added
-* Honeypot to form template (#40)
+
+- Honeypot to form template (#40)
 
 ## [2.2.0](https://github.com/rapidez/statamic/releases/tag/2.2.0) - 2023-07-06
 

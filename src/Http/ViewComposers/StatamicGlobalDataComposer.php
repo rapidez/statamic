@@ -29,6 +29,10 @@ class StatamicGlobalDataComposer
     {
         if(!isset($view->globals)) {
             $view->with('globals', (object)$this->globals);
+
+            foreach ($this->globals as $global => $globalData) {
+                $view->with($global, $globalData);
+            }
         }
 
         return $view;

@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/2.4.0...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/2.4.1...master)
+## [2.4.1](https://github.com/rapidez/statamic/releases/tag/2.4.1) - 2023-10-25
+
+### Fixed
+
+- Only use the base site url for the homepage (f1d331d)
+
 ## [2.4.0](https://github.com/rapidez/statamic/releases/tag/2.4.0) - 2023-10-25
 
 ### Added

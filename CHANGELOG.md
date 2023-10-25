@@ -1,6 +1,13 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/2.3.0...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/2.4.0...master)
+## [2.4.0](https://github.com/rapidez/statamic/releases/tag/2.4.0) - 2023-10-25
+
+### Added
+
+- Command to import Magento categories into Statamic (#38)
+- Always alternate href lang tags on home and filter option by group (0512f42)
+
 ## [2.3.0](https://github.com/rapidez/statamic/releases/tag/2.3.0) - 2023-09-22
 
 ### Added

@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/2.4.1...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/2.4.2...master)
+## [2.4.2](https://github.com/rapidez/statamic/releases/tag/2.4.2) - 2023-10-26
+
+### Fixed
+
+- Remove ambiguous keys from query (#41)
+
 ## [2.4.1](https://github.com/rapidez/statamic/releases/tag/2.4.1) - 2023-10-25
 
 ### Fixed

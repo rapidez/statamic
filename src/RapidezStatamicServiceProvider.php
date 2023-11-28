@@ -163,6 +163,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
     public function currentSiteIsEnabled(): bool
     {
-        return !config('statamic.sites.sites.' . Site::current()->handle() . '.attributes.disabled', false) ?? true;
+        return !config('statamic.sites.sites.' . Site::current()->handle() . '.attributes.disabled', false);
     }
 }

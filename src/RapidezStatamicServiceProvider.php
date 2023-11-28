@@ -65,7 +65,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
     public function bootRoutes() : self
     {
-        if (config('rapidez-statamic.routes')) {
+        if (config('rapidez-statamic.routes') && !$this->isCurrentSiteDisabled()) {
             Rapidez::addFallbackRoute(StatamicRewriteController::class);
         }
 
@@ -81,22 +81,23 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
     public function bootListeners() : self
     {
-        Event::listen([GlobalSetSaved::class, GlobalSetDeleted::class], function() {
-            Cache::forget('statamic-globals-'.Site::current()->handle());
-        });
+        if (!$this->isCurrentSiteDisabled()) {
+            Event::listen([GlobalSetSaved::class, GlobalSetDeleted::class], function () {
+                Cache::forget('statamic-globals-' . Site::current()->handle());
+            });
 
-        Event::listen('rapidez-statamic:category-entry-data', fn($category) => [
+            Event::listen('rapidez-statamic:category-entry-data', fn($category) => [
                 'title' => $category->name,
-                'slug'  => trim($category->url_key),
-            ]
-        );
+                'slug' => trim($category->url_key),
+            ]);
+        }
 
         return $this;
     }
 
     public function bootRunway() : self
     {
-        if (config('rapidez-statamic.runway.configure')) {
+        if (config('rapidez-statamic.runway.configure') && !$this->isCurrentSiteDisabled()) {
             config(['runway.resources' => array_merge(
                 config('rapidez-statamic.runway.resources'),
                 config('runway.resources')
@@ -108,7 +109,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
     public function bootComposers() : self
     {
-        if (config('rapidez-statamic.fetch.product')) {
+        if (config('rapidez-statamic.fetch.product') && !$this->isCurrentSiteDisabled()) {
             View::composer('rapidez::product.overview', function (RenderedView $view) {
                 $entry = Entry::query()
                     ->where('collection', 'products')
@@ -120,7 +121,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             });
         }
 
-        if (config('rapidez-statamic.fetch.category')) {
+        if (config('rapidez-statamic.fetch.category') && !$this->isCurrentSiteDisabled()) {
             View::composer('rapidez::category.overview', function (RenderedView $view) {
                 $entry = Entry::query()
                     ->where('collection', 'categories')
@@ -132,8 +133,10 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             });
         }
 
-        $this->app->singleton(StatamicGlobalDataComposer::class);
-        View::composer('*', StatamicGlobalDataComposer::class);
+        if (!$this->isCurrentSiteDisabled()) {
+            $this->app->singleton(StatamicGlobalDataComposer::class);
+            View::composer('*', StatamicGlobalDataComposer::class);
+        }
 
         return $this;
     }
@@ -156,5 +159,10 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         ], 'config');
 
         return $this;
+    }
+
+    public function isCurrentSiteDisabled(): bool
+    {
+        return config('statamic.sites.sites.' . Site::current()->handle() . '.attributes.disabled') ?? false;
     }
 }

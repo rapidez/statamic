@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/2.4.2...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/2.5.0...master)
+## [2.5.0](https://github.com/rapidez/statamic/releases/tag/2.5.0) - 2023-11-28
+
+### Added
+
+- Disabled site option (#43)
+
 ## [2.4.2](https://github.com/rapidez/statamic/releases/tag/2.4.2) - 2023-10-26
 
 ### Fixed

@@ -58,14 +58,15 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
     public function bootConfig() : self
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/rapidez-statamic.php', 'rapidez-statamic');
+        $this->mergeConfigFrom(__DIR__.'/../config/rapidez/statamic.php', 'rapidez.statamic');
+        $this->mergeConfigFrom(__DIR__.'/../config/rapidez/statamic/runway.php', 'rapidez.statamic.runway');
 
         return $this;
     }
 
     public function bootRoutes() : self
     {
-        if (config('rapidez-statamic.routes') && $this->currentSiteIsEnabled()) {
+        if (config('rapidez.statamic.routes') && $this->currentSiteIsEnabled()) {
             Rapidez::addFallbackRoute(StatamicRewriteController::class);
         }
 
@@ -97,9 +98,9 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
     public function bootRunway() : self
     {
-        if (config('rapidez-statamic.runway.configure') && $this->currentSiteIsEnabled()) {
+        if (config('rapidez.statamic.runway.configure') && $this->currentSiteIsEnabled()) {
             config(['runway.resources' => array_merge(
-                config('rapidez-statamic.runway.resources'),
+                config('rapidez.statamic.runway.resources'),
                 config('runway.resources')
             )]);
         }
@@ -109,7 +110,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
     public function bootComposers() : self
     {
-        if (config('rapidez-statamic.fetch.product') && $this->currentSiteIsEnabled()) {
+        if (config('rapidez.statamic.fetch.product') && $this->currentSiteIsEnabled()) {
             View::composer('rapidez::product.overview', function (RenderedView $view) {
                 $entry = Entry::query()
                     ->where('collection', 'products')
@@ -121,7 +122,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             });
         }
 
-        if (config('rapidez-statamic.fetch.category') && $this->currentSiteIsEnabled()) {
+        if (config('rapidez.statamic.fetch.category') && $this->currentSiteIsEnabled()) {
             View::composer('rapidez::category.overview', function (RenderedView $view) {
                 $entry = Entry::query()
                     ->where('collection', 'categories')
@@ -155,7 +156,11 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         ], 'views');
 
         $this->publishes([
-            __DIR__.'/../config/rapidez-statamic.php' => config_path('rapidez-statamic.php'),
+            __DIR__.'/../config/rapidez/statamic.php' => config_path('rapidez/statamic.php'),
+        ], 'config');
+
+        $this->publishes([
+            __DIR__.'/../config/rapidez/statamic/runway.php.php' => config_path('rapidez/statamic/runway.php'),
         ], 'config');
 
         return $this;

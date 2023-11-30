@@ -17,7 +17,7 @@ class Product extends Model
     protected static function booting()
     {
         static::addGlobalScope(function (Builder $builder) {
-            $builder->whereIn('visibility', config('rapidez-statamic.runway.product_visibility'));
+            $builder->whereIn('visibility', config('rapidez.statamic.runway.product_visibility'));
         });
     }
 

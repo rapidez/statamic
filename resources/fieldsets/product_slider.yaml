@@ -15,7 +15,7 @@ fields:
   -
     handle: products
     field:
-      mode: table
+      mode: default
       resource: product
       create: false
       display: Products
@@ -25,3 +25,6 @@ fields:
       instructions_position: above
       visibility: visible
       localizable: true
+      replicator_preview: true
+      reorderable: false
+      hide_display: false

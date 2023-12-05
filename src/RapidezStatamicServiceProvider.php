@@ -178,9 +178,9 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             Utility::register('imports')
                 ->icon('synchronize')
                 ->action(ImportsController::class)
-                ->title('Import')
-                ->navTitle('Import')
-                ->description('Import products or categories from Magento')
+                ->title(__('Import'))
+                ->navTitle(__('Import'))
+                ->description(__('Import products or categories from Magento'))
                 ->routes(function (Router $router) : void {
                     $router->post('/import-categories', [ImportsController::class, 'importCategories'])
                         ->name('import-categories');

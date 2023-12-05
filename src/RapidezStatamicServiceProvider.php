@@ -2,25 +2,29 @@
 
 namespace Rapidez\Statamic;
 
+use Statamic\Statamic;
+use Statamic\Sites\Sites;
+use Statamic\Facades\Site;
+use Statamic\Facades\Entry;
+use Statamic\Facades\Utility;
+use Illuminate\Routing\Router;
+use Rapidez\Core\Facades\Rapidez;
+use Statamic\Events\GlobalSetSaved;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\View\View as RenderedView;
-use Rapidez\Core\Facades\Rapidez;
-use Rapidez\Statamic\Commands\ImportCategories;
-use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
-use Rapidez\Statamic\Forms\JsDrivers\Vue;
-use Rapidez\Statamic\Http\Controllers\StatamicRewriteController;
-use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
 use Rapidez\Statamic\Tags\Alternates;
 use Statamic\Events\GlobalSetDeleted;
-use Statamic\Events\GlobalSetSaved;
-use Statamic\Facades\Entry;
-use Statamic\Facades\Site;
-use Statamic\Sites\Sites;
-use Statamic\Statamic;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\View\View as RenderedView;
+use Rapidez\Statamic\Forms\JsDrivers\Vue;
+use Rapidez\Statamic\Commands\ImportProducts;
+use Rapidez\Statamic\Commands\ImportCategories;
+use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
+use Rapidez\Statamic\Http\Controllers\ImportsController;
+use Rapidez\Statamic\Http\Controllers\StatamicRewriteController;
+use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
@@ -41,7 +45,8 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootListeners()
             ->bootRunway()
             ->bootComposers()
-            ->bootPublishables();
+            ->bootPublishables()
+            ->bootUtilities();
 
         Vue::register();
         Alternates::register();
@@ -50,7 +55,8 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootCommands() : self
     {
         $this->commands([
-            ImportCategories::class
+            ImportCategories::class,
+            ImportProducts::class,
         ]);
 
         return $this;
@@ -89,6 +95,11 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             Event::listen('rapidez-statamic:category-entry-data', fn($category) => [
                 'title' => $category->name,
                 'slug' => trim($category->url_key),
+            ]);
+
+            Event::listen('rapidez-statamic:product-entry-data', fn($product) => [
+                'title' => $product->name,
+                'slug' => trim($product->url_key),
             ]);
         }
 
@@ -161,6 +172,27 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         return $this;
     }
 
+    public function bootUtilities() : static
+    {
+        Utility::extend(function () : void {
+            Utility::register('imports')
+                ->icon('synchronize')
+                ->action(ImportsController::class)
+                ->title('Import')
+                ->navTitle('Import')
+                ->description('Import products or categories from Magento')
+                ->routes(function (Router $router) : void {
+                    $router->post('/import-categories', [ImportsController::class, 'importCategories'])
+                        ->name('import-categories');
+
+                    $router->post('/import-products', [ImportsController::class, 'importProducts'])
+                        ->name('import-products');
+                });
+        });
+        
+        return $this;
+    }
+    
     public function currentSiteIsEnabled(): bool
     {
         return !config('statamic.sites.sites.' . Site::current()->handle() . '.attributes.disabled', false);

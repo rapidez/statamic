@@ -13,23 +13,15 @@ use Statamic\Facades\Entry;
 use Statamic\Facades\Site;
 use Symfony\Component\Console\Helper\ProgressBar;
 
-class ImportCategories extends Command
+class ImportProducts extends Command
 {
-    protected $signature = 'rapidez:statamic:import:categories {categories?* : Categories in a space separated list, by entity_id or url_key} {--all : Process all categories if none have been passed} {--site=* : Sites handles or urls to process, if none are passed it will be done for all sites (Default will be all sites)}';
+    protected $signature = 'rapidez:statamic:import:products {--site=* : Sites handles or urls to process, if none are passed it will be done for all sites (Default will be all sites)}';
 
-    protected $description = 'Create a new category entry for a category if it does not exist.';
+    protected $description = 'Create a new product entry for a product if it does not exist.';
 
-    public function handle(): int
+    public function handle()
     {
-        $categoryModel = config('rapidez.models.category');
-        $categoryModelInstance = new $categoryModel;
-
-        $categoryIdentifiers = $this->argument('categories');
-        if (!$categoryIdentifiers && !$this->option('all')) {
-            $this->error(__('You must enter categories or pass the --all flag.'));
-
-            return static::FAILURE;
-        }
+        $productModel = config('rapidez.models.product');
 
         $sites = $this->option('site');
         $sites = $sites
@@ -48,29 +40,22 @@ class ImportCategories extends Command
 
             Rapidez::setStore($siteAttributes['magento_store_id']);
 
-            $categories = $categoryModel::query()
-                ->unless($categoryIdentifiers, fn ($query) => $query
-                    ->whereNotNull('url_key')
-                    ->whereNot('url_key', 'default-category')
-                )
-                ->when($categoryIdentifiers, fn ($query) => $query
-                    ->whereIn($categoryModelInstance->getQualifiedKeyName(), $categoryIdentifiers)
-                    ->orWhereIn('url_key', $categoryIdentifiers)
-                )
+            $products = $productModel::query()
+                ->selectAttributes(['entity_id', 'sku', 'name', 'url_key'])
                 ->lazy();
-
-            foreach ($categories as $category) {
+            
+            foreach ($products as $product) {
                 static::createEntry(
                     [
-                        'collection' => config('rapidez-statamic.import.categories.collection', 'categories'),
-                        'blueprint'  => config('rapidez-statamic.import.categories.blueprint', 'category'),
+                        'collection' => config('rapidez-statamic.import.products.collection', 'products'),
+                        'blueprint'  => config('rapidez-statamic.import.products.blueprint', 'product'),
                         'site'       => $site->handle(),
-                        'linked_category' => $category->entity_id,
+                        'linked_product' => $product->sku,
                     ],
                     array_merge([
                         'locale'       => $site->handle(),
                         'site'       => $site->handle(),
-                    ], ...Event::dispatch('rapidez-statamic:category-entry-data', ['category' => $category]))
+                    ], ...Event::dispatch('rapidez-statamic:product-entry-data', ['product' => $product]))
                 );
             }
 
@@ -92,7 +77,7 @@ class ImportCategories extends Command
         /** @var \Statamic\Entries\Entry $entry */
         $entry = Entry::make();
         $values = array_merge($attributes, $values);
-
+        
         static::setEntryData($entry, $values)->save();
     }
 

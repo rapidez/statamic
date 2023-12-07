@@ -3,15 +3,10 @@
 namespace Rapidez\Statamic\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Str;
 use Rapidez\Core\Facades\Rapidez;
-use Rapidez\Statamic\Jobs\ImportCategoriesJob;
-use ReflectionClass;
-use Statamic\Facades\Entry;
+use Rapidez\Statamic\Actions\StatamicEntryAction;
 use Statamic\Facades\Site;
-use Symfony\Component\Console\Helper\ProgressBar;
 
 class ImportProducts extends Command
 {
@@ -23,6 +18,9 @@ class ImportProducts extends Command
     {
         $productModel = config('rapidez.models.product');
 
+        /** @var StatamicEntryAction $statamicEntryAction */
+        $statamicEntryAction = app(StatamicEntryAction::class);
+        
         $sites = $this->option('site');
         $sites = $sites
             ? array_filter(array_map(fn($handle) => (Site::get($handle) ?: Site::findByUrl($handle)) ?: $this->output->warning(__('No site found with handle or url: :handle', ['handle' => $handle])), $sites))
@@ -45,7 +43,7 @@ class ImportProducts extends Command
                 ->lazy();
             
             foreach ($products as $product) {
-                static::createEntry(
+                $statamicEntryAction::createEntry(
                     [
                         'collection' => config('rapidez-statamic.import.products.collection', 'products'),
                         'blueprint'  => config('rapidez-statamic.import.products.blueprint', 'product'),
@@ -63,39 +61,6 @@ class ImportProducts extends Command
         }
         $bar->finish();
 
-
         return static::SUCCESS;
-    }
-
-    protected static function createEntry(array $attributes, array $values = [])
-    {
-        if (Entry::query()->where($attributes)->count()) {
-            // Entry was already created.
-            return;
-        }
-
-        /** @var \Statamic\Entries\Entry $entry */
-        $entry = Entry::make();
-        $values = array_merge($attributes, $values);
-        
-        static::setEntryData($entry, $values)->save();
-    }
-
-    protected static function setEntryData(\Statamic\Entries\Entry $entry, array $values = []) : \Statamic\Entries\Entry
-    {
-        $reflectedEntry = new ReflectionClass($entry);
-        foreach ($values as $key => $value) {
-            // Check if the key is a statamic setter
-            if (!$reflectedEntry->hasMethod($key) || $reflectedEntry->getMethod($key)->getNumberOfParameters() < 1) {
-                continue;
-            }
-
-            $entry->$key($value);
-            unset($values[$key]);
-        }
-
-        $entry->merge($values);
-
-        return $entry;
     }
 }

@@ -2,16 +2,11 @@
 
 namespace Rapidez\Statamic\Commands;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Str;
-use Rapidez\Core\Facades\Rapidez;
-use Rapidez\Statamic\Jobs\ImportCategoriesJob;
-use ReflectionClass;
-use Statamic\Facades\Entry;
 use Statamic\Facades\Site;
-use Symfony\Component\Console\Helper\ProgressBar;
+use Illuminate\Console\Command;
+use Rapidez\Core\Facades\Rapidez;
+use Illuminate\Support\Facades\Event;
+use Rapidez\Statamic\Actions\StatamicEntryAction;
 
 class ImportCategories extends Command
 {
@@ -23,6 +18,9 @@ class ImportCategories extends Command
     {
         $categoryModel = config('rapidez.models.category');
         $categoryModelInstance = new $categoryModel;
+
+        /** @var StatamicEntryAction $statamicEntryAction */
+        $statamicEntryAction = app(StatamicEntryAction::class);
 
         $categoryIdentifiers = $this->argument('categories');
         if (!$categoryIdentifiers && !$this->option('all')) {
@@ -60,14 +58,17 @@ class ImportCategories extends Command
                 ->lazy();
 
             foreach ($categories as $category) {
-                static::createEntry(
+                $statamicEntryAction::createEntry(
                     [
-                        'collection' => 'categories',
-                        'blueprint'  => 'category',
+                        'collection' => config('rapidez-statamic.import.categories.collection', 'categories'),
+                        'blueprint'  => config('rapidez-statamic.import.categories.blueprint', 'category'),
                         'site'       => $site->handle(),
                         'linked_category' => $category->entity_id,
                     ],
-                    array_merge(...Event::dispatch('rapidez-statamic:category-entry-data', ['category' => $category]))
+                    array_merge([
+                        'locale'       => $site->handle(),
+                        'site'       => $site->handle(),
+                    ], ...Event::dispatch('rapidez-statamic:category-entry-data', ['category' => $category]))
                 );
             }
 
@@ -75,39 +76,6 @@ class ImportCategories extends Command
         }
         $bar->finish();
 
-
         return static::SUCCESS;
-    }
-
-    protected static function createEntry(array $attributes, array $values = [])
-    {
-        if (Entry::query()->where($attributes)->count()) {
-            // Entry was already created.
-            return;
-        }
-
-        /** @var \Statamic\Entries\Entry $entry */
-        $entry = Entry::make();
-        $values = array_merge($attributes, $values);
-
-        static::setEntryData($entry, $values)->save();
-    }
-
-    protected static function setEntryData(\Statamic\Entries\Entry $entry, array $values = []) : \Statamic\Entries\Entry
-    {
-        $reflectedEntry = new ReflectionClass($entry);
-        foreach ($values as $key => $value) {
-            // Check if the key is a statamic setter
-            if (!$reflectedEntry->hasMethod($key) || $reflectedEntry->getMethod($key)->getNumberOfParameters() < 1) {
-                continue;
-            }
-
-            $entry->$key($value);
-            unset($values[$key]);
-        }
-
-        $entry->merge($values);
-
-        return $entry;
     }
 }

@@ -65,7 +65,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootConfig() : self
     {
         $this->mergeConfigFrom(__DIR__.'/../config/rapidez/statamic.php', 'rapidez.statamic');
-        $this->mergeConfigFrom(__DIR__.'/../config/rapidez/statamic/runway.php', 'rapidez.statamic.runway');
 
         return $this;
     }
@@ -168,10 +167,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__.'/../config/rapidez/statamic.php' => config_path('rapidez/statamic.php'),
-        ], 'config');
-
-        $this->publishes([
-            __DIR__.'/../config/rapidez/statamic/runway.php.php' => config_path('rapidez/statamic/runway.php'),
         ], 'config');
 
         return $this;

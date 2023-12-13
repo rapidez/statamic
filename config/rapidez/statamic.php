@@ -33,17 +33,17 @@ return [
         // Should we configure Runway? You'll get a products,
         // categories and brands / manufacturers resource.
         'configure' => true,
-    
+
         // The attribute id used for the brand resource.
         'brand_attribute_id' => 83,
-    
+
         // Only show these product visibilities.
         // VISIBILITY_NOT_VISIBLE    = 1;
         // VISIBILITY_IN_CATALOG     = 2;
         // VISIBILITY_IN_SEARCH      = 3;
         // VISIBILITY_BOTH           = 4;
         'product_visibility' => [2, 3, 4],
-    
+
         // The Runway resources we'll configure.
         'resources' => [
             \Rapidez\Statamic\Models\Product::class => [
@@ -63,7 +63,7 @@ return [
                     ]
                 ]
             ],
-    
+
             \Rapidez\Statamic\Models\Category::class => [
                 'name' => 'Categories',
                 'read_only' => true,
@@ -80,7 +80,7 @@ return [
                     ]
                 ]
             ],
-    
+
             \Rapidez\Statamic\Models\Brand::class => [
                 'name' => 'Brands',
                 'read_only' => true,

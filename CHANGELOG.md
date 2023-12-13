@@ -1,6 +1,16 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/2.5.0...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/2.6.0...master)
+## [2.6.0](https://github.com/rapidez/statamic/releases/tag/2.6.0) - 2023-12-12
+
+### Added
+
+- Product import command & add utility to start imports (#46)
+
+### Changed
+
+- Remove deprecated HasMany table mode (#45)
+
 ## [2.5.0](https://github.com/rapidez/statamic/releases/tag/2.5.0) - 2023-11-28
 
 ### Added

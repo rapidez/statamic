@@ -17,6 +17,18 @@ return [
         'category' => true,
     ],
 
+    // Which collection and blueprint should be used for importing products?
+    'import' => [
+        'categories' => [
+            'collection' => 'categories',
+            'blueprint' => 'category',
+        ],
+        'products' => [
+            'collection' => 'products',
+            'blueprint' => 'product',
+        ],
+    ],
+
     'runway' => [
         // Should we configure Runway? You'll get a products,
         // categories and brands / manufacturers resource.

@@ -34,4 +34,14 @@ class ImportsController extends Controller
 
         return redirect(cp_route('utilities.imports'));
     }
+
+    public function importBrands() : RedirectResponse
+    {
+        Artisan::queue('rapidez:statamic:import:brands')
+            ->onQueue('imports');
+
+        Toast::success(__('The import of brands has started!'))->duration(5000);
+
+        return redirect(cp_route('utilities.imports'));
+    }
 }

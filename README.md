@@ -3,7 +3,7 @@
 This package helps you integrate Statamic within your Rapidez project by adding some good starting points:
 
 - Products, categories and brands are integrated through [Runway](https://github.com/duncanmcclean/runway) as read only resources so you can link them to the content
-- Products, categories and pages collections as starting point so you can extend this however you'd like
+- Products, categories, brands and pages collections as starting point so you can extend this however you'd like
 - Route merging so Statamic routes work as fallback
 - Page builder fieldset with a product slider, content, image and form component
 - Responsive images with [spatie/statamic-responsive-images](https://github.com/spatie/statamic-responsive-images)
@@ -147,6 +147,31 @@ If you have a custom blueprint and would like to add more data from the product 
 ```php
 Event::listen('rapidez-statamic:product-entry-data', fn($product) => [
         'description' => $product->description,
+    ]
+);
+```
+
+#### Brands
+
+To make it easier to change brands content in bulk you can create brand entries with content copied over in bulk.
+
+To do this run one of the following:
+
+```bash
+# Import all brands in all sites
+php artisan rapidez:statamic:import:brands
+
+# Import all brands in the site with handle "default" only
+php artisan rapidez:statamic:import:brands --site=default
+```
+
+By default the slug and title of the brand are copied.
+
+If you have a custom blueprint and would like to add more data from the brand you can do so by hooking into the `rapidez-statamic:brand-entry-data` event:
+
+```php
+Event::listen('rapidez-statamic:brand-entry-data', fn($brand) => [
+        'description' => $brand->description,
     ]
 );
 ```

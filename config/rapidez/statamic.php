@@ -27,6 +27,10 @@ return [
             'collection' => 'products',
             'blueprint' => 'product',
         ],
+        'brands' => [
+            'collection' => 'brands',
+            'blueprint' => 'brand',
+        ],
     ],
 
     'runway' => [

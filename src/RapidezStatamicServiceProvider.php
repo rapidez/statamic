@@ -18,6 +18,7 @@ use Rapidez\Statamic\Tags\Alternates;
 use Statamic\Events\GlobalSetDeleted;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View as RenderedView;
+use Rapidez\Statamic\Commands\ImportBrands;
 use Rapidez\Statamic\Forms\JsDrivers\Vue;
 use Rapidez\Statamic\Commands\ImportProducts;
 use Rapidez\Statamic\Commands\ImportCategories;
@@ -57,6 +58,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         $this->commands([
             ImportCategories::class,
             ImportProducts::class,
+            ImportBrands::class,
         ]);
 
         return $this;
@@ -100,6 +102,11 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             Event::listen('rapidez-statamic:product-entry-data', fn($product) => [
                 'title' => $product->name,
                 'slug' => trim($product->url_key),
+            ]);
+
+            Event::listen('rapidez-statamic:brand-entry-data', fn($brand) => [
+                'title' => $brand->value_store,
+                'slug' => trim($brand->value_admin),
             ]);
         }
 
@@ -187,6 +194,9 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
                     $router->post('/import-products', [ImportsController::class, 'importProducts'])
                         ->name('import-products');
+
+                    $router->post('/import-brands', [ImportsController::class, 'importBrands'])
+                        ->name('import-brands');
                 });
         });
         

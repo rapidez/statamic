@@ -23,7 +23,7 @@ composer require rapidez/statamic
 
 ## Configuration
 
-Have a look within the `rapidez-statamic.php` config file, if you need to change something you can publish it with:
+Have a look within the `rapidez/statamic.php` config file, if you need to change something you can publish it with:
 
 ```
 php artisan vendor:publish --provider="Rapidez\Statamic\RapidezStatamicServiceProvider" --tag=config
@@ -89,7 +89,7 @@ It is important to add the Magento store ID for every site in the attributes sec
 
 ### Showing content on categories and products
 
-By default you'll get the configured content on categories and products available withint the `$content` variable. This can be enabled/disabled with the `fetch` configurations within the `rapidez-statamic.php` config file. If you want to display the configured content from the default page builder you can include this in your view:
+By default you'll get the configured content on categories and products available withint the `$content` variable. This can be enabled/disabled with the `fetch` configurations within the `rapidez/statamic.php` config file. If you want to display the configured content from the default page builder you can include this in your view:
 ```
 @includeWhen(isset($content), 'rapidez-statamic::page_builder', ['content' => $content?->content])
 ```

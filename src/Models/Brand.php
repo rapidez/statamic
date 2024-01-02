@@ -36,7 +36,7 @@ class Brand extends Model
                 })
                 ->leftJoinSub($renamedStore, 'store_value', function ($join) {
                     $join->on('store_value.sub_option_id', '=', 'eav_attribute_option.option_id')
-                         ->where('store_value.store_id', Site::selected()->attributes['magento_store_id']);
+                         ->where('store_value.store_id', Site::current()->attributes['magento_store_id']);
                 })
                 ->where('attribute_id', config('rapidez.statamic.runway.brand_attribute_id'));
         });

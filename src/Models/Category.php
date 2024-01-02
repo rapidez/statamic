@@ -14,6 +14,6 @@ class Category extends Model
 
     public function getTable()
     {
-        return 'catalog_category_flat_store_'.Site::selected()->attributes['magento_store_id'];
+        return 'catalog_category_flat_store_'.Site::current()->attributes['magento_store_id'];
     }
 }

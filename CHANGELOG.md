@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/2.8.0...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/2.8.1...master)
+## [2.8.1](https://github.com/rapidez/statamic/releases/tag/2.8.1) - 2024-01-02
+
+### Fixed
+
+- Use the current site instead of the selected site (#48)
+
 ## [2.8.0](https://github.com/rapidez/statamic/releases/tag/2.8.0) - 2023-12-20
 
 ### Changed

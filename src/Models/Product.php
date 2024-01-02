@@ -23,6 +23,6 @@ class Product extends Model
 
     public function getTable()
     {
-        return 'catalog_product_flat_'.Site::selected()->attributes['magento_store_id'];
+        return 'catalog_product_flat_'.Site::current()->attributes['magento_store_id'];
     }
 }

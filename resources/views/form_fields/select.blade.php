@@ -1,4 +1,4 @@
-<x-select
+<x-rapidez::select
     :name="$field['handle']"
     :label="$field['display']"
     :value="$field['old'] ?: $field['default'] ?? ''"
@@ -16,4 +16,4 @@
             {{ $label }}
         </option>
     @endforeach
-</x-select>
+</x-rapidez::select>

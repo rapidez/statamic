@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/2.8.1...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/2.8.2...master)
+## [2.8.2](https://github.com/rapidez/statamic/releases/tag/2.8.2) - 2024-01-04
+
+### Fixed
+
+- Use Rapidez core select component (#49)
+
 ## [2.8.1](https://github.com/rapidez/statamic/releases/tag/2.8.1) - 2024-01-02
 
 ### Fixed

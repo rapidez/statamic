@@ -117,10 +117,10 @@ php artisan rapidez:statamic:import:categories 5 8 9 category-url-key --site=def
 
 By default the slug and title of the category are copied.
 
-If you have a custom blueprint and would like to add more data from the category you can do so by hooking into the `rapidez-statamic:category-entry-data` event:
+If you have a custom blueprint and would like to add more data from the category you can do so by hooking into the Eventy event: `rapidez-statamic:category-entry-data`
 
 ```php
-Event::listen('rapidez-statamic:category-entry-data', fn($category) => [
+Eventy::addFilter('rapidez.statamic.category.entry.data', fn($category) => [
         'description' => $category->description,
     ]
 );
@@ -142,10 +142,10 @@ php artisan rapidez:statamic:import:products --site=default
 
 By default the slug and title of the product are copied.
 
-If you have a custom blueprint and would like to add more data from the product you can do so by hooking into the `rapidez-statamic:product-entry-data` event:
+If you have a custom blueprint and would like to add more data from the product you can do so by hooking into the Eventy event: `rapidez.statamic.product.entry.data`
 
 ```php
-Event::listen('rapidez-statamic:product-entry-data', fn($product) => [
+Eventy::addFilter('rapidez.statamic.product.entry.data', fn($product) => [
         'description' => $product->description,
     ]
 );
@@ -167,10 +167,10 @@ php artisan rapidez:statamic:import:brands --site=default
 
 By default the slug and title of the brand are copied.
 
-If you have a custom blueprint and would like to add more data from the brand you can do so by hooking into the `rapidez-statamic:brand-entry-data` event:
+If you have a custom blueprint and would like to add more data from the brand you can do so by hooking into the Eventy event `rapidez.statamic.brand.entry.data`
 
 ```php
-Event::listen('rapidez-statamic:brand-entry-data', fn($brand) => [
+Eventy::addFilter('rapidez.statamic.brand.entry.data', fn($brand) => [
         'description' => $brand->description,
     ]
 );

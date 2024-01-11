@@ -53,7 +53,7 @@ class ImportProducts extends Command
                     array_merge([
                         'locale'       => $site->handle(),
                         'site'       => $site->handle(),
-                    ], ...Event::dispatch('rapidez-statamic:product-entry-data', ['product' => $product]))
+                    ], ...array_filter(Event::dispatch('rapidez-statamic:product-entry-data', ['product' => $product])))
                 );
             }
 

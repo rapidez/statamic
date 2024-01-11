@@ -68,7 +68,7 @@ class ImportCategories extends Command
                     array_merge([
                         'locale'       => $site->handle(),
                         'site'       => $site->handle(),
-                    ], ...Event::dispatch('rapidez-statamic:category-entry-data', ['category' => $category]))
+                    ], ...array_filter(Event::dispatch('rapidez-statamic:category-entry-data', ['category' => $category])))
                 );
             }
 

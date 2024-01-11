@@ -40,7 +40,7 @@ class ImportBrands extends Command
                     array_merge([
                         'locale' => $site->handle(),
                         'site' => $site->handle(),
-                    ], ...Event::dispatch('rapidez-statamic:brand-entry-data', ['brand' => $brand]))
+                    ], ...array_filter(Event::dispatch('rapidez-statamic:brand-entry-data', ['brand' => $brand])))
                 );
             }
             $bar->advance();

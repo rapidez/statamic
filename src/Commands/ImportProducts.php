@@ -2,11 +2,11 @@
 
 namespace Rapidez\Statamic\Commands;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Event;
-use Rapidez\Core\Facades\Rapidez;
-use Rapidez\Statamic\Actions\StatamicEntryAction;
 use Statamic\Facades\Site;
+use Illuminate\Console\Command;
+use Rapidez\Core\Facades\Rapidez;
+use TorMorten\Eventy\Facades\Eventy;
+use Rapidez\Statamic\Actions\StatamicEntryAction;
 
 class ImportProducts extends Command
 {
@@ -53,7 +53,7 @@ class ImportProducts extends Command
                     array_merge([
                         'locale'       => $site->handle(),
                         'site'       => $site->handle(),
-                    ], ...Event::dispatch('rapidez-statamic:product-entry-data', ['product' => $product]))
+                    ], ...[Eventy::filter('rapidez.statamic.product.entry.data', $product)])
                 );
             }
 

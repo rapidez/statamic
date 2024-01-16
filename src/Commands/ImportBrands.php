@@ -5,8 +5,8 @@ namespace Rapidez\Statamic\Commands;
 use Statamic\Facades\Site;
 use Illuminate\Console\Command;
 use Rapidez\Statamic\Models\Brand;
+use TorMorten\Eventy\Facades\Eventy;
 use Rapidez\Statamic\Actions\StatamicEntryAction;
-use Illuminate\Support\Facades\Event;
 
 class ImportBrands extends Command
 {
@@ -40,7 +40,7 @@ class ImportBrands extends Command
                     array_merge([
                         'locale' => $site->handle(),
                         'site' => $site->handle(),
-                    ], ...Event::dispatch('rapidez-statamic:brand-entry-data', ['brand' => $brand]))
+                    ], ...[Eventy::filter('rapidez.statamic.brand.entry.data', $brand)])
                 );
             }
             $bar->advance();

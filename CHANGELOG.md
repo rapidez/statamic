@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/2.8.2...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/2.9.0...master)
+## [2.9.0](https://github.com/rapidez/statamic/releases/tag/2.9.0) - 2024-01-16
+
+### Changed
+
+- Use Eventy for import commands (#50)
+
 ## [2.8.2](https://github.com/rapidez/statamic/releases/tag/2.8.2) - 2024-01-04
 
 ### Fixed

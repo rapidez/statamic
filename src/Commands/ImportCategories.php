@@ -5,7 +5,7 @@ namespace Rapidez\Statamic\Commands;
 use Statamic\Facades\Site;
 use Illuminate\Console\Command;
 use Rapidez\Core\Facades\Rapidez;
-use Illuminate\Support\Facades\Event;
+use TorMorten\Eventy\Facades\Eventy;
 use Rapidez\Statamic\Actions\StatamicEntryAction;
 
 class ImportCategories extends Command
@@ -68,7 +68,7 @@ class ImportCategories extends Command
                     array_merge([
                         'locale'       => $site->handle(),
                         'site'       => $site->handle(),
-                    ], ...Event::dispatch('rapidez-statamic:category-entry-data', ['category' => $category]))
+                    ], ...[Eventy::filter('rapidez.statamic.category.entry.data', $category)])
                 );
             }
 

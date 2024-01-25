@@ -1,6 +1,36 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/2.8.0...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/2.9.0...master)
+## [2.9.0](https://github.com/rapidez/statamic/releases/tag/2.9.0) - 2024-01-16
+
+If you're listening to the events you should now use Eventy:
+```diff
+-Event::listen('rapidez-statamic:category-entry-data', fn($category) => [
++Eventy::addFilter('rapidez.statamic.category.entry.data', fn($category) => [
+
+-Event::listen('rapidez-statamic:product-entry-data', fn($product) => [
++Eventy::addFilter('rapidez.statamic.product.entry.data', fn($product) => [
+
+-Event::listen('rapidez-statamic:brand-entry-data', fn($brand) => [
++Eventy::addFilter('rapidez.statamic.brand.entry.data', fn($brand) => [
+```
+
+### Changed
+
+- Use Eventy for import commands (#50)
+
+## [2.8.2](https://github.com/rapidez/statamic/releases/tag/2.8.2) - 2024-01-04
+
+### Fixed
+
+- Use Rapidez core select component (#49)
+
+## [2.8.1](https://github.com/rapidez/statamic/releases/tag/2.8.1) - 2024-01-02
+
+### Fixed
+
+- Use the current site instead of the selected site (#48)
+
 ## [2.8.0](https://github.com/rapidez/statamic/releases/tag/2.8.0) - 2023-12-20
 
 ### Changed

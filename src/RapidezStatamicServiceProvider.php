@@ -26,6 +26,7 @@ use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
 use Rapidez\Statamic\Http\Controllers\ImportsController;
 use Rapidez\Statamic\Http\Controllers\StatamicRewriteController;
 use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
+use TorMorten\Eventy\Facades\Eventy;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
@@ -96,17 +97,17 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                 Cache::forget('statamic-globals-' . Site::current()->handle());
             });
 
-            Event::listen('rapidez-statamic:category-entry-data', fn($category) => [
+            Eventy::addFilter('rapidez.statamic.category.entry.data', fn($category) => [
                 'title' => $category->name,
                 'slug' => trim($category->url_key),
             ]);
 
-            Event::listen('rapidez-statamic:product-entry-data', fn($product) => [
+            Eventy::addFilter('rapidez.statamic.product.entry.data', fn($product) => [
                 'title' => $product->name,
                 'slug' => trim($product->url_key),
             ]);
 
-            Event::listen('rapidez-statamic:brand-entry-data', fn($brand) => [
+            Eventy::addFilter('rapidez.statamic.brand.entry.data', fn($brand) => [
                 'title' => $brand->value_store,
                 'slug' => trim($brand->value_admin),
             ]);

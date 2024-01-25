@@ -32,6 +32,8 @@ return [
             'blueprint' => 'brand',
         ],
     ],
+    
+    'responsive_image_multiplier' => 150,
 
     'runway' => [
         // Should we configure Runway? You'll get a products,

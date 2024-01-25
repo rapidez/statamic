@@ -47,7 +47,8 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootRunway()
             ->bootComposers()
             ->bootPublishables()
-            ->bootUtilities();
+            ->bootUtilities()
+            ->bootStack();
 
         Vue::register();
         Alternates::register();
@@ -83,6 +84,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootViews() : self
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'rapidez-statamic');
+        $this->loadViewsFrom(__DIR__.'/../resources/views/vendor/responsive-images', 'responsive-images');
 
         return $this;
     }
@@ -199,10 +201,17 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                         ->name('import-brands');
                 });
         });
-        
+
         return $this;
     }
-    
+
+    public function bootStack() : static
+    {
+        View::startPush('head', view('rapidez-statamic::stack.head'));
+
+        return $this;
+    }
+
     public function currentSiteIsEnabled(): bool
     {
         return !config('statamic.sites.sites.' . Site::current()->handle() . '.attributes.disabled', false);

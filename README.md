@@ -180,6 +180,33 @@ Eventy::addFilter('rapidez.statamic.brand.entry.data', fn($brand) => [
 
 When you create a form you could use `rapidez-statamic::emails.form` as HTML template which uses the [Laravel mail template](https://laravel.com/docs/master/mail#customizing-the-components) with all fields in a table, make sure you enable markdown!
 
+### Upgrading
+
+Since 0.4.0 we have started using optionalDeep for the $globals, and $content variables.
+This means some code may need to be upgraded. Here's a list of things you can expect might need to be changed:
+
+Since optionalDeep will always return the optional class we explicitly need to ask it if a value is set
+```diff
+- @if($globals->cookie_notice->text)
++ @if($globals->cookie_notice->text->isset())
+```
+
+This also means that checks for specific values need to be updated
+```diff
+- @if($globals->cookie_notice->text === 'foo')
++ @if($globals->cookie_notice->text->get() === 'foo')
+```
+
+However, anything that will attempt to cast the value to string will get the value right away. Thus bits that can stay unchanged are:
+```blade
+{{ $globals->cookie_notice->text }}
+{{ $globals->cookie_notice->text ?? 'fallback value' }}
+{{ $globals->cookie_notice->text . ' string concatenation' }}
+@foreach($content->blocks as $contentBlock)
+
+@endForeach
+```
+
 ## License
 
 GNU General Public License v3. Please see [License File](LICENSE) for more information.

@@ -32,7 +32,7 @@
     "require": {
         "php": "^8.0|^8.1",
         "doublethreedigital/runway": "^5.0",
-        "rapidez/blade-directives": "*",
+        "rapidez/blade-directives": "^0.3",
         "spatie/statamic-responsive-images": "^4.0",
         "statamic/cms": "^4.0",
         "tormjens/eventy": "^0.8"

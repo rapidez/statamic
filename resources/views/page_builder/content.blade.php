@@ -1,6 +1,6 @@
 <div class="prose max-w-none">
     @foreach($content as $set)
-        @if($set->type == 'text')
+        @if($set->type->get() == 'text')
             {!! $set->text !!}
         @else
             <div class="not-prose">

@@ -11,7 +11,6 @@ use Illuminate\Routing\Router;
 use Rapidez\Core\Facades\Rapidez;
 use Statamic\Events\GlobalSetSaved;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
 use Rapidez\Statamic\Tags\Alternates;
@@ -136,7 +135,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                     ->where('linked_product', config('frontend.product.sku'))
                     ->first();
 
-                $view->with('content', $entry);
+                $view->with('content', optionalDeep($entry));
             });
         }
 
@@ -148,7 +147,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                     ->where('linked_category', config('frontend.category.entity_id'))
                     ->first();
 
-                $view->with('content', $entry);
+                $view->with('content', optionalDeep($entry));
             });
         }
 

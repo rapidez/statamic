@@ -28,7 +28,7 @@ class StatamicGlobalDataComposer
     public function compose(View $view) : View
     {
         if(!isset($view->globals)) {
-            $view->with('globals', (object)$this->globals);
+            $view->with('globals', optionalDeep((object)$this->globals));
         }
 
         return $view;

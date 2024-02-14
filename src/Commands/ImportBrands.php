@@ -32,8 +32,8 @@ class ImportBrands extends Command
             foreach (Brand::get() as $brand) {
                 $statamicEntryAction::createEntry(
                     [
-                        'collection' => config('rapidez-statamic.import.brands.collection', 'brands'),
-                        'blueprint' => config('rapidez-statamic.import.brands.blueprint', 'brand'),
+                        'collection' => config('rapidez.statamic.import.brands.collection', 'brands'),
+                        'blueprint' => config('rapidez.statamic.import.brands.blueprint', 'brand'),
                         'site' => $site->handle(),
                         'linked_brand' => $brand->option_id,
                     ],

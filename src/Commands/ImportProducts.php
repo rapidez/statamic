@@ -45,8 +45,8 @@ class ImportProducts extends Command
             foreach ($products as $product) {
                 $statamicEntryAction::createEntry(
                     [
-                        'collection' => config('rapidez-statamic.import.products.collection', 'products'),
-                        'blueprint'  => config('rapidez-statamic.import.products.blueprint', 'product'),
+                        'collection' => config('rapidez.statamic.import.products.collection', 'products'),
+                        'blueprint'  => config('rapidez.statamic.import.products.blueprint', 'product'),
                         'site'       => $site->handle(),
                         'linked_product' => $product->sku,
                     ],

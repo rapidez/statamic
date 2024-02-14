@@ -60,8 +60,8 @@ class ImportCategories extends Command
             foreach ($categories as $category) {
                 $statamicEntryAction::createEntry(
                     [
-                        'collection' => config('rapidez-statamic.import.categories.collection', 'categories'),
-                        'blueprint'  => config('rapidez-statamic.import.categories.blueprint', 'category'),
+                        'collection' => config('rapidez.statamic.import.categories.collection', 'categories'),
+                        'blueprint'  => config('rapidez.statamic.import.categories.blueprint', 'category'),
                         'site'       => $site->handle(),
                         'linked_category' => $category->entity_id,
                     ],

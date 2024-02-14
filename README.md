@@ -182,7 +182,7 @@ When you create a form you could use `rapidez-statamic::emails.form` as HTML tem
 
 ### Upgrading
 
-Since 0.4.0 we have started using optionalDeep for the $globals, and $content variables.
+Since 3.0.0 we have started using optionalDeep for the $globals, and $content variables.
 This means some code may need to be upgraded. Here's a list of things you can expect might need to be changed:
 
 Since optionalDeep will always return the optional class we explicitly need to ask it if a value is set

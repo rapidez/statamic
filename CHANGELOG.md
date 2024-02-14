@@ -1,12 +1,6 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/2.9.1...master)
-## [2.9.1](https://github.com/rapidez/statamic/releases/tag/2.9.1) - 2024-02-14
-
-### Fixed
-
-- Correct config path location (#54)
-
+[Unreleased changes](https://github.com/rapidez/statamic/compare/2.9.0...master)
 ## [2.9.0](https://github.com/rapidez/statamic/releases/tag/2.9.0) - 2024-01-16
 
 If you're listening to the events you should now use Eventy:

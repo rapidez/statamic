@@ -3,6 +3,8 @@
 [Unreleased changes](https://github.com/rapidez/statamic/compare/3.0.0...master)
 ## [3.0.0](https://github.com/rapidez/statamic/releases/tag/3.0.0) - 2024-02-14
 
+See the upgrade notes: https://github.com/rapidez/statamic#upgrading
+
 ### Changed
 
 - Implement optionalDeep (#53)

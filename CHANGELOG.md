@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/3.0.0...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/3.0.1...master)
+## [3.0.1](https://github.com/rapidez/statamic/releases/tag/3.0.1) - 2024-02-20
+
+### Fixed
+
+- Make sure the page collection has the site configured (#55)
+
 ## [3.0.0](https://github.com/rapidez/statamic/releases/tag/3.0.0) - 2024-02-14
 
 See the upgrade notes: https://github.com/rapidez/statamic#upgrading

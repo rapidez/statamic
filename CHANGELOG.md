@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/3.0.1...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/3.0.2...master)
+## [3.0.2](https://github.com/rapidez/statamic/releases/tag/3.0.2) - 2024-02-22
+
+### Fixed
+
+- Guarantee includeFirstSafe receives array (#56)
+
 ## [3.0.1](https://github.com/rapidez/statamic/releases/tag/3.0.1) - 2024-02-20
 
 ### Fixed

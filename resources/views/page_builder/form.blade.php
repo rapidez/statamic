@@ -28,7 +28,7 @@
                     ])
                     v-if="{!! $form['show_field'][$field['handle']] ?? true !!}"
                 >
-                    @includeFirstSafe(['form_fields.' . $field['type'], 'rapidez-statamic::form_fields.' . $field['type']], $set)
+                    @includeFirstSafe(['form_fields.' . $field['type'], 'rapidez-statamic::form_fields.' . $field['type']], optionalDeep($set)->toArray())
                 </div>
             @endforeach
         </div>

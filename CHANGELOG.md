@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/3.0.2...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/3.1.0...master)
+## [3.1.0](https://github.com/rapidez/statamic/releases/tag/3.1.0) - 2024-02-27
+
+### Changed
+
+- Moved responsive image observer to head stack (#52)
+
 ## [3.0.2](https://github.com/rapidez/statamic/releases/tag/3.0.2) - 2024-02-22
 
 ### Fixed

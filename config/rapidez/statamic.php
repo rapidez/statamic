@@ -33,6 +33,10 @@ return [
         ],
     ],
 
+    // This defines the multiplier for the responsive images and which size to show.
+    // Default is 1.5x the displayed size.
+    'responsive_image_multiplier' => 150,
+
     'runway' => [
         // Should we configure Runway? You'll get a products,
         // categories and brands / manufacturers resource.

@@ -1,16 +1,5 @@
 title: 'Brand overview'
 fields:
-  - handle: include_brand_list
-    field:
-      default: false
-      type: toggle
-      display: 'Include brand list'
-      listable: hidden
-      instructions_position: above
-      visibility: visible
-      replicator_preview: true
-      hide_display: false
-
   - handle: include_table_of_contents
     field:
       default: false

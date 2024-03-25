@@ -11,18 +11,6 @@
 @endphp
 
 <div class="lg:container">
-    @if($include_brand_list)
-        <div>
-            <span>@lang('Brands')</span>
-            <ul class="flex flex-col">
-                @foreach($brands as $brand)
-                    <li>
-                        <a href="{{ $brand->url() }}">{{ $brand->title }}</a>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
     <div class="flex flex-col">
         @if($include_table_of_contents)
             <ul class="flex">
@@ -40,7 +28,13 @@
                     </span>
                     <ul class="flex row-wrap">
                         @foreach($group as $brand)
-                            <li>{{ $brand->title }}</li>
+                            <a href="{{ $brand->url() }}">
+                                @if(!$brand->image->isEmpty())
+                                    @responsive($brand->image->first())
+                                @else
+                                    <li>{{ $brand->title }}</li>
+                                @endif
+                            </a>
                         @endforeach
                     </ul>
                 </div>

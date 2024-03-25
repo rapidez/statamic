@@ -16,9 +16,9 @@
     @if ($title)
         <h1 class="font-bold text-3xl mb-5">{{ $title }}</h1>
     @endif
-    @if ($description)
+    @if ($brand_content)
         <div class="prose prose-green max-w-none">
-            @content($description)
+            @include('rapidez-statamic::page_builder.content', ['content' => $brand_content])
         </div>
     @endif
     <x-rapidez::listing query="{ terms: { '{{ $brandAttribute->code }}.keyword': ['{{ $title }}'] } }"/>

@@ -25,5 +25,7 @@ sections:
           visibility: visible
           localizable: true
       -
+        import: image
+      -
         import: page_builder
 title: brands

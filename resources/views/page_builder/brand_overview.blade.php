@@ -28,13 +28,15 @@
                     </span>
                     <ul class="flex row-wrap">
                         @foreach($group as $brand)
-                            <a href="{{ $brand->url() }}">
-                                @if(!$brand->image->isEmpty())
-                                    @responsive($brand->image->first())
-                                @else
-                                    <li>{{ $brand->title }}</li>
-                                @endif
-                            </a>
+                            <li>
+                                <a href="{{ $brand->url() }}">
+                                    @if(!$brand->image->isEmpty())
+                                        @responsive($brand->image->first())
+                                    @else
+                                        {{ $brand->title }}
+                                    @endif
+                                </a>
+                            </li>
                         @endforeach
                     </ul>
                 </div>

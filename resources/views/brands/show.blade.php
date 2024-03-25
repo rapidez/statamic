@@ -8,6 +8,8 @@
     @endforeach
 @endpush
 
+@php($brandAttribute = \Rapidez\Core\Models\Attribute::find(config('rapidez.statamic.runway.brand_attribute_id')))
+
 @section('content')
     @includeWhen(!$is_homepage, 'rapidez-statamic::breadcrumbs')
 
@@ -19,7 +21,7 @@
             @content($description)
         </div>
     @endif
-    <x-rapidez::listing query="{ terms: { 'manufacturer.keyword': ['{{ $title }}'] } }"/>
+    <x-rapidez::listing query="{ terms: { '{{ $brandAttribute->code }}.keyword': ['{{ $title }}'] } }"/>
 
     @include('rapidez-statamic::page_builder')
 @endsection

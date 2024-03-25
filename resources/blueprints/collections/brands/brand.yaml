@@ -28,4 +28,8 @@ sections:
         import: image
       -
         import: page_builder
+  meta:
+    display: Meta
+    fields:
+      - import: meta_data
 title: brands

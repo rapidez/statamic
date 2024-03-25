@@ -1,4 +1,4 @@
-title: Brands
+title: 'Brand content'
 propagate: true
 template: rapidez-statamic::brands/show
 layout: layout

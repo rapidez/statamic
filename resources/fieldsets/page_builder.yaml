@@ -23,7 +23,7 @@ fields:
             -
               import: product_slider
         brandlist:
-          display: 'Brand list'
+          display: 'Brandlist'
           fields:
             - import: brandlist
         image:

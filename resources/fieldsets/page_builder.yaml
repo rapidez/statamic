@@ -25,7 +25,7 @@ fields:
         brandlist:
           display: 'Brand list'
           fields:
-            - import: brand_list
+            - import: brandlist
         image:
           display: Image
           fields:

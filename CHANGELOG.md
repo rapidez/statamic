@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/3.1.0...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/3.2.0...master)
+## [3.2.0](https://github.com/rapidez/statamic/releases/tag/3.2.0) - 2024-03-25
+
+### Added
+
+- Brand pages and overview (#59)
+
 ## [3.1.0](https://github.com/rapidez/statamic/releases/tag/3.1.0) - 2024-02-27
 
 ### Changed

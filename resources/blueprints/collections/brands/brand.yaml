@@ -10,20 +10,6 @@ sections:
           validate:
             - required
           localizable: true
-      -
-        handle: linked_brand
-        field:
-          max_items: 1
-          mode: default
-          resource: brand
-          create: false
-          display: 'Linked brand'
-          type: belongs_to
-          icon: belongs_to
-          listable: hidden
-          instructions_position: above
-          visibility: visible
-          localizable: true
       - handle: description
         field:
           buttons:
@@ -63,6 +49,20 @@ sections:
           visibility: visible
           replicator_preview: true
           hide_display: false
+      -
+        handle: linked_brand
+        field:
+          max_items: 1
+          mode: default
+          resource: brand
+          create: false
+          display: 'Linked brand'
+          type: belongs_to
+          icon: belongs_to
+          listable: hidden
+          instructions_position: above
+          visibility: visible
+          localizable: true
       -
         import: image
       -

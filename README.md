@@ -96,6 +96,17 @@ By default you'll get the configured content on categories and products availabl
 - Product: `resources/views/vendor/rapidez/product/overview.blade.php`
 - Category: `resources/views/vendor/rapidez/category/overview.blade.php`
 
+
+### Brand overview and single brand
+#### Brand pages
+Single brand pages display a listing page with your products linked to that brand. By default the single brand pages are disabled. You can enable routing for them in `content/collections/brands.yaml` by adding a route for them:
+
+```yaml
+    route: '/brands/{slug}'
+```
+#### Brand overview
+If you want an overview page for your brands you can add a `Brand overview` component on a normal page. This will automaticly load a view with your brands grouped by their first letter.
+
 ### Importing categories or products from Magento
 
 #### Categories

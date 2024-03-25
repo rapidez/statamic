@@ -24,9 +24,6 @@
         </div>
     @endif
     <div class="flex flex-col">
-        @if($page->title)
-            <h1>{{ $page->title }}</h1>
-        @endif
         @if($include_table_of_contents)
             <ul class="flex">
                 @foreach($grouped->keys() as $letter)

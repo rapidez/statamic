@@ -1,0 +1,12 @@
+title: 'Brandlist'
+fields:
+  - handle: include_table_of_contents
+    field:
+      default: false
+      type: toggle
+      display: 'Include table of contents'
+      listable: hidden
+      instructions_position: above
+      visibility: visible
+      replicator_preview: true
+      hide_display: false

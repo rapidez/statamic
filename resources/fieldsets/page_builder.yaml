@@ -22,6 +22,10 @@ fields:
           fields:
             -
               import: product_slider
+        brandlist:
+          display: 'Brandlist'
+          fields:
+            - import: brandlist
         image:
           display: Image
           fields:

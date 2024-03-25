@@ -1,8 +1,13 @@
 title: 'Brand content'
 propagate: true
+template: rapidez-statamic::brands/show
+layout: layout
 revisions: false
-slugs: false
 sort_dir: asc
 date_behavior:
   past: public
   future: private
+preview_targets:
+  -
+    label: Entry
+    url: '{permalink}'

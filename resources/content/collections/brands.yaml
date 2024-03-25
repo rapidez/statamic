@@ -3,7 +3,6 @@ propagate: true
 template: rapidez-statamic::brands/show
 layout: layout
 revisions: false
-route: '/brands/{slug}'
 sort_dir: asc
 date_behavior:
   past: public

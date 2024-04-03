@@ -39,11 +39,10 @@ class ImportBrands extends Command
 
                 if (Schema::hasTable('amasty_amshopby_option_setting')) {
                     $amastyData = DB::table('amasty_amshopby_option_setting')->where('value', '=', $brand->option_id)->first();
-                    $extraData['meta_title'] = $amastyData->meta_title;
-                    $extraData['meta_description'] = $amastyData->meta_description;
+                    $extraData['meta_title'] = $amastyData?->meta_title;
+                    $extraData['meta_description'] = $amastyData?->meta_description;
 
-                    if ($amastyData->image) {
-                        $file = file_get_contents(config('rapidez.media_url').'/amasty/shopby/option_images/'.$amastyData->image, false, stream_context_create(['ssl' => ['verify_peer' => false, 'verify_peer_name' => false]]));
+                    if ($amastyData?->image && $file = @fopen(config('rapidez.media_url').'/amasty/shopby/option_images/'.$amastyData->image, 'r')) {
                         Storage::disk('assets')->put('brands/' . $amastyData->image, $file);
                         $extraData['image'] = 'brands/' . $amastyData->image;
                     }

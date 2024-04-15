@@ -1,6 +1,11 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/3.2.0...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/3.3.0...master)
+## [3.3.0](https://github.com/rapidez/statamic/releases/tag/3.3.0) - 2024-04-12
+
+### Added
+ - Download images from Amasty brands if they're present (https://github.com/rapidez/statamic/pull/60)
+
 ## [3.2.0](https://github.com/rapidez/statamic/releases/tag/3.2.0) - 2024-03-25
 
 ### Added

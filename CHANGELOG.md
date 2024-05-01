@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/3.3.0...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/3.4.0...master)
+## [3.4.0](https://github.com/rapidez/statamic/releases/tag/3.4.0) - 2024-05-01
+
+### Changed
+
+- Brandlist styling (#61)
+
 ## [3.3.0](https://github.com/rapidez/statamic/releases/tag/3.3.0) - 2024-04-12
 
 ### Added

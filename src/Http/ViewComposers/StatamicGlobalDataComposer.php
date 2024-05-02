@@ -9,11 +9,11 @@ use Statamic\Facades\Site;
 
 class StatamicGlobalDataComposer
 {
-    private $globals;
-
-    public function __construct()
+    public function getGlobals()
     {
-        $this->globals = Cache::rememberForever('statamic-globals-'.Site::current()->handle(), function() {
+        return Cache::rememberForever('statamic-globals-'.Site::current()->handle(), function() {
+            $data = [];
+            
             foreach (GlobalSet::all() as $set) {
                 foreach ($set->localizations() as $locale => $variables) {
                     if ($locale == Site::current()->handle()) {
@@ -21,14 +21,15 @@ class StatamicGlobalDataComposer
                     }
                 }
             }
-            return ($data ?? []);
+            
+            return $data;
         });
     }
 
     public function compose(View $view) : View
     {
         if(!isset($view->globals)) {
-            $view->with('globals', optionalDeep((object)$this->globals));
+            $view->with('globals', optionalDeep((object)$this->getGlobals()));
         }
 
         return $view;

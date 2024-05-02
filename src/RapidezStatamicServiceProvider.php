@@ -207,7 +207,9 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
     public function bootStack() : static
     {
-        View::startPush('head', view('rapidez-statamic::stack.head'));
+        if (! $this->app->runningInConsole()) {
+            View::startPush('head', view('rapidez-statamic::stack.head'));
+        }
 
         return $this;
     }

@@ -225,6 +225,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->filter(fn($_site) => ($_site?->attributes()['magento_store_id'] ?? null) === config('rapidez.store'))
             ->first();
 
-        return $site?->handle() ?? '';
+        return $site?->handle() ?? config('rapidez.store_code');
     }
 }

@@ -133,7 +133,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             View::composer('rapidez::product.overview', function (RenderedView $view) {
                 $entry = Entry::query()
                     ->where('collection', 'products')
-                    ->where('site', config('rapidez.store_code'))
+                    ->where('site', $this->getSiteHandleByStoreId())
                     ->where('linked_product', config('frontend.product.sku'))
                     ->first();
 
@@ -145,7 +145,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             View::composer('rapidez::category.overview', function (RenderedView $view) {
                 $entry = Entry::query()
                     ->where('collection', 'categories')
-                    ->where('site', config('rapidez.store_code'))
+                    ->where('site', $this->getSiteHandleByStoreId())
                     ->where('linked_category', config('frontend.category.entity_id'))
                     ->first();
 
@@ -217,5 +217,14 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function currentSiteIsEnabled(): bool
     {
         return !config('statamic.sites.sites.' . Site::current()->handle() . '.attributes.disabled', false);
+    }
+
+    public function getSiteHandleByStoreId(): string
+    {
+        $site = Site::all()
+            ->filter(fn($_site) => $_site->attributes()['magento_store_id'] === config('rapidez.store'))
+            ->first();
+
+        return $site?->handle() ?? '';
     }
 }

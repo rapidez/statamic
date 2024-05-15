@@ -10,12 +10,14 @@
 ## [3.4.2](https://github.com/rapidez/statamic/releases/tag/3.4.2) - 2024-05-02
 
 ### Fixed
-- Only push head when not running in console (https://github.com/rapidez/statamic/pull/63)
+
+- Only push head when not running in console (#63)
 
 ## [3.4.1](https://github.com/rapidez/statamic/releases/tag/3.4.1) - 2024-05-02
 
 ### Changed
-- Move globals to getGlobals function instead of constructor (https://github.com/rapidez/statamic/pull/62)
+
+- Move globals to getGlobals function instead of constructor (#62)
 
 ## [3.4.0](https://github.com/rapidez/statamic/releases/tag/3.4.0) - 2024-05-01
 

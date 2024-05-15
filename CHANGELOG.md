@@ -4,7 +4,8 @@
 ## [3.5.0](https://github.com/rapidez/statamic/releases/tag/3.5.0) - 2024-05-14
 
 ### Changed
-- Get site based on Magento store ID (https://github.com/rapidez/statamic/pull/65)
+
+- Get site based on Magento store ID (#65)
 
 ## [3.4.2](https://github.com/rapidez/statamic/releases/tag/3.4.2) - 2024-05-02
 

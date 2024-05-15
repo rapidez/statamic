@@ -1,6 +1,11 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/3.4.2...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/3.5.0...master)
+## [3.5.0](https://github.com/rapidez/statamic/releases/tag/3.5.0) - 2024-05-14
+
+### Changed
+- Get site based on Magento store ID (https://github.com/rapidez/statamic/pull/65)
+
 ## [3.4.2](https://github.com/rapidez/statamic/releases/tag/3.4.2) - 2024-05-02
 
 ### Fixed

@@ -11,7 +11,7 @@
 @php($brandAttribute = \Rapidez\Core\Models\Attribute::find(config('rapidez.statamic.runway.brand_attribute_id')))
 
 @section('content')
-    <div class="container mt-4 mb-8 lg:mb-20">
+    <div class="container">
         @includeWhen(!$is_homepage, 'rapidez-statamic::breadcrumbs')
 
         @if ($title)

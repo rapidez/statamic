@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Statamic\Facades\Site;
+use Statamic\Statamic;
 
 class Brand extends Model
 {
@@ -36,7 +37,7 @@ class Brand extends Model
                 })
                 ->leftJoinSub($renamedStore, 'store_value', function ($join) {
                     $join->on('store_value.sub_option_id', '=', 'eav_attribute_option.option_id')
-                         ->where('store_value.store_id', Site::current()->attributes['magento_store_id']);
+                         ->where('store_value.store_id', (Statamic::isCpRoute() ? Site::selected()->attributes['magento_store_id'] : Site::current()->attributes['magento_store_id']));
                 })
                 ->where('attribute_id', config('rapidez.statamic.runway.brand_attribute_id'));
         });

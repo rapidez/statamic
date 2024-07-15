@@ -5,6 +5,7 @@ namespace Rapidez\Statamic\Models;
 use DoubleThreeDigital\Runway\Traits\HasRunwayResource;
 use Illuminate\Database\Eloquent\Model;
 use Statamic\Facades\Site;
+use Statamic\Statamic;
 
 class Category extends Model
 {
@@ -14,6 +15,6 @@ class Category extends Model
 
     public function getTable()
     {
-        return 'catalog_category_flat_store_'.Site::current()->attributes['magento_store_id'];
+        return 'catalog_category_flat_store_'.(Statamic::isCpRoute() ? Site::selected()->attributes['magento_store_id'] : Site::current()->attributes['magento_store_id']);
     }
 }

@@ -11,17 +11,19 @@
 @php($brandAttribute = \Rapidez\Core\Models\Attribute::find(config('rapidez.statamic.runway.brand_attribute_id')))
 
 @section('content')
-    @includeWhen(!$is_homepage, 'rapidez-statamic::breadcrumbs')
+    <div class="container">
+        @includeWhen(!$is_homepage, 'rapidez-statamic::breadcrumbs')
 
-    @if ($title)
-        <h1 class="font-bold text-3xl mb-5">{{ $title }}</h1>
-    @endif
-    @if ($brand_content)
-        <div class="prose prose-green max-w-none">
-            @include('rapidez-statamic::page_builder.content', ['content' => $brand_content])
-        </div>
-    @endif
-    <x-rapidez::listing query="{ terms: { '{{ $brandAttribute->code }}.keyword': ['{{ $title }}'] } }"/>
+        @if ($title)
+            <h1 class="font-bold text-3xl mb-5">{{ $title }}</h1>
+        @endif
+        @if ($brand_content)
+            <div class="prose prose-green max-w-none">
+                @include('rapidez-statamic::page_builder.content', ['content' => $brand_content])
+            </div>
+        @endif
+        <x-rapidez::listing query="{ terms: { '{{ $brandAttribute->code }}.keyword': ['{{ $title }}'] } }"/>
 
-    @include('rapidez-statamic::page_builder')
+        @include('rapidez-statamic::page_builder')
+    </div>
 @endsection

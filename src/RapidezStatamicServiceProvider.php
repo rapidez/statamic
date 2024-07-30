@@ -18,6 +18,7 @@ use Statamic\Events\GlobalSetDeleted;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View as RenderedView;
 use Rapidez\Statamic\Commands\ImportBrands;
+use Rapidez\Statamic\Commands\InstallCommand;
 use Rapidez\Statamic\Forms\JsDrivers\Vue;
 use Rapidez\Statamic\Commands\ImportProducts;
 use Rapidez\Statamic\Commands\ImportCategories;
@@ -60,6 +61,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ImportCategories::class,
             ImportProducts::class,
             ImportBrands::class,
+            InstallCommand::class,
         ]);
 
         return $this;
@@ -119,8 +121,8 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     {
         if (config('rapidez.statamic.runway.configure') && $this->currentSiteIsEnabled()) {
             config(['runway.resources' => array_merge(
-                config('rapidez.statamic.runway.resources'),
-                config('runway.resources')
+                config('rapidez.statamic.runway.resources') ?? [],
+                config('runway.resources') ?? []
             )]);
         }
 

@@ -27,8 +27,9 @@ class InstallCommand extends Command
 
         $this->info('If you would like to store users in the database please make sure to follow this guide: https://statamic.dev/tips/storing-users-in-a-database#from-a-fresh-statamic-project');
 
-        $this->info('Configuring sites:');
-        $this->call('statamic:multisite');
+        if ($this->confirm('Would you like to configure a multisite? Note: Configuring a multisite requires a Statamic PRO license.')) {
+            $this->call('statamic:multisite');
+        }
 
         if ($this->confirm('Would you like to publish Collections, Blueprints, Fieldsets & Views?', 1)) {
             $this->call('vendor:publish', [

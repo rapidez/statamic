@@ -79,7 +79,7 @@ If you'd like to use the homepage from Statamic instead of the CMS page from Mag
 
 ### Publish Collections, Blueprints and Fieldsets
 
-If you ran the install command these will already have been published.
+If you have run the install command these will already have been published.
 
 ```
 php artisan vendor:publish --provider="Rapidez\Statamic\RapidezStatamicServiceProvider" --tag=rapidez-statamic-content

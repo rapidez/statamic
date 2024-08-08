@@ -24,12 +24,15 @@ composer require rapidez/statamic
 ## Install command
 
 The install command will help you set up all the necessary settings.
+It will mainly setup the [Eloquent driver](https://github.com/statamic/eloquent-driver) and publish the necessary vendor from the rapidez/statamic repo. 
 
 ```
 php artisan rapidez-statamic:install
 ```
 
-Please make sure to use the following settings when setting up the eloquent driver:
+When running the install command you will be prompted to setup the Eloquent driver.
+In this configuration you can choose what to keep in the flat file system and what to migrate to the database.
+We recommend migrating the following options to the database when setting up the eloquent driver:
 - Assets
 - Collection Trees
 - Entries
@@ -207,6 +210,12 @@ Eventy::addFilter('rapidez.statamic.brand.entry.data', fn($brand) => [
     ]
 );
 ```
+
+### Globals
+
+Globals will be available through the `$globals` variable.
+For example; If you created a global with the handle `header` and added a field called `logo` in this global it will be available as `$globals->header->logo`.
+
 
 ### Forms
 

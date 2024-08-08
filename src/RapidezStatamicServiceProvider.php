@@ -170,6 +170,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             __DIR__.'/../resources/content/collections' => base_path('content/collections'),
             __DIR__.'/../resources/content/assets' => base_path('content/assets'),
             __DIR__.'/../resources/fieldsets' => resource_path('fieldsets'),
+            __DIR__.'/../resources/blueprints/runway' => resource_path('blueprints/vendor/runway'),
         ], 'rapidez-statamic-content');
 
         $this->publishes([

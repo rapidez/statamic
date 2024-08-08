@@ -1,0 +1,23 @@
+tabs:
+  main:
+    sections:
+      -
+        fields:
+          -
+            handle: entity_id
+            field:
+              type: integer
+              localizable: false
+              visibility: read_only
+          -
+            handle: sku
+            field:
+              type: text
+              localizable: false
+              visibility: read_only
+          -
+            handle: name
+            field:
+              type: text
+              localizable: false
+              visibility: read_only

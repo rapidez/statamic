@@ -68,6 +68,7 @@ class ImportCategories extends Command
                     array_merge([
                         'locale'       => $site->handle(),
                         'site'       => $site->handle(),
+                        // @phpstan-ignore staticMethod.void
                     ], ...[Eventy::filter('rapidez.statamic.category.entry.data', $category)])
                 );
             }

@@ -2,6 +2,7 @@
 
 namespace Rapidez\Statamic\Http\Controllers;
 
+use Illuminate\Routing\Redirector;
 use Statamic\Facades\CP\Toast;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -15,7 +16,7 @@ class ImportsController extends Controller
         return view('rapidez-statamic::utilities.import_utility.imports');
     }
 
-    public function importCategories() : RedirectResponse
+    public function importCategories() : RedirectResponse|Redirector
     {
         Artisan::queue('rapidez:statamic:import:categories --all')
             ->onQueue('imports');
@@ -25,7 +26,7 @@ class ImportsController extends Controller
         return redirect(cp_route('utilities.imports'));
     }
 
-    public function importProducts() : RedirectResponse
+    public function importProducts() : RedirectResponse|Redirector
     {
         Artisan::queue('rapidez:statamic:import:products')
             ->onQueue('imports');
@@ -35,7 +36,7 @@ class ImportsController extends Controller
         return redirect(cp_route('utilities.imports'));
     }
 
-    public function importBrands() : RedirectResponse
+    public function importBrands() : RedirectResponse|Redirector
     {
         Artisan::queue('rapidez:statamic:import:brands')
             ->onQueue('imports');

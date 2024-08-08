@@ -2,6 +2,7 @@
 
 namespace Rapidez\Statamic;
 
+use Statamic\Eloquent\Entries\EntryQueryBuilder;
 use Statamic\Statamic;
 use Statamic\Sites\Sites;
 use Statamic\Facades\Site;
@@ -30,14 +31,14 @@ use TorMorten\Eventy\Facades\Eventy;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
-    public function register()
+    public function register(): void
     {
-        $this->app->extend(Sites::class, function () {
-            return new SitesLinkedToMagentoStores(config('statamic.sites'));
+        $this->app->extend(Sites::class, function (): SitesLinkedToMagentoStores {
+            return new SitesLinkedToMagentoStores();
         });
     }
 
-    public function boot()
+    public function boot(): void
     {
         $this
             ->bootCommands()
@@ -133,7 +134,9 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     {
         if (config('rapidez.statamic.fetch.product') && $this->currentSiteIsEnabled()) {
             View::composer('rapidez::product.overview', function (RenderedView $view) {
-                $entry = Entry::query()
+                /** @var EntryQueryBuilder $entry */
+                $entry = Entry::query();
+                $entry = $entry
                     ->where('collection', 'products')
                     ->where('site', $this->getSiteHandleByStoreId())
                     ->where('linked_product', config('frontend.product.sku'))
@@ -145,7 +148,9 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
         if (config('rapidez.statamic.fetch.category') && $this->currentSiteIsEnabled()) {
             View::composer('rapidez::category.overview', function (RenderedView $view) {
-                $entry = Entry::query()
+                /** @var EntryQueryBuilder $entry */
+                $entry = Entry::query();
+                $entry = $entry
                     ->where('collection', 'categories')
                     ->where('site', $this->getSiteHandleByStoreId())
                     ->where('linked_category', config('frontend.category.entity_id'))

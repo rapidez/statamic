@@ -59,6 +59,7 @@ class ImportBrands extends Command
                         'locale' => $site->handle(),
                         'site' => $site->handle(),
                         ...$extraData,
+                        // @phpstan-ignore staticMethod.void
                     ], ...[Eventy::filter('rapidez.statamic.brand.entry.data', $brand)])
                 );
             }

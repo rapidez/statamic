@@ -2,6 +2,7 @@
 
 namespace Rapidez\Statamic\Actions;
 
+use Statamic\Eloquent\Entries\EntryQueryBuilder;
 use Statamic\Facades\Entry;
 use ReflectionClass;
 
@@ -9,7 +10,9 @@ class StatamicEntryAction
 {
     public static function createEntry(array $attributes, array $values = []): void
     {
-        if (Entry::query()->where($attributes)->count()) {
+        /** @var EntryQueryBuilder $entry */
+        $entry = Entry::query();
+        if ($entry->where($attributes)->count()) {
             // Entry was already created.
             return;
         }

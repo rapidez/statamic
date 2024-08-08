@@ -2,13 +2,19 @@
 
 namespace Rapidez\Statamic\Extend;
 
+use Statamic\Sites\Site;
 use Statamic\Sites\Sites;
+use Illuminate\Support\Collection;
 
 class SitesLinkedToMagentoStores extends Sites
 {
-    public function findByUrl($url)
+    /**
+     * @param string $url
+     * @return Site
+     */
+    public function findByUrl($url): Site
     {
-        if ($site = $this->findByMageRunCode(request()->server('MAGE_RUN_CODE'))) {
+        if ($site = $this->findByMageRunCode((string) request()->server('MAGE_RUN_CODE'))) {
             return $site;
         }
 
@@ -16,8 +22,10 @@ class SitesLinkedToMagentoStores extends Sites
     }
 
 
-    public function findByMageRunCode($code)
+    public function findByMageRunCode(string $code): Site|null
     {
-        return collect($this->sites)->get($code);
+        $sites = collect($this->sites);
+
+        return $sites->get($code);
     }
 }

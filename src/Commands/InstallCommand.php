@@ -21,7 +21,7 @@ class InstallCommand extends Command
             '--tag' => 'statamic-eloquent-config',
         ]);
 
-        $this->confirm('Did you set the table_prefix in config/statamic/eloquent-driver.php to "statamic_"?', 1);
+        $this->confirm('Did you set the table_prefix in config/statamic/eloquent-driver.php to "statamic_"?', true);
 
         $this->call('statamic:install:eloquent-driver');
 
@@ -31,7 +31,7 @@ class InstallCommand extends Command
             $this->call('statamic:multisite');
         }
 
-        if ($this->confirm('Would you like to publish Collections, Blueprints, Fieldsets & Views?', 1)) {
+        if ($this->confirm('Would you like to publish Collections, Blueprints, Fieldsets & Views?', true)) {
             $this->call('vendor:publish', [
                 '--provider' => 'Rapidez\Statamic\RapidezStatamicServiceProvider',
                 '--tag' => 'rapidez-statamic-content',
@@ -43,7 +43,7 @@ class InstallCommand extends Command
             ]);
         }
 
-        if ($this->confirm('Would you like to make a user?', 1)) {
+        if ($this->confirm('Would you like to make a user?', true)) {
             $this->call('statamic:make:user');
         }
 

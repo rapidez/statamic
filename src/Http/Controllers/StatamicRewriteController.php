@@ -10,7 +10,7 @@ use Statamic\Http\Controllers\FrontendController;
 
 class StatamicRewriteController
 {
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): string
     {
         return (new FrontendController)->index($request);
     }

@@ -2,12 +2,16 @@
 
 namespace Rapidez\Statamic\Tags;
 
+use Illuminate\Support\Collection;
 use Statamic\Facades\Config;
 use Statamic\Tags\Tags;
 
 class Alternates extends Tags
 {
-    public function index()
+    /**
+     * @return Collection<string, string>
+     */
+    public function index(): Collection
     {
         $page = $this->params->get('page');
         $isHome = request()->path() == '/';

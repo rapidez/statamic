@@ -53,6 +53,7 @@ class ImportProducts extends Command
                     array_merge([
                         'locale'       => $site->handle(),
                         'site'       => $site->handle(),
+                        // @phpstan-ignore staticMethod.void
                     ], ...[Eventy::filter('rapidez.statamic.product.entry.data', $product)])
                 );
             }

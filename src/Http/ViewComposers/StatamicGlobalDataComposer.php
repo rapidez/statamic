@@ -4,12 +4,16 @@ namespace Rapidez\Statamic\Http\ViewComposers;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
+use Statamic\Eloquent\Globals\Variables;
 use Statamic\Facades\GlobalSet;
 use Statamic\Facades\Site;
 
 class StatamicGlobalDataComposer
 {
-    public function getGlobals()
+    /**
+     * @return array<string, Variables>
+     */
+    public function getGlobals(): array
     {
         return Cache::rememberForever('statamic-globals-'.Site::current()->handle(), function() {
             $data = [];

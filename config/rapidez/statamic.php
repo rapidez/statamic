@@ -59,17 +59,6 @@ return [
                 'read_only' => true,
                 'title_field' => 'name',
                 'cp_icon' => 'table',
-                'blueprint' => [
-                    'sections' => [
-                        'main' => [
-                            'fields' => [
-                                ['handle' => 'entity_id', 'field' => ['type' => 'integer']],
-                                ['handle' => 'sku', 'field' => ['type' => 'text']],
-                                ['handle' => 'name', 'field' => ['type' => 'text']],
-                            ]
-                        ]
-                    ]
-                ]
             ],
 
             \Rapidez\Statamic\Models\Category::class => [
@@ -77,16 +66,6 @@ return [
                 'read_only' => true,
                 'title_field' => 'name',
                 'cp_icon' => 'array',
-                'blueprint' => [
-                    'sections' => [
-                        'main' => [
-                            'fields' => [
-                                ['handle' => 'entity_id', 'field' => ['type' => 'integer']],
-                                ['handle' => 'name', 'field' => ['type' => 'text']],
-                            ]
-                        ]
-                    ]
-                ]
             ],
 
             \Rapidez\Statamic\Models\Brand::class => [
@@ -95,19 +74,21 @@ return [
                 'title_field' => 'value_store',
                 'cp_icon' => 'tags',
                 'order_by' => 'sort_order',
-                'blueprint' => [
-                    'sections' => [
-                        'main' => [
-                            'fields' => [
-                                ['handle' => 'option_id', 'field' => ['type' => 'integer']],
-                                ['handle' => 'sort_order', 'field' => ['type' => 'integer']],
-                                ['handle' => 'value_admin', 'field' => ['type' => 'text']],
-                                ['handle' => 'value_store', 'field' => ['type' => 'text']],
-                            ]
-                        ]
-                    ]
-                ],
             ],
         ],
     ],
+
+    'sites' => [
+        'default' => [
+            'name' => env('APP_NAME', 'Statamic'),
+            'locale' => 'en_EN',
+            'lang' => 'en_EN',
+            'url' => '/',
+            'attributes' => [
+                'magento_store_id' => 1,
+                'group' => 'default',
+                'disabled' => false,
+            ],
+        ],
+    ]
 ];

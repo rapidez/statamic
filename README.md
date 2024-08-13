@@ -21,6 +21,31 @@ You need to have `statamic/cms` installed in your Rapidez installation. Follow t
 composer require rapidez/statamic
 ```
 
+## Install command
+
+The install command will help you set up all the necessary settings.
+It will mainly setup the [Eloquent driver](https://github.com/statamic/eloquent-driver) and publish the necessary vendor from the rapidez/statamic repo. 
+
+```
+php artisan rapidez-statamic:install
+```
+
+When running the install command you will be prompted to setup the Eloquent driver.
+In this configuration you can choose what to keep in the flat file system and what to migrate to the database.
+We recommend migrating the following options to the database when setting up the eloquent driver:
+- Assets
+- Collection Trees
+- Entries
+- Forms
+- Form Submissions
+- Globals
+- Global Variables
+- Navigation Trees
+- Terms
+- Tokens
+
+After you're done running the install command make sure to check the guide below for some manual changes.
+
 ## Configuration
 
 Have a look within the `rapidez/statamic.php` config file, if you need to change something you can publish it with:
@@ -57,6 +82,8 @@ If you'd like to use the homepage from Statamic instead of the CMS page from Mag
 
 ### Publish Collections, Blueprints and Fieldsets
 
+If you have run the install command these will already have been published.
+
 ```
 php artisan vendor:publish --provider="Rapidez\Statamic\RapidezStatamicServiceProvider" --tag=rapidez-statamic-content
 ```
@@ -70,21 +97,32 @@ php artisan vendor:publish --provider="Rapidez\Statamic\RapidezStatamicServicePr
 
 ### Magento Store ID
 
-It is important to add the Magento store ID for every site in the attributes section within `config/statamic/sites.php` and use the store code as key. The current site will be determined based on the `MAGE_RUN_CODE`. By default Statamic uses the url for this; that's still the fallback. If you need to generate some urls with a multisite it's a best practice to specify the `url` per site from env variables. See the [Statamic multisite docs](https://statamic.dev/multi-site#url). Optionally you could set the `group` within the `attributes` if you'd like to group sites to filter the alternate hreflang link tags. You could also set the `disabled` within the `attributes` section to true if you want to exclude this site from being altered with Statamic data.
-
-```php
-'sites' => [
-    'default' => [
-        'name' => config('app.name'),
-        'locale' => 'nl_NL',
-        'url' => '/',
-        'attributes' => [
-            'magento_store_id' => 1,
-            'group' => 'default',
-            'disabled' => false,
-        ]
+It is important to add the Magento store ID for every site in the attributes section within `resources/sites.yaml` and use the store code as key. Because the url can vary per enviroment(local, testing, staging, production) we use the "sites" section of the config file and reference that in the `sites.yaml`. The current site will be determined based on the `MAGE_RUN_CODE`. By default Statamic uses the url for this; that's still the fallback. If you need to generate some urls with a multisite it's a best practice to specify the `url` per site from env variables. See the [Statamic multisite docs](https://statamic.dev/multi-site#url). Optionally you could set the `group` within the `attributes` if you'd like to group sites to filter the alternate hreflang link tags. You could also set the `disabled` within the `attributes` section to true if you want to exclude this site from being altered with Statamic data.
+```yaml
+'default' => [
+    'name' => env('APP_NAME', 'Statamic'),
+    'locale' => 'en_EN',
+    'lang' => 'en_EN',
+    'url' => '/',
+    'attributes' => [
+        'magento_store_id' => 1,
+        'group' => 'default',
+        'disabled' => false,
     ],
-]
+],
+```
+
+
+```yaml
+default:
+  name: '{{ config:rapidez.statamic.sites.default.name }}'
+  locale: '{{ config:rapidez.statamic.sites.default.locale }}'
+  lang: '{{ config:rapidez.statamic.sites.default.lang }}'
+  url: '{{ config:rapidez.statamic.sites.default.url }}'
+  attributes:
+    magento_store_id: '{{ config:rapidez.statamic.sites.default.attributes.magento_store_id }}'
+    group: '{{ config:rapidez.statamic.sites.default.attributes.group }}'
+    disabled: '{{ config:rapidez.statamic.sites.default.attributes.disabled }}'
 ```
 
 ### Showing content on categories and products
@@ -186,6 +224,12 @@ Eventy::addFilter('rapidez.statamic.brand.entry.data', fn($brand) => [
     ]
 );
 ```
+
+### Globals
+
+Globals will be available through the `$globals` variable.
+For example; If you created a global with the handle `header` and added a field called `logo` in this global it will be available as `$globals->header->logo`.
+
 
 ### Forms
 

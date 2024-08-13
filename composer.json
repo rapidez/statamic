@@ -30,11 +30,13 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": "^8.0|^8.1",
-        "doublethreedigital/runway": "^5.0",
-        "rapidez/blade-directives": "^0.4",
-        "spatie/statamic-responsive-images": "^4.0",
-        "statamic/cms": "^4.0",
+        "php": "^8.1|^8.2",
+        "justbetter/statamic-eloquent-driver-globalset-migration-generator": "^0.1.0",
+        "rapidez/blade-directives": "^0.6",
+        "spatie/statamic-responsive-images": "^5.0",
+        "statamic-rad-pack/runway": "^7.6",
+        "statamic/cms": "^5.0",
+        "statamic/eloquent-driver": "^4.9",
         "tormjens/eventy": "^0.8"
     },
     "autoload": {

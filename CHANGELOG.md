@@ -1,6 +1,21 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/3.5.0...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/4.0.0...master)
+## [4.0.0](https://github.com/rapidez/statamic/releases/tag/4.0.0) - 2024-08-13
+
+In this release we've added compatibility with Statamic 5. This forces you to configure your sites in the new `resources/sites.yaml`. You can still use your old config by referencing it in the `resources/sites.yaml`, see: https://github.com/rapidez/statamic#magento-store-id
+
+### Added
+
+- Statamic 5 support + install command (#69)
+
+## [3.5.1](https://github.com/rapidez/statamic/releases/tag/3.5.1) - 2024-07-09
+
+### Fixed
+
+- Brand page container (#64)
+- Use the selected site in the control panel (#66)
+
 ## [3.5.0](https://github.com/rapidez/statamic/releases/tag/3.5.0) - 2024-05-14
 
 ### Changed

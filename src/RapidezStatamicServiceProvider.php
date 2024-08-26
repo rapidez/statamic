@@ -13,6 +13,7 @@ use Statamic\Events\GlobalSetSaved;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Artisan;
 use Rapidez\Statamic\Tags\Alternates;
 use Statamic\Events\GlobalSetDeleted;
 use Illuminate\Support\ServiceProvider;
@@ -96,6 +97,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         if ($this->currentSiteIsEnabled()) {
             Event::listen([GlobalSetSaved::class, GlobalSetDeleted::class], function () {
                 Cache::forget('statamic-globals-' . Site::current()->handle());
+                Artisan::call('view:clear');
             });
 
             Eventy::addFilter('rapidez.statamic.category.entry.data', fn($category) => [

@@ -96,8 +96,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     {
         if ($this->currentSiteIsEnabled()) {
             Event::listen([GlobalSetSaved::class, GlobalSetDeleted::class], function () {
-                Cache::forget('statamic-globals-' . Site::current()->handle());
-                Artisan::call('view:clear');
+                Cache::forget('statamic-globals-' . Site::selected()->handle());
             });
 
             Eventy::addFilter('rapidez.statamic.category.entry.data', fn($category) => [

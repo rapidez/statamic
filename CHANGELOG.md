@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/4.0.0...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/4.0.1...4.0.1)
+## [4.0.1](https://github.com/rapidez/statamic/releases/tag/4.0.1) - 2024-08-27
+
+### Fixed
+
+- Clear the correct site cache when globals change (#70)
+
 ## [4.0.0](https://github.com/rapidez/statamic/releases/tag/4.0.0) - 2024-08-13
 
 In this release we've added compatibility with Statamic 5. This forces you to configure your sites in the new `resources/sites.yaml`. You can still use your old config by referencing it in the `resources/sites.yaml`, see: https://github.com/rapidez/statamic#magento-store-id

@@ -1,4 +1,4 @@
-@php($form = Statamic::tag('form:create')->param('in', $form->value()->handle(), 'js' => 'vue')->fetch())
+@php($form = Statamic::tag('form:create')->params(['in', $form->value()->handle(), 'js' => 'vue'])->fetch())
 
 @if($form['success'])
     <div>@lang('The form was submitted successfully')</div>

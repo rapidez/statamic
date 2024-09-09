@@ -9,6 +9,8 @@ use Statamic\Facades\Site;
 
 class StatamicGlobalDataComposer
 {
+    protected $globals;
+    
     public function getGlobals()
     {
         return Cache::rememberForever('statamic-globals-'.Site::current()->handle(), function() {
@@ -28,8 +30,12 @@ class StatamicGlobalDataComposer
 
     public function compose(View $view) : View
     {
-        if(!isset($view->globals)) {
-            $view->with('globals', optionalDeep((object)$this->getGlobals()));
+        if (!$this->globals) {
+            $this->globals = optionalDeep((object)$this->getGlobals());
+        }
+        
+        if (!isset($view->globals)) {
+            $view->with('globals', $this->globals);
         }
 
         return $view;

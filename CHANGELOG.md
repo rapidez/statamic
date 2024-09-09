@@ -1,6 +1,16 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/4.0.1...4.0.1)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/4.1.0...4.1.0)
+## [4.1.0](https://github.com/rapidez/statamic/releases/tag/4.1.0) - 2024-09-09
+
+### Changed
+
+- Cache the globals in memory (#73)
+
+### Fixed
+
+- Page builder form template error fix (#72)
+
 ## [4.0.1](https://github.com/rapidez/statamic/releases/tag/4.0.1) - 2024-08-27
 
 ### Fixed

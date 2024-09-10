@@ -2,6 +2,8 @@
 
 namespace Rapidez\Statamic;
 
+use Illuminate\Support\Facades\Blade;
+use Rapidez\Statamic\Directives\IncludeCachedDirective;
 use Statamic\Statamic;
 use Statamic\Sites\Sites;
 use Statamic\Facades\Site;
@@ -41,6 +43,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function boot()
     {
         $this
+            ->bootDirectives()
             ->bootCommands()
             ->bootConfig()
             ->bootRoutes()
@@ -55,6 +58,16 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         Vue::register();
         Alternates::register();
     }
+
+    protected function bootDirectives(): static
+    {
+        IncludeCachedDirective::bind();
+        Blade::directive('includeCached', function ($expression) {
+            return "<?php echo \Rapidez\Statamic\Directives\IncludeCachedDirective::handle({$expression}); ?>";
+        });
+        return $this;
+    }
+
 
     public function bootCommands() : self
     {

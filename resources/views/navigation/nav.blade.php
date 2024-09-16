@@ -9,7 +9,7 @@
     $baseUrl = \Statamic\Facades\Site::current()->absoluteUrl();
 @endphp
 <nav class="relative border-y max-lg:hidden">
-    <ul class="flex items-center justify-center gap-7 font-semibold text-neutral [&>:not(:hover)]:hover:text-inactive">
+    <ul class="flex items-center justify-center gap-8 font-semibold text-neutral [&>:not(:hover)]:hover:text-inactive text-sm">
         @foreach (Statamic::tag('nav:main')->fetch() as $item)
             @php
                 $level1Url = isset($item['linked_category']) && ($item['linked_category']?->value()['url_path'] ?? false) ? $baseUrl . '/' . $item['linked_category']->value()['url_path'] : $item['url'] ?? '';
@@ -25,7 +25,7 @@
                     <div class="pointer-events-none absolute inset-x-0 top-full -translate-y-1 border-t bg-white opacity-0 transition group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100">
                         <div class="pointer-events-none absolute inset-x-0 top-full h-screen bg-neutral/50"></div>
                         <div class="container relative flex overflow-hidden">
-                            <ul class="columns-3 flex-col gap-x-12 py-10 text-base font-bold xl:columns-4 w-full">
+                            <ul class="columns-3 flex-col gap-x-12 py-10 font-bold xl:columns-4 w-full">
                                 @foreach ($item['children'] as $level2)
                                     @php
                                         $level2Url = isset($level2['linked_category']) && ($level2['linked_category']?->value()['url_path'] ?? false) ? $baseUrl . '/' . $level2['linked_category']->value()['url_path'] : $level2['url'] ?? '';

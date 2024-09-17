@@ -1,6 +1,8 @@
 @props(['id', 'children', 'title' => __('Menu'), 'hasParent' => false, 'tag' => 'form', 'parentUrl' => ''])
 @slots(['headerbutton'])
-
+@php
+    $baseUrl = \Statamic\Facades\Site::current()->absoluteUrl();
+@endphp
 <x-rapidez::slideover.mobile
     :title="(string) $title"
     :$id
@@ -12,7 +14,7 @@
             @include('rapidez-statamic::navigation.header-button')
         </div>
     </x-slot:headerbutton>
-    <div class="flex w-full flex-1 flex-col bg-inactive-100">
+    <div class="bg-inactive-100 flex w-full flex-1 flex-col">
         <ul class="mt-5 flex flex-col divide-y border-y bg-white">
             @if ($hasParent && $parentUrl)
                 <li>
@@ -23,10 +25,7 @@
             @endif
             @foreach ($children ?: [] as $child)
                 @php
-                    $url = $child['url'];
-                    if (isset($child['linked_category'])) {
-                        $url = Str::start($child['linked_category']->value()['url_path'] ?? '', '/');
-                    }
+                    $url = getItemUrl($child, $baseUrl)
                 @endphp
                 <li class="relative">
                     @if ($child['title'] ?? '')

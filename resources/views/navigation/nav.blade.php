@@ -12,7 +12,7 @@
     <ul class="flex items-center justify-center gap-8 font-semibold text-neutral [&>:not(:hover)]:hover:text-inactive text-sm">
         @foreach (Statamic::tag('nav:main')->fetch() as $item)
             @php
-                $itemUrl = isset($item['linked_category']) && ($item['linked_category']?->value()['url_path'] ?? false) ? $baseUrl . '/' . $item['linked_category']->value()['url_path'] : $item['url'] ?? '';
+                $itemUrl = getItemUrl($item, $baseUrl);
             @endphp
             <li class="group">
                 <a class="relative flex py-4 transition" href="{{ $itemUrl }}">
@@ -28,14 +28,14 @@
                             <ul class="columns-3 flex-col gap-x-12 py-10 font-bold xl:columns-4 w-full">
                                 @foreach ($item['children'] as $item)
                                     @php
-                                        $itemUrl = isset($item['linked_category']) && ($item['linked_category']?->value()['url_path'] ?? false) ? $baseUrl . '/' . $item['linked_category']->value()['url_path'] : $item['url'] ?? '';
+                                        $itemUrl = getItemUrl($item, $baseUrl);
                                     @endphp
                                     <li class="flex break-inside-avoid flex-col gap-1 pb-5">
                                         <a href="{{ $itemUrl }}">{{ $item['title'] }}</a>
                                         <ul class="flex flex-col font-medium [&>:not(:hover)]:hover:text-inactive">
                                             @foreach ($item['children'] as $item)
                                                 @php
-                                                    $itemUrl = isset($item['linked_category']) && ($item['linked_category']?->value()['url_path'] ?? false) ? $baseUrl . '/' . $item['linked_category']->value()['url_path'] : $item['url'] ?? '';
+                                                    $itemUrl = getItemUrl($item, $baseUrl);
                                                 @endphp
                                                 <li class="transition">
                                                     <a href="{{ $itemUrl }}">{{ $item['title'] }}</a>

@@ -25,7 +25,7 @@
             @endif
             @foreach ($children ?: [] as $child)
                 @php
-                    $url = getItemUrl($child, $baseUrl)
+                    $url = getItemUrl($child, $baseUrl);
                 @endphp
                 <li class="relative">
                     @if ($child['title'] ?? '')

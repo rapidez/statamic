@@ -9,8 +9,7 @@
         id="navigation"
         is-form
         :children="$mobileNavData"
-    >
-    </x-rapidez-statamic::nav-layer>
+    />
 </nav>
 @php
     $baseUrl = \Statamic\Facades\Site::current()->absoluteUrl();

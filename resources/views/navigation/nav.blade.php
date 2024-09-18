@@ -21,7 +21,7 @@
                 $itemUrl = getItemUrl($item, $baseUrl);
             @endphp
             <li class="group">
-                <a class="relative flex py-4 transition" href="{{ $itemUrl }}">
+                <a class="relative flex py-5 transition" href="{{ $itemUrl }}">
                     {{ $item['title'] }}
                     @if ($item['children'])
                         <div class="bg-primary absolute inset-x-0 bottom-0 z-50 h-0.5 w-full origin-right translate-y-1/2 scale-x-0 transition group-hover:origin-left group-hover:scale-x-100"></div>

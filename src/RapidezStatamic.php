@@ -47,7 +47,7 @@ class RapidezStatamic
         return $branch;
     }
 
-    private function getUrl(array $item): ?string
+    protected function getUrl(array $item): ?string
     {
         if ($item['category'] ?? false) {
             $urlPath = is_array($item['category']) ? ($item['category']['url_path'] ?? '') : ($item['category']->value()['url_path'] ?? '');
@@ -55,25 +55,5 @@ class RapidezStatamic
         }
 
         return $item['url'] ?? '';
-    }
-
-    public function getButtonUrl(array $item): ?string
-    {
-        if (!($item instanceof ArrayableLink)) {
-            return '';
-        }
-
-        if ($item?->url() ?? false) {
-            return $item->url();
-        }
-
-        $itemData = $item->toArray() ?? [];
-
-        if (($itemData['linked_category'] ?? false) && ($itemData['linked_category']?->value() ?? false)) {
-            $urlPath = is_array($itemData['linked_category']?->value()) ? ($itemData['linked_category']?->value()['url_path'] ?? '') : ($itemData['linked_category']->value()['url_path'] ?? '');
-            return Str::start($urlPath, '/');
-        }
-
-        return '';
     }
 }

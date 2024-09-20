@@ -5,6 +5,7 @@ namespace Rapidez\Statamic;
 use Illuminate\Support\Facades\Blade;
 use Rapidez\Statamic\Directives\IncludeCachedDirective;
 use Statamic\Statamic;
+use Rapidez\Statamic\RapidezStatamic;
 use Statamic\Sites\Sites;
 use Statamic\Facades\Site;
 use Statamic\Facades\Entry;
@@ -30,6 +31,7 @@ use Rapidez\Statamic\Http\Controllers\ImportsController;
 use Rapidez\Statamic\Http\Controllers\StatamicRewriteController;
 use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
 use TorMorten\Eventy\Facades\Eventy;
+use Rapidez\Statamic\Facades\RapidezStatamic as RapidezStatamicFacade;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
@@ -38,6 +40,8 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         $this->app->extend(Sites::class, function () {
             return new SitesLinkedToMagentoStores(config('statamic.sites'));
         });
+
+        $this->registerBindings();
     }
 
     public function boot()
@@ -59,12 +63,20 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         Alternates::register();
     }
 
-    protected function bootDirectives(): static
+    public function registerBindings(): self
     {
         IncludeCachedDirective::bind();
+        $this->app->singleton('rapidez-statamic', RapidezStatamic::class);
+
+        return $this;
+    }
+
+    protected function bootDirectives(): self
+    {
         Blade::directive('includeCached', function ($expression) {
             return "<?php echo \Rapidez\Statamic\Directives\IncludeCachedDirective::handle({$expression}); ?>";
         });
+
         return $this;
     }
 

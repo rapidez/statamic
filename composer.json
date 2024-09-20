@@ -37,11 +37,18 @@
         "statamic-rad-pack/runway": "^7.6",
         "statamic/cms": "^5.0",
         "statamic/eloquent-driver": "^4.9",
+        "illuminate/database": "^10.0|^11.0",
+        "illuminate/events": "^10.0|^11.0",
+        "illuminate/queue": "^10.0|^11.0",
+        "illuminate/support": "^10.0|^11.0",
         "tormjens/eventy": "^0.8"
     },
     "autoload": {
         "psr-4": {
             "Rapidez\\Statamic\\": "src"
+        },
+        "aliases": {
+            "RapidezStatamic": "Rapidez\\Statamic\\Facades\\RapidezStatamic"
         }
     },
     "config": {

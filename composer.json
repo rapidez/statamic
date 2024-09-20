@@ -46,9 +46,6 @@
     "autoload": {
         "psr-4": {
             "Rapidez\\Statamic\\": "src"
-        },
-        "aliases": {
-            "RapidezStatamic": "Rapidez\\Statamic\\Facades\\RapidezStatamic"
         }
     },
     "config": {
@@ -62,6 +59,9 @@
             "providers": [
                 "Rapidez\\Statamic\\RapidezStatamicServiceProvider"
             ]
+        },
+        "aliases": {
+            "RapidezStatamic": "Rapidez\\Statamic\\Facades\\RapidezStatamic"
         }
     }
 }

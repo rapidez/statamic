@@ -6,7 +6,7 @@ This package helps you integrate Statamic within your Rapidez project by adding 
 - Products, categories, brands and pages collections as starting point so you can extend this however you'd like
 - Route merging so Statamic routes work as fallback
 - Page builder fieldset with a product slider, content, image and form component
-- Responsive images with Statamic Glide and [justbetter/statamic-glide-directive](https://github.com/justbetter/statamic-glide-directive)
+- Responsive images with Glide through [justbetter/statamic-glide-directive](https://github.com/justbetter/statamic-glide-directive)
 - Breadcrumbs for pages
 - Globals available in all views
 - Meta title, description and automatic alternate hreflang link tags

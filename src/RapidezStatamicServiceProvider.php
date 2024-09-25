@@ -13,7 +13,6 @@ use Statamic\Events\GlobalSetSaved;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Artisan;
 use Rapidez\Statamic\Tags\Alternates;
 use Statamic\Events\GlobalSetDeleted;
 use Illuminate\Support\ServiceProvider;
@@ -212,7 +211,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootStack() : static
     {
         if (! $this->app->runningInConsole()) {
-            View::startPush('head', view('rapidez-statamic::stack.head'));
+            View::startPush('head', view('statamic-glide-directive::partials.head'));
         }
 
         return $this;

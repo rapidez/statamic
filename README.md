@@ -225,12 +225,6 @@ Eventy::addFilter('rapidez.statamic.brand.entry.data', fn($brand) => [
 );
 ```
 
-### Images
-To allow the images to change on resize, add this include to your head in the layouts:
-```php
-@include('statamic-glide-directive::partials.head')
-```
-
 
 ### Globals
 

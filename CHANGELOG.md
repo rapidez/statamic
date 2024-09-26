@@ -3,12 +3,16 @@
 [Unreleased changes](https://github.com/rapidez/statamic/compare/4.2.0...4.2.0)
 ## [4.2.0](https://github.com/rapidez/statamic/releases/tag/4.2.0) - 2024-09-26
 
-### What's Changed
-* Remove spatie package and add JustBetter glide package by @BobWez98 in https://github.com/rapidez/statamic/pull/75
-* bugfix, don't load responsive images by @BobWez98 in https://github.com/rapidez/statamic/pull/76
+### Changed
+
+- License change GPL-3.0 > GPL-3.0-or-later (59b86c5)
+- Replaced spatie/statamic-responsive-images with justbetter/statamic-glide-directive (#75)
+
+### Fixed
+
+- Don't load removed views (#76)
 
 
-**Full Changelog**: https://github.com/rapidez/statamic/compare/4.1.0...4.2.0
 
 ## [4.1.0](https://github.com/rapidez/statamic/releases/tag/4.1.0) - 2024-09-09
 

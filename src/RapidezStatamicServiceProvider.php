@@ -86,7 +86,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootViews() : self
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'rapidez-statamic');
-        $this->loadViewsFrom(__DIR__.'/../resources/views/vendor/responsive-images', 'responsive-images');
 
         return $this;
     }

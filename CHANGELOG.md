@@ -1,10 +1,11 @@
 # Changelog 
 
 [Unreleased changes](https://github.com/rapidez/statamic/compare/4.2.0...4.2.0)
-## [4.2.0](https://github.com/rapidez/statamic/releases/tag/4.2.0) - 2024-09-25
+## [4.2.0](https://github.com/rapidez/statamic/releases/tag/4.2.0) - 2024-09-26
 
 ### What's Changed
 * Remove spatie package and add JustBetter glide package by @BobWez98 in https://github.com/rapidez/statamic/pull/75
+* bugfix, don't load responsive images by @BobWez98 in https://github.com/rapidez/statamic/pull/76
 
 
 **Full Changelog**: https://github.com/rapidez/statamic/compare/4.1.0...4.2.0

@@ -1,6 +1,14 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/4.1.0...4.1.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/4.2.0...4.2.0)
+## [4.2.0](https://github.com/rapidez/statamic/releases/tag/4.2.0) - 2024-09-25
+
+### What's Changed
+* Remove spatie package and add JustBetter glide package by @BobWez98 in https://github.com/rapidez/statamic/pull/75
+
+
+**Full Changelog**: https://github.com/rapidez/statamic/compare/4.1.0...4.2.0
+
 ## [4.1.0](https://github.com/rapidez/statamic/releases/tag/4.1.0) - 2024-09-09
 
 ### Changed

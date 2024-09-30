@@ -2,6 +2,7 @@
 
 namespace Rapidez\Statamic\Extend;
 
+use Illuminate\Support\Facades\Cache;
 use Statamic\Sites\Sites;
 
 class SitesLinkedToMagentoStores extends Sites
@@ -12,12 +13,15 @@ class SitesLinkedToMagentoStores extends Sites
             return $site;
         }
 
-        return parent::findByUrl($url);
+        return Cache::store('array')->rememberForever('rapidez.statamic.findByUrl-'.$url, fn() => parent::findByUrl($url));
     }
 
 
     public function findByMageRunCode($code)
     {
-        return collect($this->sites)->get($code);
+        if (!$code) {
+            return null;
+        }
+        return Cache::store('array')->rememberForever('rapidez.statamic.findByMageRunCode-'.$code, fn() => collect($this->sites)->get($code));
     }
 }

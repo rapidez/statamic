@@ -9,11 +9,11 @@ class SitesLinkedToMagentoStores extends Sites
 {
     public function findByUrl($url)
     {
-        if ($site = $this->findByMageRunCode(request()->server('MAGE_RUN_CODE'))) {
+        if ($site = once(fn() => $this->findByMageRunCode(request()->server('MAGE_RUN_CODE')))) {
             return $site;
         }
 
-        return Cache::store('array')->rememberForever('rapidez.statamic.findByUrl-'.$url, fn() => parent::findByUrl($url));
+        return once(fn() => parent::findByUrl($url));
     }
 
 

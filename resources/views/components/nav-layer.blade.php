@@ -24,12 +24,9 @@
                 </li>
             @endif
             @foreach ($children ?: [] as $child)
-                @php
-                    $url = getItemUrl($child, $baseUrl);
-                @endphp
                 <li class="relative">
                     @if ($child['title'] ?? '')
-                        <a href="{{ $url }}" class="flex items-center justify-between p-5 font-semibold">
+                        <a href="{{ $child['url'] }}" class="flex items-center justify-between p-5 font-semibold">
                             {{ $child['title'] }}
                             @if ($child['children'])
                                 <x-heroicon-o-chevron-right class="size-4" />

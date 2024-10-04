@@ -43,10 +43,7 @@
     "autoload": {
         "psr-4": {
             "Rapidez\\Statamic\\": "src"
-        },
-        "files": [
-            "src/Helpers/UrlHelper.php"
-        ]
+        }
     },
     "config": {
         "sort-packages": true,

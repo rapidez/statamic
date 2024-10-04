@@ -22,17 +22,9 @@ class GenerateSitemap extends Command
 
     public function handle()
     {
-        $sitemap = '<?xml version="1.0" encoding="UTF-8"?>';
-        $sitemap .= '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-
         foreach (SiteFacade::all() as $site) {
-            $sitemap .= $this->addSitemap('sitemap_statamic_' . $site->handle() . '.xml');
             $this->generateStoreSitemap($site);
         }
-
-        $sitemap .= '</sitemapindex>';
-
-        file_put_contents(public_path('statamic_sitemap.xml'), $sitemap);
 
         return Command::SUCCESS;
     }

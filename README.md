@@ -236,6 +236,20 @@ For example; If you created a global with the handle `header` and added a field 
 
 When you create a form you could use `rapidez-statamic::emails.form` as HTML template which uses the [Laravel mail template](https://laravel.com/docs/master/mail#customizing-the-components) with all fields in a table, make sure you enable markdown!
 
+### Sitemap
+
+It is possible to create a sitemap per store, each sitemap is a index containing all collections & taxonomies that contain their own views.
+The XML files will be generated as:
+```shell
+sitemap_statamic_{site_handle}
+sitemap_statamic_collection_{site_handle}_{collection_handle}
+sitemap_statamic_taxonomy_{site_handle}_{taxonomy_handle}
+```
+You can generate the sitemaps by running:
+```shell
+rapidez:statamic:generate:sitemap
+```
+
 ### Upgrading
 
 Since 3.0.0 we have started using optionalDeep for the $globals, and $content variables.

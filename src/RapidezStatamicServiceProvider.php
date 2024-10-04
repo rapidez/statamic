@@ -2,7 +2,6 @@
 
 namespace Rapidez\Statamic;
 
-use Statamic\Statamic;
 use Statamic\Sites\Sites;
 use Statamic\Facades\Site;
 use Statamic\Facades\Entry;
@@ -21,6 +20,7 @@ use Rapidez\Statamic\Commands\ImportBrands;
 use Rapidez\Statamic\Commands\InstallCommand;
 use Rapidez\Statamic\Forms\JsDrivers\Vue;
 use Rapidez\Statamic\Commands\ImportProducts;
+use Rapidez\Statamic\Commands\GenerateSitemap;
 use Rapidez\Statamic\Commands\ImportCategories;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
 use Rapidez\Statamic\Http\Controllers\ImportsController;
@@ -62,6 +62,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ImportProducts::class,
             ImportBrands::class,
             InstallCommand::class,
+            GenerateSitemap::class
         ]);
 
         return $this;

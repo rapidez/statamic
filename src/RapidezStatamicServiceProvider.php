@@ -26,6 +26,10 @@ use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
 use Rapidez\Statamic\Http\Controllers\ImportsController;
 use Rapidez\Statamic\Http\Controllers\StatamicRewriteController;
 use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
+use Rapidez\Statamic\Listeners\ClearNavTreeCache;
+use Rapidez\Statamic\Listeners\SetCollectionsForNav;
+use Statamic\Events\NavCreated;
+use Statamic\Events\NavTreeSaved;
 use TorMorten\Eventy\Facades\Eventy;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
@@ -35,6 +39,8 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         $this->app->extend(Sites::class, function () {
             return new SitesLinkedToMagentoStores(config('statamic.sites'));
         });
+
+        $this->app->singleton('rapidez-statamic-nav', StatamicNav::class);
     }
 
     public function boot()
@@ -70,6 +76,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootConfig() : self
     {
         $this->mergeConfigFrom(__DIR__.'/../config/rapidez/statamic.php', 'rapidez.statamic');
+        $this->mergeConfigFrom(__DIR__ . '/../config/rapidez/statamic/nav.php', 'rapidez.statamic.nav');
 
         return $this;
     }
@@ -96,6 +103,9 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             Event::listen([GlobalSetSaved::class, GlobalSetDeleted::class], function () {
                 Cache::forget('statamic-globals-' . Site::selected()->handle());
             });
+
+            Event::listen(NavCreated::class, SetCollectionsForNav::class);
+            Event::listen(NavTreeSaved::class, ClearNavTreeCache::class);
 
             Eventy::addFilter('rapidez.statamic.category.entry.data', fn($category) => [
                 'title' => $category->name,

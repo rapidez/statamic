@@ -33,6 +33,7 @@
         "php": "^8.1|^8.2",
         "justbetter/statamic-eloquent-driver-globalset-migration-generator": "^0.1.0",
         "rapidez/blade-directives": "^0.6",
+        "rapidez/core": "^2.13",
         "justbetter/statamic-glide-directive": "^2.1",
         "statamic-rad-pack/runway": "^7.6",
         "statamic/cms": "^5.0",
@@ -57,7 +58,10 @@
         "laravel": {
             "providers": [
                 "Rapidez\\Statamic\\RapidezStatamicServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "StatamicNav": "Rapidez\\Statamic\\Facades\\StatamicNav"
+            }
         }
     }
 }

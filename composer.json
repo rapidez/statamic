@@ -57,7 +57,7 @@
                 "Rapidez\\Statamic\\RapidezStatamicServiceProvider"
             ],
             "aliases": {
-                "StatamicNav": "Rapidez\\Statamic\\Facades\\StatamicNav"
+                "RapidezStatamic": "Rapidez\\Statamic\\Facades\\RapidezStatamic"
             }
         }
     }

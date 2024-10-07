@@ -2,7 +2,6 @@
 
 namespace Rapidez\Statamic;
 
-use Statamic\Statamic;
 use Statamic\Sites\Sites;
 use Statamic\Facades\Site;
 use Statamic\Facades\Entry;
@@ -40,7 +39,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             return new SitesLinkedToMagentoStores(config('statamic.sites'));
         });
 
-        $this->app->singleton('rapidez-statamic-nav', StatamicNav::class);
+        $this->app->singleton(RapidezStatamic::class);
     }
 
     public function boot()
@@ -188,6 +187,8 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__.'/../config/rapidez/statamic.php' => config_path('rapidez/statamic.php'),
+            __DIR__ . '/../config/rapidez/statamic/system.php' => config_path('rapidez/statamic/system.php'),
+            __DIR__ . '/../config/rapidez/statamic/nav.php' => config_path('rapidez/statamic/nav.php'),
         ], 'config');
 
         return $this;

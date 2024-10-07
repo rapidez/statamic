@@ -14,8 +14,7 @@ class ClearNavTreeCache
         $tree = $event->tree;
         
         $cacheKey = 'nav:' . $tree->handle() . '-' . config('rapidez.store');
-        if (Cache::has($cacheKey)) {
-            Cache::forget($cacheKey);
-        }
+        
+        Cache::forget($cacheKey);
     }
 }

@@ -34,11 +34,12 @@ class StatamicNav
             if ($item['children']) {
                 $children = $this->buildTree($item['children']);
                 if ($children) {
-                    $element['children'] = $children;
+                    $item['children'] = $children;
                 }
             }
 
             $item['url'] = $this->determineEntryUrl($item['entry_id']->augmentable());
+            
             $branch[] = $item;
         }
 
@@ -47,29 +48,27 @@ class StatamicNav
 
     public function determineEntryUrl(Entry|Page $entry, string $nav = 'global-link'): string
     {
-        return Cache::rememberForever(sprintf('%s-%s-nav-%s', config('rapidez.store'), $nav, $entry->id()), function () use ($entry) {
-            $linkedRunwayResourceKey = $entry
-                ->data()
-                ->keys()
-                ->firstWhere(fn($field) => collect([
-                    ...config('rapidez.statamic.nav.allowed_collections'),
-                    'linked_',
-                ])->firstWhere(fn($key) => str($field)->startsWith($key)));
-                    
-            if (!$linkedRunwayResourceKey || !$entry->{$linkedRunwayResourceKey} || $entry->slug()) {
-                return $entry->url() ?? '';
-            }
+        $linkedRunwayResourceKey = $entry
+            ->data()
+            ->keys()
+            ->firstWhere(fn($field) => collect([
+                ...config('rapidez.statamic.nav.allowed_collections'),
+                'linked_',
+            ])->firstWhere(fn($key) => str($field)->startsWith($key)));
+        
+        if (!$linkedRunwayResourceKey || !$entry->{$linkedRunwayResourceKey} || $entry->slug()) {
+            return $entry->url() ?? '';
+        }
 
-            $suffix = str($linkedRunwayResourceKey)->contains('category')
-                ? Rapidez::config('catalog/seo/category_url_suffix', '')
-                : (
-                    str($linkedRunwayResourceKey)->contains('product')
-                    ? Rapidez::config('catalog/seo/product_url_suffix', '')
-                    : ''
-                );
+        $suffix = str($linkedRunwayResourceKey)->contains('category')
+            ? Rapidez::config('catalog/seo/category_url_suffix', '')
+            : (
+                str($linkedRunwayResourceKey)->contains('product')
+                ? Rapidez::config('catalog/seo/product_url_suffix', '')
+                : ''
+            );
 
 
-            return $entry->{$linkedRunwayResourceKey}['url_path'] . $suffix;
-        });
+        return $entry->{$linkedRunwayResourceKey}['url_path'] . $suffix;
     }
 }

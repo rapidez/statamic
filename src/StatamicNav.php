@@ -3,11 +3,9 @@
 namespace Rapidez\Statamic;
 
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Str;
 use Statamic\Statamic;
 use Statamic\Eloquent\Entries\Entry;
 use Rapidez\Core\Facades\Rapidez;
-use Statamic\Facades\Site;
 use Statamic\Structures\Page;
 
 class StatamicNav
@@ -20,14 +18,15 @@ class StatamicNav
 
         return Cache::rememberForever($tag . '-' . config('rapidez.store'), fn() => $this->buildMenu($tag));
     }
-    protected function buildMenu(string $key)
+
+    protected function buildMenu(string $key): array
     {
         $nav = Statamic::tag($key)->fetch();
 
         return $this->buildTree($nav);
     }
 
-    private function buildTree(array $items, $parentId = null)
+    private function buildTree(array $items, $parentId = null): array
     {
         $branch = [];
 

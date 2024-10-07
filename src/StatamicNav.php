@@ -69,6 +69,6 @@ class StatamicNav
             );
 
 
-        return $entry->{$linkedRunwayResourceKey}['url_path'] . $suffix;
+        return '/' . $entry->{$linkedRunwayResourceKey}['url_path'] . $suffix;
     }
 }

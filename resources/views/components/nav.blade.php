@@ -1,8 +1,8 @@
 @props(['nav' => 'nav:main', 'mobileNav' => 'nav:main'])
 @php
     // This combines multiple navigations into one for desktop and mobile seperately, only neccessary if you have multiple navigations
-    $navData = array_merge(...Arr::map(Arr::wrap($nav), fn($item) => \Rapidez\Statamic\Facades\StatamicNav::nav($item)));
-    $mobileNavData = array_merge(...Arr::map(Arr::wrap($mobileNav), fn($item) => \Rapidez\Statamic\Facades\StatamicNav::nav($item)));
+    $navData = array_merge(...Arr::map(Arr::wrap($nav), fn($item) => StatamicNav::nav($item)));
+    $mobileNavData = array_merge(...Arr::map(Arr::wrap($mobileNav), fn($item) => StatamicNav::nav($item)));
 @endphp
 <nav class="lg:hidden">
     <x-rapidez-statamic::nav-layer

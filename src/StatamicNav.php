@@ -26,13 +26,13 @@ class StatamicNav
         return $this->buildTree($nav);
     }
 
-    private function buildTree(array $items, $parentId = null): array
+    private function buildTree(array $items): array
     {
         $branch = [];
 
         foreach ($items as $item) {
-            if ($item['parent'] == $parentId) {
-                $children = $this->buildTree($item['children'], $item['id']);
+            if ($item['children']) {
+                $children = $this->buildTree($item['children']);
                 if ($children) {
                     $element['children'] = $children;
                 }

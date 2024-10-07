@@ -13,8 +13,7 @@ class ClearNavTreeCache
         /** @var NavTree $tree */
         $tree = $event->tree;
         
-        $cacheKey = 'nav:' . $tree->handle() . '-' . config('rapidez.store');
-        
-        Cache::forget($cacheKey);
+        Cache::forget('nav:' . $tree->handle() . '-' . config('rapidez.store'));
+        Cache::driver('array')->forget('global-link' . '-' . config('rapidez.store'));
     }
 }

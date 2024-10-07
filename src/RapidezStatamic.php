@@ -10,7 +10,6 @@ use Statamic\Structures\Page;
 
 class RapidezStatamic
 {
-
     protected array $navCache = [];
 
     public function nav(string $tag): array
@@ -26,22 +25,22 @@ class RapidezStatamic
     {
         $nav = Statamic::tag($key)->fetch();
 
-        return $this->buildTree($nav);
+        return $this->buildTree($nav, $key);
     }
 
-    private function buildTree(array $items): array
+    private function buildTree(array $items, string $nav): array
     {
         $branch = [];
 
         foreach ($items as $item) {
             if ($item['children']) {
-                $children = $this->buildTree($item['children']);
+                $children = $this->buildTree($item['children'], $nav);
                 if ($children) {
                     $item['children'] = $children;
                 }
             }
 
-            $item['url'] = $this->determineEntryUrl($item['entry_id']->augmentable());
+            $item['url'] = $this->determineEntryUrl($item['entry_id']->augmentable(), $nav);
             
             $branch[] = $item;
         }

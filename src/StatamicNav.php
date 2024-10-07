@@ -54,7 +54,7 @@ class StatamicNav
                 ->firstWhere(fn($field) => collect([
                     ...config('rapidez.statamic.nav.allowed_collections'),
                     'linked_',
-                ])->keys()->firstWhere(fn($key) => str($field)->startsWith($key)));
+                ])->firstWhere(fn($key) => str($field)->startsWith($key)));
                     
             if (!$linkedRunwayResourceKey || !$entry->{$linkedRunwayResourceKey} || $entry->slug()) {
                 return $entry->url() ?? '';

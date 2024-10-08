@@ -51,7 +51,7 @@ class RapidezStatamic
     public function determineEntryUrl(Entry|Page $entry, string $nav = 'global-link'): string
     {
         $cacheKey = $nav . '-' . config('rapidez.store');
-        $this->navCache[$nav] = Cache::driver('array')->rememberForever($cacheKey, fn () => Cache::get($cacheKey, []));
+        $this->navCache[$nav] = Cache::get($cacheKey, []);
         
         if ( ! isset($this->navCache[$nav][$entry->id()])) {
             $linkedRunwayResourceKey = $entry
@@ -77,7 +77,7 @@ class RapidezStatamic
 
             $this->navCache[$nav][$entry->id()] = '/' . $entry->{$linkedRunwayResourceKey}['url_path'] . $suffix;
 
-            Cache::store('array')->forever($cacheKey, $this->navCache[$nav]);
+            Cache::forever($cacheKey, $this->navCache[$nav]);
         }
 
         return $this->navCache[$nav][$entry->id()];

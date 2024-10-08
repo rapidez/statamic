@@ -241,9 +241,9 @@ When you create a form you could use `rapidez-statamic::emails.form` as HTML tem
 It is possible to create a sitemap per store, each sitemap is a index containing all collections & taxonomies that contain their own views.
 The XML files will be generated as:
 ```shell
-sitemap_statamic_{site_handle}
-sitemap_statamic_collection_{site_handle}_{collection_handle}
-sitemap_statamic_taxonomy_{site_handle}_{taxonomy_handle}
+/sitemap_statamic_{site_handle}.xml
+/sitemap_statamic_collection_{site_handle}_{collection_handle}.xml
+/sitemap_statamic_taxonomy_{site_handle}_{taxonomy_handle}.xml
 ```
 You can generate the sitemaps by running:
 ```shell

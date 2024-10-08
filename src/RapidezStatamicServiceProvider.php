@@ -42,6 +42,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         $this
             ->bootCommands()
             ->bootConfig()
+            ->bootSites()
             ->bootRoutes()
             ->bootViews()
             ->bootListeners()
@@ -53,6 +54,32 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
         Vue::register();
         Alternates::register();
+    }
+
+    public function bootSites() : self
+    {
+        $sites = [];
+        $stores = Rapidez::getStores();
+
+        foreach ($stores as $store) {
+            $sites[$store['code']] = [
+                'name' => $store['name'] ?? $store['code'],
+                'locale' => '{{ config:rapidez.statamic.sites.' . $store['code'] . '.locale }}',
+                'lang' => '{{ config:rapidez.statamic.sites.' . $store['code'] . '.lang }}',
+                'url' => '{{ config:rapidez.statamic.sites.' . $store['code'] . '.url }}',
+                'attributes' => [
+                    'magento_store_id' => $store['store_id'],
+                    'group' => $store['website_code'] ?? '',
+                    'disabled' => '{{ config:rapidez.statamic.sites.' . $store['code'] . '.attributes.disabled }}',
+                ]
+            ];
+//            dd($store, $sites);
+        }
+
+        Site::setSites($sites);
+        Site::save();
+
+        return $this;
     }
 
     public function bootCommands() : self

@@ -1,3 +1,18 @@
+{{--
+    This is a mobile navigation slideover component for handling multi-level navgiations It makes use of recursion to handle multiple levels of navgation dynamically.
+
+    Properties:
+        id:             Unique identifier for the current navigation layer.
+        title:          Title displayed in the header. Defaults to "Menu".
+        hasParent:      Indicates if the current menu is a child of another menu. Defaults to false.
+        tag:            Base HTML tag for the slideover component. Set this to 'form' for the main navigation or 'div' for nested menus.
+        parentUrl:      URL used for navigating to the parent item when in a nested menu. Displayed with a "Go to" link.
+
+    Slots:
+        headerbutton:   This slot allows the customization of the button placed at the left in the header for navigation.
+
+    The component uses recursion to handle submenus. When a menu item has children, it creates another instance of this slideover component for the nested navigation layer.
+--}}
 @props(['id', 'children', 'title' => __('Menu'), 'hasParent' => false, 'tag' => 'form', 'parentUrl' => ''])
 @slots(['headerbutton'])
 @php

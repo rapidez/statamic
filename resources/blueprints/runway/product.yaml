@@ -21,3 +21,5 @@ tabs:
               type: text
               localizable: false
               visibility: read_only
+          -
+            import: page_builder

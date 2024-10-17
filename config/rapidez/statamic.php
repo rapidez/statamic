@@ -23,10 +23,6 @@ return [
             'collection' => 'categories',
             'blueprint' => 'category',
         ],
-        'products' => [
-            'collection' => 'products',
-            'blueprint' => 'product',
-        ],
         'brands' => [
             'collection' => 'brands',
             'blueprint' => 'brand',
@@ -56,7 +52,6 @@ return [
         'resources' => [
             \Rapidez\Statamic\Models\Product::class => [
                 'name' => 'Products',
-                'read_only' => true,
                 'title_field' => 'name',
                 'cp_icon' => 'table',
             ],

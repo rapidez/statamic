@@ -2,30 +2,30 @@
 
 namespace Rapidez\Statamic;
 
-use Statamic\Statamic;
-use Statamic\Sites\Sites;
-use Statamic\Facades\Site;
-use Statamic\Facades\Entry;
-use Statamic\Facades\Utility;
 use Illuminate\Routing\Router;
-use Rapidez\Core\Facades\Rapidez;
-use Statamic\Events\GlobalSetSaved;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
-use Rapidez\Statamic\Tags\Alternates;
-use Statamic\Events\GlobalSetDeleted;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View as RenderedView;
+use Rapidez\Core\Facades\Rapidez;
 use Rapidez\Statamic\Commands\ImportBrands;
-use Rapidez\Statamic\Commands\InstallCommand;
-use Rapidez\Statamic\Forms\JsDrivers\Vue;
-use Rapidez\Statamic\Commands\ImportProducts;
 use Rapidez\Statamic\Commands\ImportCategories;
+use Rapidez\Statamic\Commands\InstallCommand;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
+use Rapidez\Statamic\Forms\JsDrivers\Vue;
 use Rapidez\Statamic\Http\Controllers\ImportsController;
 use Rapidez\Statamic\Http\Controllers\StatamicRewriteController;
 use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
+use Rapidez\Statamic\Tags\Alternates;
+use StatamicRadPack\Runway\Runway;
+use Statamic\Events\GlobalSetDeleted;
+use Statamic\Events\GlobalSetSaved;
+use Statamic\Facades\Entry;
+use Statamic\Facades\Site;
+use Statamic\Facades\Utility;
+use Statamic\Sites\Sites;
+use Statamic\Statamic;
 use TorMorten\Eventy\Facades\Eventy;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
@@ -59,7 +59,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     {
         $this->commands([
             ImportCategories::class,
-            ImportProducts::class,
             ImportBrands::class,
             InstallCommand::class,
         ]);
@@ -102,11 +101,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                 'slug' => trim($category->url_key),
             ]);
 
-            Eventy::addFilter('rapidez.statamic.product.entry.data', fn($product) => [
-                'title' => $product->name,
-                'slug' => trim($product->url_key),
-            ]);
-
             Eventy::addFilter('rapidez.statamic.brand.entry.data', fn($brand) => [
                 'title' => $brand->value_store,
                 'slug' => trim($brand->value_admin),
@@ -136,7 +130,12 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                     ->where('collection', 'products')
                     ->where('site', $this->getSiteHandleByStoreId())
                     ->where('linked_product', config('frontend.product.sku'))
-                    ->first();
+                    ->first()
+
+                    // As the "product content" collection is removed
+                    // with it's blueprint we need to specify the
+                    // runway blueprint, but this doesn't work.
+                    ->blueprint('runway/product');
 
                 $view->with('content', optionalDeep($entry));
             });
@@ -191,13 +190,10 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                 ->action(ImportsController::class)
                 ->title(__('Import'))
                 ->navTitle(__('Import'))
-                ->description(__('Import products or categories from Magento'))
+                ->description(__('Import categories from Magento'))
                 ->routes(function (Router $router) : void {
                     $router->post('/import-categories', [ImportsController::class, 'importCategories'])
                         ->name('import-categories');
-
-                    $router->post('/import-products', [ImportsController::class, 'importProducts'])
-                        ->name('import-products');
 
                     $router->post('/import-brands', [ImportsController::class, 'importBrands'])
                         ->name('import-brands');

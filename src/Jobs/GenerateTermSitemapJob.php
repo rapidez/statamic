@@ -64,7 +64,11 @@ class GenerateTermSitemapJob implements ShouldQueue, ShouldBeUnique
     protected function publishedTerms()
     {
         return TaxonomyFacade::all()
-            ->flatMap(fn ($taxonomy) => $taxonomy->queryTerms()->where('site', $this->site->handle())->get())
+            ->flatMap(fn ($taxonomy) => $taxonomy->queryTerms()
+                ->where('site', $this->site->handle())
+                ->whereNotNull('uri')
+                ->get()
+            )
             ->filter
             ->published()
             ->filter(function ($term) {

@@ -73,7 +73,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                     'disabled' => '{{ config:rapidez.statamic.sites.' . $store['code'] . '.attributes.disabled }}',
                 ]
             ];
-//            dd($store, $sites);
         }
 
         Site::setSites($sites);

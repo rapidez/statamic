@@ -2,7 +2,6 @@
 
 namespace Rapidez\Statamic;
 
-use Statamic\Statamic;
 use Statamic\Sites\Sites;
 use Statamic\Facades\Site;
 use Statamic\Facades\Entry;
@@ -33,7 +32,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->extend(Sites::class, function () {
-            return new SitesLinkedToMagentoStores(config('statamic.sites'));
+            return new SitesLinkedToMagentoStores();
         });
     }
 

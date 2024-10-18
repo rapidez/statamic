@@ -16,7 +16,6 @@ use Rapidez\Statamic\Tags\Alternates;
 use Statamic\Events\GlobalSetDeleted;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View as RenderedView;
-use Rapidez\Statamic\Commands\CreateSites;
 use Rapidez\Statamic\Commands\InstallCommand;
 use Rapidez\Statamic\Commands\ImportBrands;
 use Rapidez\Statamic\Commands\ImportProducts;
@@ -61,7 +60,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ImportCategories::class,
             ImportProducts::class,
             ImportBrands::class,
-            CreateSites::class,
             InstallCommand::class,
         ]);
 

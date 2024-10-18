@@ -7,8 +7,7 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Statamic\Eloquent\Entries\Entry;
-use Statamic\Facades\Collection as CollectionFacade;
+use Statamic\Facades\Collection as StatamicCollection;
 use Statamic\Facades\Taxonomy as TaxonomyFacade;
 use Statamic\Sites\Site;
 use Statamic\Entries\Collection;
@@ -27,7 +26,7 @@ class GenerateStoreSitemapJob implements ShouldQueue, ShouldBeUnique
         $sitemap = '<?xml version="1.0" encoding="UTF-8"?>';
         $sitemap .= '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
-        $collections = CollectionFacade::all();
+        $collections = StatamicCollection::all();
         $collections = $collections->filter(fn (Collection $collection) => $collection->route($this->site->handle()));
 
         foreach ($collections as $collection) {

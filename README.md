@@ -249,6 +249,8 @@ You can generate the sitemaps by running:
 php artisan rapidez:statamic:generate:sitemap
 ```
 
+Please make sure to add `public/sitemap_statamic_*.xml` to your .gitignore file.
+
 ### Upgrading
 
 Since 3.0.0 we have started using optionalDeep for the $globals, and $content variables.

@@ -94,36 +94,10 @@ And if you'd like to change the views:
 php artisan vendor:publish --provider="Rapidez\Statamic\RapidezStatamicServiceProvider" --tag=views
 ```
 
+### Sites configuration
 
-### Magento Store ID
-
-It is important to add the Magento store ID for every site in the attributes section within `resources/sites.yaml` and use the store code as key. Because the url can vary per enviroment(local, testing, staging, production) we use the "sites" section of the config file and reference that in the `sites.yaml`. The current site will be determined based on the `MAGE_RUN_CODE`. By default Statamic uses the url for this; that's still the fallback. If you need to generate some urls with a multisite it's a best practice to specify the `url` per site from env variables. See the [Statamic multisite docs](https://statamic.dev/multi-site#url). Optionally you could set the `group` within the `attributes` if you'd like to group sites to filter the alternate hreflang link tags. You could also set the `disabled` within the `attributes` section to true if you want to exclude this site from being altered with Statamic data.
-```yaml
-'default' => [
-    'name' => env('APP_NAME', 'Statamic'),
-    'locale' => 'en_EN',
-    'lang' => 'en_EN',
-    'url' => '/',
-    'attributes' => [
-        'magento_store_id' => 1,
-        'group' => 'default',
-        'disabled' => false,
-    ],
-],
-```
-
-
-```yaml
-default:
-  name: '{{ config:rapidez.statamic.sites.default.name }}'
-  locale: '{{ config:rapidez.statamic.sites.default.locale }}'
-  lang: '{{ config:rapidez.statamic.sites.default.lang }}'
-  url: '{{ config:rapidez.statamic.sites.default.url }}'
-  attributes:
-    magento_store_id: '{{ config:rapidez.statamic.sites.default.attributes.magento_store_id }}'
-    group: '{{ config:rapidez.statamic.sites.default.attributes.group }}'
-    disabled: '{{ config:rapidez.statamic.sites.default.attributes.disabled }}'
-```
+There is no need for a sites.yaml in your project anymore.
+The sites will be registered automatically based on the configured stores in Magento.
 
 ### Showing content on categories and products
 

@@ -16,11 +16,12 @@ use Rapidez\Statamic\Tags\Alternates;
 use Statamic\Events\GlobalSetDeleted;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View as RenderedView;
-use Rapidez\Statamic\Commands\ImportBrands;
+use Rapidez\Statamic\Commands\CreateSites;
 use Rapidez\Statamic\Commands\InstallCommand;
-use Rapidez\Statamic\Forms\JsDrivers\Vue;
+use Rapidez\Statamic\Commands\ImportBrands;
 use Rapidez\Statamic\Commands\ImportProducts;
 use Rapidez\Statamic\Commands\ImportCategories;
+use Rapidez\Statamic\Forms\JsDrivers\Vue;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
 use Rapidez\Statamic\Http\Controllers\ImportsController;
 use Rapidez\Statamic\Http\Controllers\StatamicRewriteController;
@@ -41,7 +42,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         $this
             ->bootCommands()
             ->bootConfig()
-            ->bootSites()
             ->bootRoutes()
             ->bootViews()
             ->bootListeners()
@@ -55,37 +55,13 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         Alternates::register();
     }
 
-    public function bootSites() : self
-    {
-        $sites = [];
-        $stores = Rapidez::getStores();
-
-        foreach ($stores as $store) {
-            $sites[$store['code']] = [
-                'name' => $store['name'] ?? $store['code'],
-                'locale' => '{{ config:rapidez.statamic.sites.' . $store['code'] . '.locale }}',
-                'lang' => '{{ config:rapidez.statamic.sites.' . $store['code'] . '.lang }}',
-                'url' => '{{ config:rapidez.statamic.sites.' . $store['code'] . '.url }}',
-                'attributes' => [
-                    'magento_store_id' => $store['store_id'],
-                    'group' => $store['website_code'] ?? '',
-                    'disabled' => '{{ config:rapidez.statamic.sites.' . $store['code'] . '.attributes.disabled }}',
-                ]
-            ];
-        }
-
-        Site::setSites($sites);
-        Site::save();
-
-        return $this;
-    }
-
     public function bootCommands() : self
     {
         $this->commands([
             ImportCategories::class,
             ImportProducts::class,
             ImportBrands::class,
+            CreateSites::class,
             InstallCommand::class,
         ]);
 

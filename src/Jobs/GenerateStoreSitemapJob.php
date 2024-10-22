@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Storage;
 use Statamic\Facades\Collection as StatamicCollection;
 use Statamic\Facades\Taxonomy as TaxonomyFacade;
 use Statamic\Sites\Site;
@@ -56,7 +57,7 @@ class GenerateStoreSitemapJob implements ShouldQueue, ShouldBeUnique
         }
 
         $sitemap .= '</sitemapindex>';
-        file_put_contents(public_path('sitemap_statamic_' . $this->site->handle() . '.xml'), $sitemap);
+        Storage::disk('public')->put('sitemap_statamic_' . $this->site->handle() . '.xml', $sitemap);
     }
 
     protected function addSitemap($url = null) : string

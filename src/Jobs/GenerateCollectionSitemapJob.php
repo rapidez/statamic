@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Storage;
 use Rapidez\Statamic\Actions\GenerateSitemapAction;
 use Statamic\Eloquent\Entries\Entry;
 use Statamic\Sites\Site;
@@ -28,7 +29,7 @@ class GenerateCollectionSitemapJob implements ShouldQueue, ShouldBeUnique
     public function handle(): void
     {
         $sitemap = $this->sitemapGenerator->createSitemap($this->generateCollectionSitemap());
-        file_put_contents(public_path('sitemap_statamic_collection_' . $this->site->handle() . '_' . $this->collection->handle() . '.xml'), $sitemap);
+        Storage::disk('public')->put('sitemap_statamic_collection_' . $this->site->handle() . '_' . $this->collection->handle() . '.xml', $sitemap);
     }
 
     protected function generateCollectionSitemap() : string

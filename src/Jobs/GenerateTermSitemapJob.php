@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Storage;
 use Rapidez\Statamic\Actions\GenerateSitemapAction;
 use Statamic\Facades\Taxonomy as TaxonomyFacade;
 use Statamic\Sites\Site;
@@ -29,8 +30,7 @@ class GenerateTermSitemapJob implements ShouldQueue, ShouldBeUnique
     public function handle(): void
     {
         $sitemap = $this->sitemapGenerator->createSitemap($this->generateTermSitemap());
-
-        file_put_contents(public_path('sitemap_statamic_taxonomy_' . $this->site->handle() . '_' . $this->taxonomy->handle() . '.xml'), $sitemap);
+        Storage::disk('public')->put('sitemap_statamic_taxonomy_' . $this->site->handle() . '_' . $this->taxonomy->handle() . '.xml', $sitemap);
     }
 
     protected function generateTermSitemap() : string

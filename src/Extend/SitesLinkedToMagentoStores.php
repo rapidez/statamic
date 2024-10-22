@@ -25,7 +25,7 @@ class SitesLinkedToMagentoStores extends Sites
 
     protected function getSavedSites()
     {
-        return Cache::driver('array')->rememberForever('statamic_sites', function () {
+        return Cache::rememberForever('statamic_sites', function () {
             $sites = [];
             $stores = Rapidez::getStores();
             $configModel = config('rapidez.models.config');

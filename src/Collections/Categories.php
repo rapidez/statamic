@@ -125,6 +125,7 @@ class Categories extends BaseCollection
     {
         return null;
     }
+    
     public function pastDateBehavior(): ?string
     {
         return null;

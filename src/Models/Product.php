@@ -19,9 +19,9 @@ class Product extends Model
     
     protected $primaryKey = 'sku';
     protected $keyType = 'string';
-    
-    public $linkField = 'linked_product';
-    public $collection = 'products';
+
+    public string $linkField = 'linked_product';
+    public string $collection = 'products';
 
     protected static function booting()
     {

@@ -17,8 +17,8 @@ class Category extends Model
     
     protected $primaryKey = 'entity_id';
 
-    public $linkField = 'linked_category';
-    public $collection = 'categories';
+    public string $linkField = 'linked_category';
+    public string  $collection = 'categories';
 
     public function getTable()
     {

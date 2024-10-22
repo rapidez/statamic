@@ -96,8 +96,7 @@ php artisan vendor:publish --provider="Rapidez\Statamic\RapidezStatamicServicePr
 
 ### Sites configuration
 
-There is no need for a sites.yaml in your project anymore.
-The sites will be registered automatically based on the configured stores in Magento.
+There is no need for a `sites.yaml` in your project anymore. The sites will be registered automatically based on the configured stores in Magento.
 
 ### Showing content on categories and products
 

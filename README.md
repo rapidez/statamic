@@ -24,7 +24,9 @@ composer require rapidez/statamic
 ## Install command
 
 The install command will help you set up all the necessary settings.
-It will mainly setup the [Eloquent driver](https://github.com/statamic/eloquent-driver) and publish the necessary vendor from the rapidez/statamic repo. 
+It will mainly setup the [Eloquent driver](https://github.com/statamic/eloquent-driver) and publish the necessary vendor from the rapidez/statamic repo.
+
+Before running the install script, make sure you have an existing User model as Statamic requires this. See: [Statamic docs](https://statamic.dev/tips/storing-users-in-a-database)
 
 ```
 php artisan rapidez-statamic:install

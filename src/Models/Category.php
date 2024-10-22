@@ -2,16 +2,23 @@
 
 namespace Rapidez\Statamic\Models;
 
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use StatamicRadPack\Runway\Traits\HasRunwayResource;
 use Illuminate\Database\Eloquent\Model;
+use Rapidez\Statamic\Models\Traits\HasContentEntry;
 use Statamic\Facades\Site;
 use Statamic\Statamic;
+use Rapidez\Statamic\Observers\RunwayObserver;
 
+#[ObservedBy([RunwayObserver::class])]
 class Category extends Model
 {
-    use HasRunwayResource;
+    use HasRunwayResource, HasContentEntry;
     
     protected $primaryKey = 'entity_id';
+
+    public $linkField = 'linked_category';
+    public $collection = 'categories';
 
     public function getTable()
     {

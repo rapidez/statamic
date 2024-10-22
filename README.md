@@ -99,6 +99,16 @@ php artisan vendor:publish --provider="Rapidez\Statamic\RapidezStatamicServicePr
 There is no need for a sites.yaml in your project anymore.
 The sites will be registered automatically based on the configured stores in Magento.
 
+The current site will be determined based on the `MAGE_RUN_CODE`. By default Statamic uses the url for this; that's still the fallback. The `group` within the `attributes` will be set based on the `website_code` from Magento. This makes it possible to add alternate hreflang link tags.
+You could also set the `disabled` within the `attributes` section in the `rapidez/statamic.php` config to true if you want to exclude this site from being altered with Statamic data.
+```yaml
+'default' => [
+    'attributes' => [
+        'disabled' => false,
+    ],
+],
+```
+
 ### Showing content on categories and products
 
 By default you'll get the configured content on categories and products available withint the `$content` variable. This can be enabled/disabled with the `fetch` configurations within the `rapidez/statamic.php` config file. If you want to display the configured content from the default page builder you can include this in your view:

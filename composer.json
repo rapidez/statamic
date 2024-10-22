@@ -32,11 +32,12 @@
     "require": {
         "php": "^8.1|^8.2",
         "justbetter/statamic-eloquent-driver-globalset-migration-generator": "^0.1.0",
-        "rapidez/blade-directives": "^0.6",
         "justbetter/statamic-glide-directive": "^2.1",
-        "statamic-rad-pack/runway": "^7.6",
+        "rapidez/blade-directives": "^0.6",
+        "statamic-rad-pack/runway": "^7.11",
         "statamic/cms": "^5.0",
         "statamic/eloquent-driver": "^4.9",
+        "tdwesten/statamic-builder": "^1.0",
         "tormjens/eventy": "^0.8"
     },
     "autoload": {

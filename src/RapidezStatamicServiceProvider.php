@@ -49,10 +49,21 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootComposers()
             ->bootPublishables()
             ->bootUtilities()
-            ->bootStack();
+            ->bootStack()
+            ->bootBuilder();
 
         Vue::register();
         Alternates::register();
+    }
+    
+    protected function bootBuilder(): self
+    {
+        config(['statamic.builder' => [
+            ...(config('statamic.builder') ?? []),
+            ...config('rapidez.statamic.builder'),
+        ]]);
+
+        return $this;
     }
 
     public function bootCommands() : self
@@ -69,6 +80,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootConfig() : self
     {
         $this->mergeConfigFrom(__DIR__.'/../config/rapidez/statamic.php', 'rapidez.statamic');
+        $this->mergeConfigFrom(__DIR__ . '/../config/rapidez/statamic/builder.php', 'rapidez.statamic.builder');
 
         return $this;
     }
@@ -95,11 +107,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             Event::listen([GlobalSetSaved::class, GlobalSetDeleted::class], function () {
                 Cache::forget('statamic-globals-' . Site::selected()->handle());
             });
-
-            Eventy::addFilter('rapidez.statamic.category.entry.data', fn($category) => [
-                'title' => $category->name,
-                'slug' => trim($category->url_key),
-            ]);
 
             Eventy::addFilter('rapidez.statamic.brand.entry.data', fn($brand) => [
                 'title' => $brand->value_store,
@@ -177,6 +184,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__.'/../config/rapidez/statamic.php' => config_path('rapidez/statamic.php'),
+            __DIR__ . '/../config/rapidez/statamic/builder.php' => config_path('rapidez/statamic/builder.php'),
         ], 'config');
 
         return $this;

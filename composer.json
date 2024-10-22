@@ -35,7 +35,7 @@
         "rapidez/blade-directives": "^0.6",
         "justbetter/statamic-glide-directive": "^2.1",
         "statamic-rad-pack/runway": "^7.6",
-        "statamic/cms": "^5.0",
+        "statamic/cms": "^5.29",
         "statamic/eloquent-driver": "^4.9",
         "tormjens/eventy": "^0.8"
     },

@@ -31,7 +31,7 @@ class StatamicGlobalDataComposer
     public function compose(View $view) : View
     {
         if (!$this->globals) {
-            $this->globals = optionalDeep((object)$this->getGlobals());
+            $this->globals = Cache::driver('array')->rememberForever('rapidez.statamic.globals', fn() => optionalDeep((object)$this->getGlobals()));
         }
         
         if (!isset($view->globals)) {

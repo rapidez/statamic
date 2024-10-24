@@ -2,7 +2,6 @@
 
 namespace Rapidez\Statamic;
 
-use Statamic\Statamic;
 use Statamic\Sites\Sites;
 use Statamic\Facades\Site;
 use Statamic\Facades\Entry;
@@ -17,11 +16,11 @@ use Rapidez\Statamic\Tags\Alternates;
 use Statamic\Events\GlobalSetDeleted;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View as RenderedView;
-use Rapidez\Statamic\Commands\ImportBrands;
 use Rapidez\Statamic\Commands\InstallCommand;
-use Rapidez\Statamic\Forms\JsDrivers\Vue;
+use Rapidez\Statamic\Commands\ImportBrands;
 use Rapidez\Statamic\Commands\ImportProducts;
 use Rapidez\Statamic\Commands\ImportCategories;
+use Rapidez\Statamic\Forms\JsDrivers\Vue;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
 use Rapidez\Statamic\Http\Controllers\ImportsController;
 use Rapidez\Statamic\Http\Controllers\StatamicRewriteController;
@@ -32,9 +31,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->app->extend(Sites::class, function () {
-            return new SitesLinkedToMagentoStores(config('statamic.sites'));
-        });
+        $this->app->extend(Sites::class, fn () => new SitesLinkedToMagentoStores());
     }
 
     public function boot()

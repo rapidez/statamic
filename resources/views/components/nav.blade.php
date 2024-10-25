@@ -11,9 +11,7 @@
         :children="$mobileNavData"
     />
 </nav>
-@php
-    $baseUrl = \Statamic\Facades\Site::current()->absoluteUrl();
-@endphp
+
 <nav class="relative border-y max-lg:hidden">
     <ul class="text-neutral [&>:not(:hover)]:hover:text-inactive flex items-center justify-center gap-8 text-sm font-semibold">
         @foreach ($navData as $item)

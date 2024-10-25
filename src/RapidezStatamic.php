@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Cache;
 use Statamic\Statamic;
 use Statamic\Eloquent\Entries\Entry;
 use Rapidez\Core\Facades\Rapidez;
+use Rapidez\Statamic\Exceptions\NavException;
 use Statamic\Structures\Page;
 
 class RapidezStatamic
@@ -14,9 +15,11 @@ class RapidezStatamic
 
     public function nav(string $tag): array
     {
-        if (!str($tag)->startsWith('nav:')) {
-            return [];
-        }
+        throw_unless(
+            str($tag)->startsWith('nav:'),
+            NavException::class,
+            'You can only use a nav tag to get a navigation tree.'
+        );
 
         return Cache::rememberForever($tag . '-' . config('rapidez.store'), fn() => $this->buildMenu($tag));
     }
@@ -25,12 +28,15 @@ class RapidezStatamic
     {
         $nav = Statamic::tag($key)->fetch();
 
+        $cacheKey = $key . '-' . config('rapidez.store');
+        $this->navCache[$key] = Cache::get($cacheKey, []);
+
         return $this->buildTree($nav, $key);
     }
 
-    private function buildTree(array $items, string $nav): array
+    protected function buildTree(array $items, string $nav): array
     {
-        $branch = [];
+        $tree = [];
 
         foreach ($items as $item) {
             if ($item['children']) {
@@ -41,18 +47,18 @@ class RapidezStatamic
             }
 
             $item['url'] = $this->determineEntryUrl($item['entry_id']->augmentable(), $nav);
-            
-            $branch[] = $item;
-        }
 
-        return $branch;
+            $tree[] = $item;
+        }
+        
+        return $tree;
     }
 
     public function determineEntryUrl(Entry|Page $entry, string $nav = 'global-link'): string
     {
         $cacheKey = $nav . '-' . config('rapidez.store');
-        $this->navCache[$nav] = Cache::get($cacheKey, []);
-        
+
+
         if ( ! isset($this->navCache[$nav][$entry->id()])) {
             $linkedRunwayResourceKey = $entry
                 ->data()
@@ -76,7 +82,7 @@ class RapidezStatamic
 
 
             $this->navCache[$nav][$entry->id()] = '/' . $entry->{$linkedRunwayResourceKey}['url_path'] . $suffix;
-
+            
             Cache::forever($cacheKey, $this->navCache[$nav]);
         }
 

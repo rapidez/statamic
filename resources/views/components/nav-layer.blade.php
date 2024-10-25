@@ -1,8 +1,6 @@
 @props(['id', 'children', 'title' => __('Menu'), 'hasParent' => false, 'tag' => 'form', 'parentUrl' => ''])
 @slots(['headerbutton'])
-@php
-    $baseUrl = \Statamic\Facades\Site::current()->absoluteUrl();
-@endphp
+
 <x-rapidez::slideover.mobile
     :title="(string) $title"
     :$id

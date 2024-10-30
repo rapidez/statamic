@@ -26,6 +26,7 @@ class Product extends Model
     {
         return 'catalog_product_flat_' . once(fn() => (Statamic::isCpRoute()
             ? (Site::selected()->attributes['magento_store_id'] ?? '1')
-            : Site::current()->attributes['magento_store_id'] ?? '1'));
+            : (Site::current()->attributes['magento_store_id'] ?? '1')
+        ));
     }
 }

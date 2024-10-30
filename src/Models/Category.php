@@ -15,6 +15,9 @@ class Category extends Model
 
     public function getTable()
     {
-        return 'catalog_category_flat_store_'.(Statamic::isCpRoute() ? (Site::selected()->attributes['magento_store_id'] ?? '1') : (Site::current()->attributes['magento_store_id'] ?? '1'));
+        return 'catalog_category_flat_store_'.once(fn() => (Statamic::isCpRoute() 
+            ? (Site::selected()->attributes['magento_store_id'] ?? '1') 
+            : (Site::current()->attributes['magento_store_id'] ?? '1')
+        ));
     }
 }

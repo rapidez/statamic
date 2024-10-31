@@ -58,7 +58,6 @@ class RapidezStatamic
     {
         $cacheKey = $nav . '-' . config('rapidez.store');
 
-
         if ( ! isset($this->navCache[$nav][$entry->id()])) {
             $linkedRunwayResourceKey = $entry
                 ->data()
@@ -72,14 +71,11 @@ class RapidezStatamic
                 return $entry->url() ?? '';
             }
 
-            $suffix = str($linkedRunwayResourceKey)->contains('category')
-                ? Rapidez::config('catalog/seo/category_url_suffix', '')
-                : (
-                    str($linkedRunwayResourceKey)->contains('product')
-                    ? Rapidez::config('catalog/seo/product_url_suffix', '')
-                    : ''
-                );
-
+            $suffix = match (true) {
+                str($linkedRunwayResourceKey)->contains('category') => Rapidez::config('catalog/seo/category_url_suffix', ''),
+                str($linkedRunwayResourceKey)->contains('product') => Rapidez::config('catalog/seo/product_url_suffix', ''),
+                default => '',
+            };
 
             $this->navCache[$nav][$entry->id()] = '/' . $entry->{$linkedRunwayResourceKey}['url_path'] . $suffix;
             

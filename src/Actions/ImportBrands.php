@@ -20,7 +20,6 @@ class ImportBrands implements ImportsBrands
     public function handle()
     {
         foreach (Site::all() as $site) {
-
             foreach (Brand::get() as $brand) {
                 $extraData = [];
 

@@ -5,6 +5,7 @@ namespace Rapidez\Statamic;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Schedule;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View as RenderedView;
@@ -18,6 +19,7 @@ use Rapidez\Statamic\Forms\JsDrivers\Vue;
 use Rapidez\Statamic\Http\Controllers\ImportsController;
 use Rapidez\Statamic\Http\Controllers\StatamicRewriteController;
 use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
+use Rapidez\Statamic\Jobs\ImportBrandsJob;
 use Rapidez\Statamic\Tags\Alternates;
 use Statamic\Events\GlobalSetDeleted;
 use Statamic\Events\GlobalSetSaved;
@@ -25,7 +27,6 @@ use Statamic\Facades\Entry;
 use Statamic\Facades\Site;
 use Statamic\Facades\Utility;
 use Statamic\Sites\Sites;
-use Statamic\Statamic;
 use TorMorten\Eventy\Facades\Eventy;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
@@ -51,10 +52,18 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootPublishables()
             ->bootUtilities()
             ->bootStack()
-            ->bootBuilder();
+            ->bootBuilder()
+            ->bootJobs();
 
         Vue::register();
         Alternates::register();
+    }
+    
+    public function bootJobs(): self
+    {
+        Schedule::job(new ImportBrandsJob)->dailyAt('00:00');
+
+        return $this;
     }
 
     public function bootActions() : self
@@ -146,11 +155,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                     ->where('linked_product', config('frontend.product.sku'))
                     ->first();
 
-                    // As the "product content" collection is removed
-                    // with it's blueprint we need to specify the
-                    // runway blueprint, but this doesn't work.
-                    // ->blueprint('product');
-
                 $view->with('content', optionalDeep($entry));
             });
         }
@@ -203,11 +207,8 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                 ->action(ImportsController::class)
                 ->title(__('Import'))
                 ->navTitle(__('Import'))
-                ->description(__('Import categories from Magento'))
+                ->description(__('Import brands from Magento'))
                 ->routes(function (Router $router) : void {
-                    $router->post('/import-categories', [ImportsController::class, 'importCategories'])
-                        ->name('import-categories');
-
                     $router->post('/import-brands', [ImportsController::class, 'importBrands'])
                         ->name('import-brands');
                 });

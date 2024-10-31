@@ -35,7 +35,7 @@ return [
         'configure' => true,
 
         // The attribute id used for the brand resource.
-        'brand_attribute_id' => 83,
+        'brand_attribute_id' => 139,
 
         // Only show these product visibilities.
         // VISIBILITY_NOT_VISIBLE    = 1;

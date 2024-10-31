@@ -13,7 +13,6 @@ use Rapidez\Core\Facades\Rapidez;
 use Rapidez\Statamic\Actions\ImportBrands as ImportBrandsAction;
 use Rapidez\Statamic\Commands\ImportBrands;
 use Rapidez\Statamic\Commands\InstallCommand;
-use Rapidez\Statamic\Contracts\ImportsBrands;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
 use Rapidez\Statamic\Forms\JsDrivers\Vue;
 use Rapidez\Statamic\Http\Controllers\ImportsController;
@@ -41,7 +40,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function boot()
     {
         $this
-            ->bootActions()
             ->bootCommands()
             ->bootConfig()
             ->bootRoutes()
@@ -52,25 +50,10 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootPublishables()
             ->bootUtilities()
             ->bootStack()
-            ->bootBuilder()
-            ->bootJobs();
+            ->bootBuilder();
 
         Vue::register();
         Alternates::register();
-    }
-    
-    public function bootJobs(): self
-    {
-        Schedule::job(new ImportBrandsJob)->dailyAt('00:00');
-
-        return $this;
-    }
-
-    public function bootActions() : self
-    {
-        $this->app->bind(ImportsBrands::class, ImportBrandsAction::class);
-
-        return $this;
     }
     
     protected function bootBuilder(): self

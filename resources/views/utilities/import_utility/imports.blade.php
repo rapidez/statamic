@@ -2,10 +2,6 @@
 @section('title', __('Import'))
  
 @section('content')
-    <div class="flex items-center justify-between">
-        <h1>{{ __('Import categories') }}</h1>
-    </div>
-
     <div class="flex items-center justify-between mt-5">
         <h1>{{ __('Import brands') }}</h1>
     </div>

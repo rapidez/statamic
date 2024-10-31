@@ -209,9 +209,6 @@ To do this run one of the following:
 ```bash
 # Import all brands in all sites
 php artisan rapidez:statamic:import:brands
-
-# Import all brands in the site with handle "default" only
-php artisan rapidez:statamic:import:brands --site=default
 ```
 
 By default the slug and title of the brand are copied.
@@ -225,6 +222,10 @@ Eventy::addFilter('rapidez.statamic.brand.entry.data', fn($brand) => [
 );
 ```
 
+You can schedule the job to keep your brand collection up to date.
+```php
+Schedule::job(new ImportBrandsJob)->dailyAt('00:00');
+```
 
 ### Globals
 

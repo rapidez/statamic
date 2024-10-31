@@ -9,9 +9,8 @@ use TorMorten\Eventy\Facades\Eventy;
 use Illuminate\Support\Facades\Storage;
 use Rapidez\Statamic\Actions\StatamicEntryAction;
 use Illuminate\Support\Facades\Schema;
-use Rapidez\Statamic\Contracts\ImportsBrands;
 
-class ImportBrands implements ImportsBrands
+class ImportBrands
 {
     public function __construct(
         protected StatamicEntryAction $statamicEntryAction

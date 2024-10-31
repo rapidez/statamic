@@ -28,12 +28,16 @@ trait HasContentEntry
 
     protected function entry(): Attribute
     {
-        return Attribute::make(
-            get: fn() => Entry::query()
-                ->where('collection', $this->collection)
-                ->where('site', Site::selected()->handle())
-                ->where($this->linkField, $this->{$this->getKeyName()})
-                ->first(),
-        )->shouldCache();
+        if (!app()->runningInConsole()) {
+            return Attribute::make(
+                get: fn() => Entry::query()
+                    ->where('collection', $this->collection)
+                    ->where('site', Site::selected()->handle())
+                    ->where($this->linkField, $this->{$this->getKeyName()})
+                    ->first(),
+            )->shouldCache();    
+        }
+        
+        return Attribute::make();
     }
 }

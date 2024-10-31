@@ -9,16 +9,16 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View as RenderedView;
 use Rapidez\Core\Facades\Rapidez;
+use Rapidez\Statamic\Actions\ImportBrands as ImportBrandsAction;
 use Rapidez\Statamic\Commands\ImportBrands;
-use Rapidez\Statamic\Commands\ImportCategories;
 use Rapidez\Statamic\Commands\InstallCommand;
+use Rapidez\Statamic\Contracts\ImportsBrands;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
 use Rapidez\Statamic\Forms\JsDrivers\Vue;
 use Rapidez\Statamic\Http\Controllers\ImportsController;
 use Rapidez\Statamic\Http\Controllers\StatamicRewriteController;
 use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
 use Rapidez\Statamic\Tags\Alternates;
-use StatamicRadPack\Runway\Runway;
 use Statamic\Events\GlobalSetDeleted;
 use Statamic\Events\GlobalSetSaved;
 use Statamic\Facades\Entry;
@@ -40,6 +40,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function boot()
     {
         $this
+            ->bootActions()
             ->bootCommands()
             ->bootConfig()
             ->bootRoutes()
@@ -55,6 +56,13 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         Vue::register();
         Alternates::register();
     }
+
+    public function bootActions() : self
+    {
+        $this->app->bind(ImportsBrands::class, ImportBrandsAction::class);
+
+        return $this;
+    }
     
     protected function bootBuilder(): self
     {
@@ -69,7 +77,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootCommands() : self
     {
         $this->commands([
-            ImportCategories::class,
             ImportBrands::class,
             InstallCommand::class,
         ]);
@@ -137,12 +144,12 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                     ->where('collection', 'products')
                     ->where('site', $this->getSiteHandleByStoreId())
                     ->where('linked_product', config('frontend.product.sku'))
-                    ->first()
+                    ->first();
 
                     // As the "product content" collection is removed
                     // with it's blueprint we need to specify the
                     // runway blueprint, but this doesn't work.
-                    ->blueprint('runway/product');
+                    // ->blueprint('product');
 
                 $view->with('content', optionalDeep($entry));
             });
@@ -171,8 +178,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootPublishables() : self
     {
         $this->publishes([
-            __DIR__.'/../resources/blueprints/collections' => resource_path('blueprints/collections'),
-            __DIR__.'/../resources/content/collections' => base_path('content/collections'),
             __DIR__.'/../resources/content/assets' => base_path('content/assets'),
             __DIR__.'/../resources/fieldsets' => resource_path('fieldsets'),
             __DIR__.'/../resources/blueprints/runway' => resource_path('blueprints/vendor/runway'),

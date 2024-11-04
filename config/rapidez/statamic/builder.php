@@ -16,9 +16,9 @@ return [
     // You can enable the routing by specifying the routes here, they will automaticly
     // be added to your Hybrid Runway resource.
     // For example:
-    'routes' => [
-        Brands::class => [
-            'default' => '{slug}'
-        ],
-    ]
+    // 'routes' => [
+    //     Brands::class => [
+    //         'default' => '{slug}'
+    //     ],
+    // ]
 ];

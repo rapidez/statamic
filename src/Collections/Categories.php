@@ -13,4 +13,9 @@ class Categories extends Base
     {
         return __('Categories');
     }
+
+    public function visible(): bool
+    {
+        return false;
+    }
 }

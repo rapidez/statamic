@@ -5,12 +5,10 @@ namespace Rapidez\Statamic;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Schedule;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View as RenderedView;
 use Rapidez\Core\Facades\Rapidez;
-use Rapidez\Statamic\Actions\ImportBrands as ImportBrandsAction;
 use Rapidez\Statamic\Commands\ImportBrands;
 use Rapidez\Statamic\Commands\InstallCommand;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
@@ -18,7 +16,6 @@ use Rapidez\Statamic\Forms\JsDrivers\Vue;
 use Rapidez\Statamic\Http\Controllers\ImportsController;
 use Rapidez\Statamic\Http\Controllers\StatamicRewriteController;
 use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
-use Rapidez\Statamic\Jobs\ImportBrandsJob;
 use Rapidez\Statamic\Tags\Alternates;
 use Statamic\Events\GlobalSetDeleted;
 use Statamic\Events\GlobalSetSaved;
@@ -62,7 +59,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ...(config('statamic.builder') ?? []),
             ...config('rapidez.statamic.builder'),
         ]]);
-
+            
         return $this;
     }
 

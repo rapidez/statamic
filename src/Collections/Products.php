@@ -13,4 +13,9 @@ class Products extends Base
     {
         return __('Products');
     }
+
+    public function visible(): bool
+    {
+        return false;
+    }
 }

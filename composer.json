@@ -37,7 +37,7 @@
         "statamic-rad-pack/runway": "^7.11",
         "statamic/cms": "^5.0",
         "statamic/eloquent-driver": "^4.9",
-        "tdwesten/statamic-builder": "^1.0",
+        "tdwesten/statamic-builder": "dev-main",
         "tormjens/eventy": "^0.8"
     },
     "autoload": {

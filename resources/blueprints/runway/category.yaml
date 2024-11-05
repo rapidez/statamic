@@ -4,6 +4,13 @@ tabs:
       -
         fields:
           -
+            import: page_builder
+  magento:
+      display: Magento
+      sections:
+      -
+        fields:
+          -
             handle: entity_id
             field:
               type: integer

@@ -35,7 +35,7 @@ class SitesLinkedToMagentoStores extends Sites
             $configModel = config('rapidez.models.config');
 
             foreach ($stores as $store) {
-                if (config('rapidez.statamic.sites.' . $store['code'] . '.attributes.disabled')) {
+                if (in_array($store['code'], config('rapidez.statamic.disabled_sites'))) {
                     continue;
                 }
 

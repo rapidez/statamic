@@ -78,14 +78,7 @@ return [
         ],
     ],
 
-    'sites' => [
-        'default' => [
-            'locale' => 'en_EN',
-            'lang' => 'en_EN',
-            'url' => '/',
-            'attributes' => [
-                'disabled' => false,
-            ],
-        ],
-    ]
+    'disabled_sites' => [
+        // '{site_handle}'
+    ],
 ];

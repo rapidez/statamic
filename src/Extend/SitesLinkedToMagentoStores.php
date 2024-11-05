@@ -22,6 +22,6 @@ class SitesLinkedToMagentoStores extends Sites
         if (!$code || !($this->sites instanceof Collection)) {
             return null;
         }
-        return $this->sites->get($code));
+        return $this->sites->get($code);
     }
 }

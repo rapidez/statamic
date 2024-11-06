@@ -47,7 +47,7 @@ class RapidezStatamic
             }
 
             $item['url'] = $this->determineEntryUrl($item['entry_id']->augmentable(), $nav);
-
+            
             $tree[] = $item;
         }
         

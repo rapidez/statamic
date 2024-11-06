@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/4.3.0...4.3.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/4.3.1...4.3.1)
+## [4.3.1](https://github.com/rapidez/statamic/releases/tag/4.3.1) - 2024-11-05
+
+### Fixed
+
+- Typos (#86, #87)
+
 ## [4.3.0](https://github.com/rapidez/statamic/releases/tag/4.3.0) - 2024-10-30
 
 ### Changed

@@ -13,7 +13,7 @@ class SetCollectionsForNav
         $nav = $event->nav;
         
         $nav
-            ->collections(config('rapidez.statamic.nav.allowed_collections'))
+            ->collections(config('rapidez.statamic.navigation.allowed_collections'))
             ->save();
     }
 }

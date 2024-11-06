@@ -63,7 +63,7 @@ class RapidezStatamic
                 ->data()
                 ->keys()
                 ->firstWhere(fn($field) => collect([
-                    ...config('rapidez.statamic.nav.allowed_collections'),
+                    ...config('rapidez.statamic.navigation.allowed_collections'),
                     'linked_',
                 ])->firstWhere(fn($key) => str($field)->startsWith($key)));
 

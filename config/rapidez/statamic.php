@@ -78,17 +78,7 @@ return [
         ],
     ],
 
-    'sites' => [
-        'default' => [
-            'name' => env('APP_NAME', 'Statamic'),
-            'locale' => 'en_EN',
-            'lang' => 'en_EN',
-            'url' => '/',
-            'attributes' => [
-                'magento_store_id' => 1,
-                'group' => 'default',
-                'disabled' => false,
-            ],
-        ],
-    ]
+    'disabled_sites' => [
+        // '{site_handle}'
+    ],
 ];

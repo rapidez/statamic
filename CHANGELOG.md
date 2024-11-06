@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/4.3.1...4.3.1)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/4.4.0...4.4.0)
+## [4.4.0](https://github.com/rapidez/statamic/releases/tag/4.4.0) - 2024-11-06
+
+### Added
+
+- Default responsive menu with caching (#79)
+
 ## [4.3.1](https://github.com/rapidez/statamic/releases/tag/4.3.1) - 2024-11-05
 
 ### Fixed

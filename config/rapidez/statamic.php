@@ -94,4 +94,9 @@ return [
     'disabled_sites' => [
         // '{site_handle}'
     ],
+
+    'sitemap' => [
+        'prefix' => 'statamic_sitemap_',
+        'storage_directory' => 'statamic-sitemaps/'
+    ]
 ];

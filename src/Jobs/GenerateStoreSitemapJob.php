@@ -7,7 +7,6 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\Storage;
 use Statamic\Facades\Collection as StatamicCollection;
 use Statamic\Facades\Taxonomy as TaxonomyFacade;
 use Statamic\Sites\Site;
@@ -24,16 +23,12 @@ class GenerateStoreSitemapJob implements ShouldQueue, ShouldBeUnique
 
     public function handle(): void
     {
-        $sitemap = '<?xml version="1.0" encoding="UTF-8"?>';
-        $sitemap .= '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-
         $collections = StatamicCollection::all();
         $collections = $collections->filter(fn (Collection $collection) => $collection->route($this->site->handle()));
 
         foreach ($collections as $collection) {
             /* @var Collection $collection */
             if ($collection->queryEntries()->where('site', $this->site->handle())->whereStatus('published')->count()) {
-                $sitemap .= $this->addSitemap('sitemap_statamic_collection_' . $this->site->handle() . '_' . $collection->handle() . '.xml');
                 GenerateCollectionSitemapJob::dispatch($this->site, $collection);
             }
         }
@@ -52,12 +47,8 @@ class GenerateStoreSitemapJob implements ShouldQueue, ShouldBeUnique
 
         foreach ($taxonomies as $taxonomy) {
             /* @var Taxonomy $taxonomy */
-            $sitemap .= $this->addSitemap('sitemap_statamic_taxonomy_' . $this->site->handle() . '_' . $taxonomy->handle() . '.xml');
             GenerateTermSitemapJob::dispatch($this->site, $taxonomy);
         }
-
-        $sitemap .= '</sitemapindex>';
-        Storage::disk('public')->put('sitemap_statamic_' . $this->site->handle() . '.xml', $sitemap);
     }
 
     protected function addSitemap($url = null) : string

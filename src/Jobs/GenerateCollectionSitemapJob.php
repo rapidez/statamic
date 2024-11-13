@@ -28,9 +28,18 @@ class GenerateCollectionSitemapJob implements ShouldQueue, ShouldBeUnique
 
     public function handle(): void
     {
-        $sitemap = $this->sitemapGenerator->createSitemap($this->generateCollectionSitemap());
-        Storage::disk('public')->put('sitemap_statamic_collection_' . $this->site->handle() . '_' . $this->collection->handle() . '.xml', $sitemap);
+        $sitemapContent = $this->sitemapGenerator->createSitemap($this->generateCollectionSitemap());
+
+        $sitemapPath = config('rapidez.statamic.sitemap.storage_directory')
+            . config('rapidez.statamic.sitemap.prefix')
+            . $this->site->attribute('magento_store_id')
+            . '_collection_'
+            . $this->collection->handle()
+            . '.xml';
+
+        Storage::disk('public')->put($sitemapPath, $sitemapContent);
     }
+
 
     protected function generateCollectionSitemap() : string
     {

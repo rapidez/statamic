@@ -2,6 +2,8 @@
 
 namespace Rapidez\Statamic;
 
+use Illuminate\Support\Facades\Schedule;
+use Illuminate\Support\Facades\Storage;
 use Statamic\Sites\Sites;
 use Statamic\Facades\Site;
 use Statamic\Facades\Entry;
@@ -53,6 +55,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootComposers()
             ->bootPublishables()
             ->bootUtilities()
+            ->bootSitemaps()
             ->bootStack();
 
         Vue::register();
@@ -214,6 +217,41 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
         return $this;
     }
+
+    public function bootSitemaps(): static
+    {
+        Schedule::command('rapidez:statamic:generate:sitemap')->twiceDaily(0, 12);
+
+        $storeId = Site::current()->attribute('magento_store_id');
+
+        // Cache the sitemaps for the specified store ID, refreshing every day
+        $sitemaps = Cache::remember(
+            'statamic-sitemaps-' . $storeId,
+            now()->addDay(),
+            function () use ($storeId) {
+                $storageDirectory = config('rapidez.statamic.sitemap.storage_directory');
+                $sitemapPrefix = config('rapidez.statamic.sitemap.prefix');
+                $storageDisk = Storage::disk('public');
+
+                // Get all files in the storage directory and filter them by store ID and prefix
+                return collect($storageDisk->files($storageDirectory))
+                    ->filter(fn($item) => str_starts_with($item, $storageDirectory . $sitemapPrefix . $storeId . '_'))
+                    ->map(fn($item) => [
+                        'loc' => url($item),
+                        'lastmod' => $storageDisk->lastModified($item)
+                            ? date('Y-m-d H:i:s', $storageDisk->lastModified($item))
+                            : null
+                    ])
+                    ->toArray();
+            }
+        );
+
+        // Merge the sitemaps into the Rapidez sitemap filter for the current store ID
+        Eventy::addFilter('rapidez.sitemap.' . $storeId, fn($rapidezSitemaps) => array_merge($rapidezSitemaps, $sitemaps));
+
+        return $this;
+    }
+
 
     public function bootStack() : static
     {

@@ -29,9 +29,18 @@ class GenerateTermSitemapJob implements ShouldQueue, ShouldBeUnique
 
     public function handle(): void
     {
-        $sitemap = $this->sitemapGenerator->createSitemap($this->generateTermSitemap());
-        Storage::disk('public')->put('sitemap_statamic_taxonomy_' . $this->site->handle() . '_' . $this->taxonomy->handle() . '.xml', $sitemap);
+        $sitemapContent = $this->sitemapGenerator->createSitemap($this->generateTermSitemap());
+
+        $sitemapPath = config('rapidez.statamic.sitemap.storage_directory')
+            . config('rapidez.statamic.sitemap.prefix')
+            . $this->site->attribute('magento_store_id')
+            . '_taxonomy_'
+            . $this->taxonomy->handle()
+            . '.xml';
+
+        Storage::disk('public')->put($sitemapPath, $sitemapContent);
     }
+
 
     protected function generateTermSitemap() : string
     {

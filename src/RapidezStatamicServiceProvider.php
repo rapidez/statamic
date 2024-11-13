@@ -16,25 +16,29 @@ use Rapidez\Statamic\Tags\Alternates;
 use Statamic\Events\GlobalSetDeleted;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View as RenderedView;
-use Rapidez\Statamic\Commands\ImportBrands;
 use Rapidez\Statamic\Commands\InstallCommand;
-use Rapidez\Statamic\Forms\JsDrivers\Vue;
+use Rapidez\Statamic\Commands\ImportBrands;
 use Rapidez\Statamic\Commands\ImportProducts;
 use Rapidez\Statamic\Commands\GenerateSitemap;
 use Rapidez\Statamic\Commands\ImportCategories;
+use Rapidez\Statamic\Forms\JsDrivers\Vue;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
 use Rapidez\Statamic\Http\Controllers\ImportsController;
 use Rapidez\Statamic\Http\Controllers\StatamicRewriteController;
 use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
+use Rapidez\Statamic\Listeners\ClearNavTreeCache;
+use Rapidez\Statamic\Listeners\SetCollectionsForNav;
+use Statamic\Events\NavCreated;
+use Statamic\Events\NavTreeSaved;
 use TorMorten\Eventy\Facades\Eventy;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->app->extend(Sites::class, function () {
-            return new SitesLinkedToMagentoStores(config('statamic.sites'));
-        });
+        $this->app->extend(Sites::class, fn () => new SitesLinkedToMagentoStores());
+
+        $this->app->singleton(RapidezStatamic::class);
     }
 
     public function boot()
@@ -97,6 +101,9 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             Event::listen([GlobalSetSaved::class, GlobalSetDeleted::class], function () {
                 Cache::forget('statamic-globals-' . Site::selected()->handle());
             });
+
+            Event::listen(NavCreated::class, SetCollectionsForNav::class);
+            Event::listen(NavTreeSaved::class, ClearNavTreeCache::class);
 
             Eventy::addFilter('rapidez.statamic.category.entry.data', fn($category) => [
                 'title' => $category->name,

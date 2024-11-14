@@ -2,28 +2,29 @@
 
 namespace Rapidez\Statamic;
 
-use Statamic\Statamic;
-use Statamic\Sites\Sites;
-use Statamic\Facades\Site;
-use Statamic\Facades\Entry;
-use Statamic\Facades\Utility;
 use Illuminate\Routing\Router;
-use Rapidez\Core\Facades\Rapidez;
-use Statamic\Events\GlobalSetSaved;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
-use Rapidez\Statamic\Tags\Alternates;
-use Statamic\Events\GlobalSetDeleted;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View as RenderedView;
+use Rapidez\Core\Facades\Rapidez;
 use Rapidez\Statamic\Commands\ImportBrands;
-use Rapidez\Statamic\Forms\JsDrivers\Vue;
-use Rapidez\Statamic\Commands\ImportProducts;
 use Rapidez\Statamic\Commands\ImportCategories;
+use Rapidez\Statamic\Commands\ImportProducts;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
+use Rapidez\Statamic\Forms\JsDrivers\Vue;
 use Rapidez\Statamic\Http\Controllers\ImportsController;
 use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
+use Rapidez\Statamic\Tags\Alternates;
+use Statamic\Events\GlobalSetDeleted;
+use Statamic\Events\GlobalSetSaved;
+use Statamic\Facades\Entry;
+use Statamic\Facades\Site;
+use Statamic\Facades\Utility;
+use Statamic\Http\Controllers\FrontendController;
+use Statamic\Sites\Sites;
+use Statamic\Statamic;
 use TorMorten\Eventy\Facades\Eventy;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
@@ -74,7 +75,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootRoutes() : self
     {
         if (config('rapidez.statamic.routes') && $this->currentSiteIsEnabled()) {
-            Rapidez::addFallbackRoute([\Statamic\Http\Controllers\FrontendController::class, 'index']);
+            Rapidez::addFallbackRoute([FrontendController::class, 'index']);
         }
 
         return $this;

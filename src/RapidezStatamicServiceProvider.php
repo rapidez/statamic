@@ -2,6 +2,7 @@
 
 namespace Rapidez\Statamic;
 
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
 use Illuminate\Support\Facades\Storage;
 use Statamic\Sites\Sites;
@@ -220,8 +221,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
     public function bootSitemaps(): static
     {
-        Schedule::command('rapidez:statamic:generate:sitemap')->twiceDaily(0, 12);
-
         $storeId = Site::current()->attribute('magento_store_id');
 
         // Cache the sitemaps for the specified store ID, refreshing every day
@@ -248,6 +247,9 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
         // Merge the sitemaps into the Rapidez sitemap filter for the current store ID
         Eventy::addFilter('rapidez.sitemap.' . $storeId, fn($rapidezSitemaps) => array_merge($rapidezSitemaps, $sitemaps));
+
+        // Generate the Statamic sitemaps when the Rapidez sitemap generate action is called
+        Eventy::addAction('rapidez.sitemap.generate', fn() => Artisan::call('rapidez:statamic:generate:sitemap'), 20, 1);
 
         return $this;
     }

@@ -56,18 +56,18 @@ After you're done running the install command make sure to check our configurati
 
 ### Sitemap
 
-It is possible to create a sitemap per store, each sitemap is an index containing all collections and taxonomies that do have views. The XML files will be generated as:
+We hook into the [Rapidez Sitemap](https://github.com/rapidez/sitemap) generation action by triggering our own sitemap generation. 
+
+This creates multiple sitemaps based on the store ID for each collection or taxonomy that has an actual route. The XML files will be generated as:
 ```shell
-/sitemap_statamic_{site_handle}.xml
-/sitemap_statamic_collection_{site_handle}_{collection_handle}.xml
-/sitemap_statamic_taxonomy_{site_handle}_{taxonomy_handle}.xml
+/statamic_sitemap_collection_{store_id}_collection_{collection_handle}.xml
+/statamic_sitemap_taxonomy_{store_id}_taxonomy_{taxonomy_handle}.xml
 ```
-You can generate the sitemaps by running:
+
+You can also generate the sitemaps manually by running:
 ```shell
 php artisan rapidez:statamic:generate:sitemap
 ```
-
-Please make sure to add `public/sitemap_statamic_*.xml` to your .gitignore file.
 
 ### Upgrading
 

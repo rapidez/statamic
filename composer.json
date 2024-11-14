@@ -34,12 +34,18 @@
         "justbetter/statamic-glide-directive": "^2.1",
         "rapidez/blade-directives": "^0.6",
         "rapidez/core": "^2.13",
-        "rapidez/sitemap": "^1.0",
+        "rapidez/sitemap": "@dev",
         "spatie/once": "*",
         "statamic-rad-pack/runway": "^7.6",
         "statamic/cms": "^5.29",
         "statamic/eloquent-driver": "^4.9",
         "tormjens/eventy": "^0.8"
+    },
+    "repositories": {
+        "rapidez/sitemap": {
+            "type": "path",
+            "url": "/Users/kevinmeijer/sites/rapidez-packages/sitemap"
+        }
     },
     "autoload": {
         "psr-4": {

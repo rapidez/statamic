@@ -18,18 +18,14 @@ class GenerateTermSitemapJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable;
 
-    protected GenerateSitemapAction $sitemapGenerator;
-
     public function __construct(
         protected Site $site,
         protected Taxonomy $taxonomy,
-    ) {
-        $this->sitemapGenerator = new (GenerateSitemapAction::class);
-    }
+    ) {}
 
-    public function handle(): void
+    public function handle(GenerateSitemapAction $sitemapGenerator): void
     {
-        $sitemapContent = $this->sitemapGenerator->createSitemap($this->generateTermSitemap());
+        $sitemapContent = $sitemapGenerator->createSitemap($this->generateTermSitemap($sitemapGenerator));
 
         $sitemapPath = config('rapidez.statamic.sitemap.storage_directory')
             . config('rapidez.statamic.sitemap.prefix')
@@ -42,14 +38,14 @@ class GenerateTermSitemapJob implements ShouldQueue, ShouldBeUnique
     }
 
 
-    protected function generateTermSitemap() : string
+    protected function generateTermSitemap(GenerateSitemapAction $sitemapGenerator) : string
     {
         $sitemap = '';
         $terms = $this->publishedTerms();
 
         foreach ($terms as $term) {
             /* @var LocalizedTerm $term */
-            $sitemap .= $this->sitemapGenerator->addUrl($term->absoluteUrl(), $term->lastModified());
+            $sitemap .= $sitemapGenerator->addUrl($term->absoluteUrl(), $term->lastModified());
         }
 
         return $sitemap;

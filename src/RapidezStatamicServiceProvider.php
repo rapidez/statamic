@@ -23,7 +23,6 @@ use Rapidez\Statamic\Commands\ImportProducts;
 use Rapidez\Statamic\Commands\ImportCategories;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
 use Rapidez\Statamic\Http\Controllers\ImportsController;
-use Rapidez\Statamic\Http\Controllers\StatamicRewriteController;
 use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
 use TorMorten\Eventy\Facades\Eventy;
 
@@ -75,7 +74,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootRoutes() : self
     {
         if (config('rapidez.statamic.routes') && $this->currentSiteIsEnabled()) {
-            Rapidez::addFallbackRoute(StatamicRewriteController::class);
+            Rapidez::addFallbackRoute([\Statamic\Http\Controllers\FrontendController::class, 'index']);
         }
 
         return $this;

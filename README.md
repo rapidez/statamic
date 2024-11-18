@@ -23,10 +23,7 @@ composer require rapidez/statamic
 ```
 
 Make sure you have an existing User model as Statamic requires this.
-If you don't have a User model you can publish it by running:
-```bash
-php artisan vendor:publish --tag=rapidez-statamic-models
-```
+If you don't have a User model we will register one for you automatically.
 
 You will also need the migrations for the users table, these can be published by running:
 ```bash

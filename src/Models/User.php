@@ -1,6 +1,6 @@
 <?php
 
-namespace {{ namespace }}\Models;
+namespace Rapidez\Statamic\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;

@@ -2,6 +2,8 @@
 
 namespace Rapidez\Statamic;
 
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Schema;
 use Statamic\Sites\Sites;
 use Statamic\Facades\Site;
 use Statamic\Facades\Entry;
@@ -30,6 +32,7 @@ use Rapidez\Statamic\Listeners\SetCollectionsForNav;
 use Statamic\Events\NavCreated;
 use Statamic\Events\NavTreeSaved;
 use TorMorten\Eventy\Facades\Eventy;
+use Illuminate\Support\Facades\Storage;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
@@ -186,6 +189,18 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             __DIR__.'/../config/rapidez/statamic.php' => config_path('rapidez/statamic.php'),
         ], 'config');
 
+        if (!class_exists('\App\Models\User::class') && $userModel = $this->prepareUserModel()) {
+            $this->publishes([
+                $userModel => app_path('Models/User.php'),
+            ], 'rapidez-statamic-models');
+        }
+
+        if (!Schema::hasTable('users') && !file_exists(database_path('migrations/0001_01_01_000000_create_users_table.php'))) {
+            $this->publishes([
+                __DIR__ . '/../database/migrations/0001_01_01_000000_create_users_table.php' => database_path('migrations/0001_01_01_000000_create_users_table.php'),
+            ], 'rapidez-statamic-user-migrations');
+        }
+
         return $this;
     }
 
@@ -234,5 +249,25 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->first();
 
         return $site?->handle() ?? config('rapidez.store_code');
+    }
+
+    protected function prepareUserModel(): string
+    {
+        $sourceStub = __DIR__ . '/stubs/User.stub';
+        $targetPath = 'temp/User.php';
+
+        if (!File::exists($sourceStub)) {
+            return '';
+        }
+
+        $content = str_replace(
+            '{{ namespace }}',
+            'App',
+            File::get($sourceStub)
+        );
+
+        Storage::put($targetPath, $content);
+
+        return storage_path('app/' . $targetPath);
     }
 }

@@ -16,17 +16,21 @@ This package helps you integrate Statamic within your Rapidez project by adding 
 
 You need to have `statamic/cms` installed in your Rapidez installation. Follow the [installation guide](https://statamic.dev/installing/laravel).
 
-Make sure you have an existing User model as Statamic requires this.
-If you don't have a User model you can get it from the [Laravel repo](https://github.com/laravel/laravel/blob/11.x/app/Models/User.php).
-
-You will also need the migrations for the users table, this can be found [here](https://github.com/laravel/laravel/blob/11.x/database/migrations/0001_01_01_000000_create_users_table.php).
-At last you need to make some changes to your User model to make it compatible with Statamic, 
-make sure to follow [this guide](https://statamic.dev/tips/storing-users-in-a-database#in-an-existing-laravel-app) after requiring `rapidez/statamic` in your project.
-
 ## Installation
 
-```
+```bash
 composer require rapidez/statamic
+```
+
+Make sure you have an existing User model as Statamic requires this.
+If you don't have a User model you can publish it by running:
+```bash
+php artisan vendor:publish --tag=rapidez-statamic-models
+```
+
+You will also need the migrations for the users table, these can be published by running:
+```bash
+php artisan vendor:publish --tag=rapidez-statamic-user-migrations
 ```
 
 ## Install command
@@ -34,7 +38,7 @@ composer require rapidez/statamic
 The install command will help you set up all the necessary settings.
 It will mainly setup the [Eloquent driver](https://github.com/statamic/eloquent-driver) and publish the necessary vendor from the rapidez/statamic repo.
 
-```
+```bash
 php artisan rapidez-statamic:install
 ```
 

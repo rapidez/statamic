@@ -12,7 +12,6 @@ class GenerateSitemap extends Command
 
     protected $description = 'Generate a sitemap based on Statamic collections & taxonomies';
 
-
     public function handle()
     {
         foreach (SiteFacade::all() as $site) {

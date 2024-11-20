@@ -2,38 +2,39 @@
 
 namespace Rapidez\Statamic;
 
+use Statamic\Sites\Sites;
+use Statamic\Facades\Site;
+use Statamic\Facades\Entry;
+use Statamic\Facades\Utility;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View as RenderedView;
-use Rapidez\Core\Facades\Rapidez;
+use Rapidez\Statamic\Commands\InstallCommand;
 use Rapidez\Statamic\Commands\ImportBrands;
-use Rapidez\Statamic\Commands\ImportCategories;
 use Rapidez\Statamic\Commands\ImportProducts;
+use Rapidez\Statamic\Commands\ImportCategories;
+use Rapidez\Statamic\Forms\JsDrivers\Vue;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
 use Rapidez\Statamic\Forms\JsDrivers\Vue;
 use Rapidez\Statamic\Http\Controllers\ImportsController;
 use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
-use Rapidez\Statamic\Tags\Alternates;
-use Statamic\Events\GlobalSetDeleted;
-use Statamic\Events\GlobalSetSaved;
-use Statamic\Facades\Entry;
-use Statamic\Facades\Site;
-use Statamic\Facades\Utility;
+use Rapidez\Statamic\Listeners\ClearNavTreeCache;
+use Rapidez\Statamic\Listeners\SetCollectionsForNav;
 use Statamic\Http\Controllers\FrontendController;
-use Statamic\Sites\Sites;
-use Statamic\Statamic;
+use Statamic\Events\NavCreated;
+use Statamic\Events\NavTreeSaved;
 use TorMorten\Eventy\Facades\Eventy;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->app->extend(Sites::class, function () {
-            return new SitesLinkedToMagentoStores(config('statamic.sites'));
-        });
+        $this->app->extend(Sites::class, fn () => new SitesLinkedToMagentoStores());
+
+        $this->app->singleton(RapidezStatamic::class);
     }
 
     public function boot()
@@ -60,6 +61,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ImportCategories::class,
             ImportProducts::class,
             ImportBrands::class,
+            InstallCommand::class,
         ]);
 
         return $this;
@@ -84,7 +86,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootViews() : self
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'rapidez-statamic');
-        $this->loadViewsFrom(__DIR__.'/../resources/views/vendor/responsive-images', 'responsive-images');
 
         return $this;
     }
@@ -93,8 +94,11 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     {
         if ($this->currentSiteIsEnabled()) {
             Event::listen([GlobalSetSaved::class, GlobalSetDeleted::class], function () {
-                Cache::forget('statamic-globals-' . Site::current()->handle());
+                Cache::forget('statamic-globals-' . Site::selected()->handle());
             });
+
+            Event::listen(NavCreated::class, SetCollectionsForNav::class);
+            Event::listen(NavTreeSaved::class, ClearNavTreeCache::class);
 
             Eventy::addFilter('rapidez.statamic.category.entry.data', fn($category) => [
                 'title' => $category->name,
@@ -119,8 +123,8 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     {
         if (config('rapidez.statamic.runway.configure') && $this->currentSiteIsEnabled()) {
             config(['runway.resources' => array_merge(
-                config('rapidez.statamic.runway.resources'),
-                config('runway.resources')
+                config('rapidez.statamic.runway.resources') ?? [],
+                config('runway.resources') ?? []
             )]);
         }
 
@@ -168,6 +172,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             __DIR__.'/../resources/content/collections' => base_path('content/collections'),
             __DIR__.'/../resources/content/assets' => base_path('content/assets'),
             __DIR__.'/../resources/fieldsets' => resource_path('fieldsets'),
+            __DIR__.'/../resources/blueprints/runway' => resource_path('blueprints/vendor/runway'),
         ], 'rapidez-statamic-content');
 
         $this->publishes([
@@ -208,7 +213,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootStack() : static
     {
         if (! $this->app->runningInConsole()) {
-            View::startPush('head', view('rapidez-statamic::stack.head'));
+            View::startPush('head', view('statamic-glide-directive::partials.head'));
         }
 
         return $this;

@@ -2,7 +2,7 @@
 
 namespace Rapidez\Statamic\Models;
 
-use DoubleThreeDigital\Runway\Traits\HasRunwayResource;
+use StatamicRadPack\Runway\Traits\HasRunwayResource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Statamic\Facades\Site;
@@ -24,6 +24,9 @@ class Product extends Model
 
     public function getTable()
     {
-        return 'catalog_product_flat_' . (Statamic::isCpRoute() ? Site::selected()->attributes['magento_store_id'] : Site::current()->attributes['magento_store_id']);
+        return 'catalog_product_flat_' . once(fn() => (Statamic::isCpRoute()
+            ? (Site::selected()->attributes['magento_store_id'] ?? '1')
+            : (Site::current()->attributes['magento_store_id'] ?? '1')
+        ));
     }
 }

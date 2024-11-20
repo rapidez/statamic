@@ -1,6 +1,66 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/3.5.0...master)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/4.3.1...4.3.1)
+## [4.3.1](https://github.com/rapidez/statamic/releases/tag/4.3.1) - 2024-11-05
+
+### Fixed
+
+- Typos (#86, #87)
+
+## [4.3.0](https://github.com/rapidez/statamic/releases/tag/4.3.0) - 2024-10-30
+
+### Changed
+
+- Removed justbetter/statamic-eloquent-driver-globalset-migration-generator (#83)
+
+### Fixed
+
+- Performance optimizations (#77)
+
+## [4.2.0](https://github.com/rapidez/statamic/releases/tag/4.2.0) - 2024-09-26
+
+### Changed
+
+- License change GPL-3.0 > GPL-3.0-or-later (59b86c5)
+- Replaced spatie/statamic-responsive-images with justbetter/statamic-glide-directive (#75)
+
+### Fixed
+
+- Don't load removed views (#76)
+
+
+
+## [4.1.0](https://github.com/rapidez/statamic/releases/tag/4.1.0) - 2024-09-09
+
+### Changed
+
+- Cache the globals in memory (#73)
+
+### Fixed
+
+- Page builder form template error fix (#72)
+
+## [4.0.1](https://github.com/rapidez/statamic/releases/tag/4.0.1) - 2024-08-27
+
+### Fixed
+
+- Clear the correct site cache when globals change (#70)
+
+## [4.0.0](https://github.com/rapidez/statamic/releases/tag/4.0.0) - 2024-08-13
+
+In this release we've added compatibility with Statamic 5. This forces you to configure your sites in the new `resources/sites.yaml`. You can still use your old config by referencing it in the `resources/sites.yaml`, see: https://github.com/rapidez/statamic#magento-store-id
+
+### Added
+
+- Statamic 5 support + install command (#69)
+
+## [3.5.1](https://github.com/rapidez/statamic/releases/tag/3.5.1) - 2024-07-09
+
+### Fixed
+
+- Brand page container (#64)
+- Use the selected site in the control panel (#66)
+
 ## [3.5.0](https://github.com/rapidez/statamic/releases/tag/3.5.0) - 2024-05-14
 
 ### Changed

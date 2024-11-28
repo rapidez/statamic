@@ -197,6 +197,11 @@ class ProductAttribute extends Model
         return $query->where('frontend_input', $type);
     }
 
+    public function options()
+    {
+        return $this->hasMany(ProductAttributeOption::class, 'attribute_id', 'attribute_id');
+    }
+
     protected static function boot()
     {
         parent::boot();

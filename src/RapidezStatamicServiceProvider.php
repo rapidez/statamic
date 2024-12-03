@@ -2,33 +2,35 @@
 
 namespace Rapidez\Statamic;
 
-use Statamic\Sites\Sites;
-use Statamic\Facades\Site;
-use Statamic\Facades\Entry;
-use Statamic\Facades\Utility;
 use Illuminate\Routing\Router;
-use Rapidez\Core\Facades\Rapidez;
-use Statamic\Events\GlobalSetSaved;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
-use Rapidez\Statamic\Tags\Alternates;
-use Statamic\Events\GlobalSetDeleted;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View as RenderedView;
-use Rapidez\Statamic\Commands\InstallCommand;
+use Rapidez\Core\Facades\Rapidez;
 use Rapidez\Statamic\Commands\ImportBrands;
-use Rapidez\Statamic\Commands\ImportProducts;
 use Rapidez\Statamic\Commands\ImportCategories;
-use Rapidez\Statamic\Forms\JsDrivers\Vue;
+use Rapidez\Statamic\Commands\ImportProducts;
+use Rapidez\Statamic\Commands\InstallCommand;
+use Rapidez\Statamic\Commands\InvalidateCacheCommand;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
+use Rapidez\Statamic\Forms\JsDrivers\Vue;
 use Rapidez\Statamic\Http\Controllers\ImportsController;
-use Statamic\Http\Controllers\FrontendController;
 use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
 use Rapidez\Statamic\Listeners\ClearNavTreeCache;
 use Rapidez\Statamic\Listeners\SetCollectionsForNav;
+use Rapidez\Statamic\Tags\Alternates;
+use Statamic\Events\GlobalSetDeleted;
+use Statamic\Events\GlobalSetSaved;
 use Statamic\Events\NavCreated;
 use Statamic\Events\NavTreeSaved;
+use Statamic\Facades\Entry;
+use Statamic\Facades\Site;
+use Statamic\Facades\Utility;
+use Statamic\Http\Controllers\FrontendController;
+use Statamic\Sites\Sites;
+use Statamic\StaticCaching\Middleware\Cache as StaticCache;
 use TorMorten\Eventy\Facades\Eventy;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
@@ -38,6 +40,11 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         $this->app->extend(Sites::class, fn () => new SitesLinkedToMagentoStores());
 
         $this->app->singleton(RapidezStatamic::class);
+
+        $this->app->booted(function () {
+            $router = app(Router::class);
+            $router->pushMiddlewareToGroup('web', StaticCache::class);
+        });
     }
 
     public function boot()
@@ -65,6 +72,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ImportProducts::class,
             ImportBrands::class,
             InstallCommand::class,
+            InvalidateCacheCommand::class,
         ]);
 
         return $this;

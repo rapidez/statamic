@@ -2,7 +2,6 @@
 
 namespace Rapidez\Statamic;
 
-use Illuminate\Support\Facades\Schema;
 use Statamic\Sites\Sites;
 use Statamic\Facades\Site;
 use Statamic\Facades\Entry;
@@ -198,7 +197,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             config(['auth.providers.users.model' => User::class]);
         }
 
-        if (!Schema::hasTable('users') && !file_exists(database_path('migrations/0001_01_01_000000_create_users_table.php'))) {
+        if (!file_exists(database_path('migrations/0001_01_01_000000_create_users_table.php'))) {
             $this->publishes([
                 __DIR__ . '/../database/migrations/0001_01_01_000000_create_users_table.php' => database_path('migrations/0001_01_01_000000_create_users_table.php'),
             ], 'rapidez-statamic-user-migrations');

@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Storage;
-use Rapidez\Statamic\Actions\GenerateSitemapAction;
+use Rapidez\Sitemap\Actions\GenerateSitemapAction;
 use Statamic\Eloquent\Entries\Entry;
 use Statamic\Sites\Site;
 use Statamic\Entries\Collection;

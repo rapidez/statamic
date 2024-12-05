@@ -149,7 +149,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                 $entry = Entry::query()
                     ->where('collection', 'products')
                     ->where('site', $this->getSiteHandleByStoreId())
-                    ->where('linked_product', config('frontend.product.sku'))
+                    ->whereJsonContains('linked_product', config('frontend.product.sku'))
                     ->first();
 
                 $view->with('content', optionalDeep($entry));
@@ -161,7 +161,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                 $entry = Entry::query()
                     ->where('collection', 'categories')
                     ->where('site', $this->getSiteHandleByStoreId())
-                    ->where('linked_category', config('frontend.category.entity_id'))
+                    ->whereJsonContains('linked_category', config('frontend.category.entity_id'))
                     ->first();
 
                 $view->with('content', optionalDeep($entry));

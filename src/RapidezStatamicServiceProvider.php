@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View as RenderedView;
+use Rapidez\Statamic\Actions\GenerateSitemapsAction;
 use Rapidez\Core\Facades\Rapidez;
 use Rapidez\Statamic\Commands\ImportBrands;
 use Rapidez\Statamic\Commands\ImportCategories;
@@ -59,6 +60,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootComposers()
             ->bootPublishables()
             ->bootUtilities()
+            ->bootSitemaps()
             ->bootStack();
 
         Vue::register();
@@ -72,7 +74,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ImportProducts::class,
             ImportBrands::class,
             InstallCommand::class,
-            InvalidateCacheCommand::class,
+            InvalidateCacheCommand::class
         ]);
 
         return $this;
@@ -220,6 +222,14 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
         return $this;
     }
+
+    public function bootSitemaps(): static
+    {
+        Eventy::addAction('rapidez.sitemap.generate', fn() => GenerateSitemapsAction::generate(), 20, 1);
+
+        return $this;
+    }
+
 
     public function bootStack() : static
     {

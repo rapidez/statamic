@@ -94,4 +94,8 @@ return [
     'disabled_sites' => [
         // '{site_handle}'
     ],
+
+    'sitemap' => [
+        'prefix' => env('STATAMIC_SITEMAP_PREFIX', 'statamic_sitemap_')
+    ]
 ];

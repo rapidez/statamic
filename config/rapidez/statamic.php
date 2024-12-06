@@ -96,7 +96,6 @@ return [
     ],
 
     'sitemap' => [
-        'prefix' => env('STATAMIC_SITEMAP_PREFIX', 'statamic_sitemap_'),
-        'storage_directory' => 'statamic-sitemaps/'
+        'prefix' => env('STATAMIC_SITEMAP_PREFIX', 'statamic_sitemap_')
     ]
 ];

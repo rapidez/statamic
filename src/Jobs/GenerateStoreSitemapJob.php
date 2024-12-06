@@ -7,11 +7,12 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Storage;
 use Statamic\Facades\Collection as StatamicCollection;
 use Statamic\Facades\Taxonomy as TaxonomyFacade;
 use Statamic\Sites\Site;
 use Statamic\Entries\Collection;
-use Statamic\Taxonomies\Taxonomy;
+use TorMorten\Eventy\Facades\Eventy;
 
 class GenerateStoreSitemapJob implements ShouldQueue, ShouldBeUnique
 {
@@ -23,16 +24,26 @@ class GenerateStoreSitemapJob implements ShouldQueue, ShouldBeUnique
 
     public function handle(): void
     {
+        $this->createCollectionSitemaps();
+        $this->createTaxonomySitemaps();
+        $this->addSitemapFilter();
+    }
+
+    protected function createCollectionSitemaps() : void
+    {
         $collections = StatamicCollection::all();
         $collections = $collections->filter(fn (Collection $collection) => $collection->route($this->site->handle()));
 
         foreach ($collections as $collection) {
             /* @var Collection $collection */
             if ($collection->queryEntries()->where('site', $this->site->handle())->whereStatus('published')->count()) {
-                GenerateCollectionSitemapJob::dispatch($this->site, $collection);
+                GenerateCollectionSitemapJob::dispatchSync($this->site, $collection);
             }
         }
+    }
 
+    protected function createTaxonomySitemaps() : void
+    {
         $taxonomies = TaxonomyFacade::all()
             ->filter(function ($taxonomy) {
                 $terms = $taxonomy->queryTerms()
@@ -47,20 +58,29 @@ class GenerateStoreSitemapJob implements ShouldQueue, ShouldBeUnique
 
         foreach ($taxonomies as $taxonomy) {
             /* @var Taxonomy $taxonomy */
-            GenerateTermSitemapJob::dispatch($this->site, $taxonomy);
+            GenerateTermSitemapJob::dispatchSync($this->site, $taxonomy);
         }
     }
 
-    protected function addSitemap($url = null) : string
+    protected function addSitemapFilter() : void
     {
-        $sitemap = '<sitemap>';
+        $storeId = $this->site->attribute('magento_store_id');
+        $storageDisk = Storage::disk(config('rapidez-sitemap.disk', 'public'));
+        $path = trim(config('rapidez-sitemap.path', 'rapidez-sitemaps'), '/');
+        $storageDirectory = $path.'/'.$storeId.'/';
 
-        if ($url) {
-            $sitemap .= '<loc>' . url($url) . '</loc>';
-        }
+        $sitemapPrefix = config('rapidez.statamic.sitemap.prefix');
 
-        $sitemap .= '</sitemap>';
+        $sitemaps = collect($storageDisk->files($storageDirectory))
+            ->filter(fn($item) => str_starts_with($item, $storageDirectory . $sitemapPrefix))
+            ->map(fn($item) => [
+                'loc' => url($item),
+                'lastmod' => $storageDisk->lastModified($item)
+                    ? date('Y-m-d H:i:s', $storageDisk->lastModified($item))
+                    : null
+            ])
+            ->toArray();
 
-        return $sitemap;
+        Eventy::addFilter('rapidez.sitemap.' . $storeId, fn($rapidezSitemaps) => array_merge($rapidezSitemaps, $sitemaps));
     }
 }

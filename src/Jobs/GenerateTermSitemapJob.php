@@ -25,30 +25,29 @@ class GenerateTermSitemapJob implements ShouldQueue, ShouldBeUnique
 
     public function handle(GenerateSitemapAction $sitemapGenerator): void
     {
-        $sitemapContent = $sitemapGenerator->createSitemap($this->generateTermSitemap($sitemapGenerator));
+        $storeId = $this->site->attribute('magento_store_id');
+        $path = trim(config('rapidez-sitemap.path', 'rapidez-sitemaps'), '/');
+        $storageDirectory = $path.'/'.$storeId.'/';
+        
+        $sitemapPath = $storageDirectory
+        . config('rapidez.statamic.sitemap.prefix')
+        . 'taxonomy_'
+        . $this->taxonomy->handle()
+        . '.xml';
 
-        $sitemapPath = config('rapidez.statamic.sitemap.storage_directory')
-            . config('rapidez.statamic.sitemap.prefix')
-            . $this->site->attribute('magento_store_id')
-            . '_taxonomy_'
-            . $this->taxonomy->handle()
-            . '.xml';
-
-        Storage::disk('public')->put($sitemapPath, $sitemapContent);
+        $sitemapContent = $sitemapGenerator->createSitemapUrlset($this->generateTermSitemap());
+        $storageDisk = Storage::disk(config('rapidez-sitemap.disk', 'public'));
+        $storageDisk->put($sitemapPath, $sitemapContent);
     }
 
 
-    protected function generateTermSitemap(GenerateSitemapAction $sitemapGenerator) : string
+    protected function generateTermSitemap() : array
     {
-        $sitemap = '';
         $terms = $this->publishedTerms();
-
-        foreach ($terms as $term) {
-            /* @var LocalizedTerm $term */
-            $sitemap .= $sitemapGenerator->addUrl($term->absoluteUrl(), $term->lastModified());
-        }
-
-        return $sitemap;
+        return $terms->map(fn (LocalizedTerm $term) => [
+            'loc' => $term->absoluteUrl(),
+            'lastmod' => $term->lastModified()
+        ])->toArray();
     }
 
     protected function publishedTerms()

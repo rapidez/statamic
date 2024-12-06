@@ -56,18 +56,15 @@ After you're done running the install command make sure to check our configurati
 
 ### Sitemap
 
-We hook into the [Rapidez Sitemap](https://github.com/rapidez/sitemap) generation action by triggering our own sitemap generation. 
+We hook into the [Rapidez Sitemap](https://github.com/rapidez/sitemap) generation by adding our Statamic-specific sitemaps to the store's sitemap index. 
 
-This creates multiple sitemaps based on the store ID for each collection or taxonomy that has an actual route. The XML files will be generated as:
+For each store, we generate sitemaps for collections and taxonomies that have actual routes and content. The XML files will be stored in the configured sitemap disk (defaults to 'public') under the configured path (defaults to 'rapidez-sitemaps') with the following structure:
 ```shell
-/statamic_sitemap_collection_{store_id}_collection_{collection_handle}.xml
-/statamic_sitemap_taxonomy_{store_id}_taxonomy_{taxonomy_handle}.xml
+rapidez-sitemaps/{store_id}/{sitemap_prefix}_collection_{collection_handle}.xml
+rapidez-sitemaps/{store_id}/{sitemap_prefix}_taxonomy_{taxonomy_handle}.xml
 ```
 
-You can also generate the sitemaps manually by running:
-```shell
-php artisan rapidez:statamic:generate:sitemap
-```
+The sitemap prefix can be configured in the `rapidez.statamic.sitemap.prefix` config.
 
 ### Upgrading
 

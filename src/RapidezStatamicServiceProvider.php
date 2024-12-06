@@ -19,6 +19,7 @@ use Rapidez\Statamic\Tags\Alternates;
 use Statamic\Events\GlobalSetDeleted;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View as RenderedView;
+use Rapidez\Statamic\Actions\GenerateSitemapsAction;
 use Rapidez\Statamic\Commands\InstallCommand;
 use Rapidez\Statamic\Commands\ImportBrands;
 use Rapidez\Statamic\Commands\ImportProducts;
@@ -221,35 +222,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
     public function bootSitemaps(): static
     {
-        $storeId = Site::current()->attribute('magento_store_id');
-
-        // Cache the sitemaps for the specified store ID, refreshing every day
-        $sitemaps = Cache::remember(
-            'statamic-sitemaps-' . $storeId,
-            now()->addDay(),
-            function () use ($storeId) {
-                $storageDirectory = config('rapidez.statamic.sitemap.storage_directory');
-                $sitemapPrefix = config('rapidez.statamic.sitemap.prefix');
-                $storageDisk = Storage::disk('public');
-
-                // Get all files in the storage directory and filter them by store ID and prefix
-                return collect($storageDisk->files($storageDirectory))
-                    ->filter(fn($item) => str_starts_with($item, $storageDirectory . $sitemapPrefix . $storeId . '_'))
-                    ->map(fn($item) => [
-                        'loc' => url($item),
-                        'lastmod' => $storageDisk->lastModified($item)
-                            ? date('Y-m-d H:i:s', $storageDisk->lastModified($item))
-                            : null
-                    ])
-                    ->toArray();
-            }
-        );
-
-        // Merge the sitemaps into the Rapidez sitemap filter for the current store ID
-        Eventy::addFilter('rapidez.sitemap.' . $storeId, fn($rapidezSitemaps) => array_merge($rapidezSitemaps, $sitemaps));
-
-        // Generate the Statamic sitemaps when the Rapidez sitemap generate action is called
-        Eventy::addAction('rapidez.sitemap.generate', fn() => Artisan::call('rapidez:statamic:generate:sitemap'), 20, 1);
+        Eventy::addAction('rapidez.sitemap.generate', fn() => GenerateSitemapsAction::generate(), 20, 1);
 
         return $this;
     }

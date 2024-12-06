@@ -9,9 +9,9 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Storage;
 use Rapidez\Sitemap\Actions\GenerateSitemapAction;
-use Statamic\Eloquent\Entries\Entry;
 use Statamic\Sites\Site;
 use Statamic\Entries\Collection;
+use Statamic\Entries\Entry;
 
 class GenerateCollectionSitemapJob implements ShouldQueue, ShouldBeUnique
 {
@@ -24,29 +24,27 @@ class GenerateCollectionSitemapJob implements ShouldQueue, ShouldBeUnique
 
     public function handle(GenerateSitemapAction $sitemapGenerator): void
     {
-        $sitemapContent = $sitemapGenerator->createSitemap($this->generateCollectionSitemap($sitemapGenerator));
-
-        $sitemapPath = config('rapidez.statamic.sitemap.storage_directory')
-            . config('rapidez.statamic.sitemap.prefix')
-            . $this->site->attribute('magento_store_id')
-            . '_collection_'
-            . $this->collection->handle()
-            . '.xml';
-
-        Storage::disk('public')->put($sitemapPath, $sitemapContent);
+        $storeId = $this->site->attribute('magento_store_id');
+        $path = trim(config('rapidez-sitemap.path', 'rapidez-sitemaps'), '/');
+        $storageDirectory = $path.'/'.$storeId.'/';
+        
+        $sitemapPath = $storageDirectory
+        . config('rapidez.statamic.sitemap.prefix')
+        . 'collection_'
+        . $this->collection->handle()
+        . '.xml';
+        
+        $sitemapContent = $sitemapGenerator->createSitemapUrlset($this->generateCollectionSitemap());
+        $storageDisk = Storage::disk(config('rapidez-sitemap.disk', 'public'));
+        $storageDisk->put($sitemapPath, $sitemapContent);
     }
 
-
-    protected function generateCollectionSitemap(GenerateSitemapAction $sitemapGenerator) : string
+    protected function generateCollectionSitemap() : array
     {
-        $sitemap = '';
         $entries = $this->collection->queryEntries()->where('site', $this->site->handle())->whereStatus('published')->get();
-
-        foreach ($entries as $entry) {
-            /* @var Entry $entry */
-            $sitemap .= $sitemapGenerator->addUrl($entry->url(), $entry->lastModified());
-        }
-
-        return $sitemap;
+        return $entries->map(fn (Entry $entry) => [
+            'loc' => $entry->url(),
+            'lastmod' => $entry->lastModified()
+        ])->toArray();
     }
 }

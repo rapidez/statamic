@@ -20,7 +20,6 @@ use Rapidez\Statamic\Actions\GenerateSitemapsAction;
 use Rapidez\Statamic\Commands\InstallCommand;
 use Rapidez\Statamic\Commands\ImportBrands;
 use Rapidez\Statamic\Commands\ImportProducts;
-use Rapidez\Statamic\Commands\GenerateSitemap;
 use Rapidez\Statamic\Commands\ImportCategories;
 use Rapidez\Statamic\Forms\JsDrivers\Vue;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
@@ -67,8 +66,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ImportCategories::class,
             ImportProducts::class,
             ImportBrands::class,
-            InstallCommand::class,
-            GenerateSitemap::class
+            InstallCommand::class
         ]);
 
         return $this;

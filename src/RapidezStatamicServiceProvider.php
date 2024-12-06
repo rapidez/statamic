@@ -16,6 +16,7 @@ use Rapidez\Statamic\Tags\Alternates;
 use Statamic\Events\GlobalSetDeleted;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View as RenderedView;
+use Rapidez\Statamic\Actions\GenerateSitemapsAction;
 use Rapidez\Statamic\Commands\ImportBrands;
 use Rapidez\Statamic\Commands\InstallCommand;
 use Rapidez\Statamic\Forms\JsDrivers\Vue;
@@ -54,6 +55,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootComposers()
             ->bootPublishables()
             ->bootUtilities()
+            ->bootSitemaps()
             ->bootStack();
 
         Vue::register();
@@ -214,6 +216,14 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
         return $this;
     }
+
+    public function bootSitemaps(): static
+    {
+        Eventy::addAction('rapidez.sitemap.generate', fn() => GenerateSitemapsAction::generate(), 20, 1);
+
+        return $this;
+    }
+
 
     public function bootStack() : static
     {

@@ -103,5 +103,9 @@ return [
                 'disabled' => false,
             ],
         ],
+    ],
+
+    'sitemap' => [
+        'prefix' => env('STATAMIC_SITEMAP_PREFIX', 'statamic_sitemap_')
     ]
 ];

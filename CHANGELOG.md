@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/4.4.0...4.4.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/4.5.0...4.5.0)
+## [4.5.0](https://github.com/rapidez/statamic/releases/tag/4.5.0) - 2024-12-06
+
+### Added
+
+- Collections & taxonomies sitemaps with rapidez/sitemap (#93)
+
 ## [4.4.0](https://github.com/rapidez/statamic/releases/tag/4.4.0) - 2024-11-06
 
 ### Added

@@ -33,6 +33,7 @@ use Statamic\Http\Controllers\FrontendController;
 use Statamic\Sites\Sites;
 use Statamic\StaticCaching\Middleware\Cache as StaticCache;
 use TorMorten\Eventy\Facades\Eventy;
+use Rapidez\Statamic\Models\User;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
@@ -59,6 +60,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootRunway()
             ->bootComposers()
             ->bootPublishables()
+            ->bootUserModel()
             ->bootUtilities()
             ->bootSitemaps()
             ->bootStack();
@@ -195,6 +197,21 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/rapidez/statamic.php' => config_path('rapidez/statamic.php'),
         ], 'config');
+
+        return $this;
+    }
+
+    public function bootUserModel() : static
+    {
+        if (!class_exists('\App\Models\User::class')) {
+            config(['auth.providers.users.model' => User::class]);
+        }
+
+        if (!file_exists(database_path('migrations/0001_01_01_000000_create_users_table.php'))) {
+            $this->publishes([
+                __DIR__ . '/../database/migrations/0001_01_01_000000_create_users_table.php' => database_path('migrations/0001_01_01_000000_create_users_table.php'),
+            ], 'rapidez-statamic-user-migrations');
+        }
 
         return $this;
     }

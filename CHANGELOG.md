@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/4.5.0...4.5.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/4.6.0...4.6.0)
+## [4.6.0](https://github.com/rapidez/statamic/releases/tag/4.6.0) - 2024-12-11
+
+### Added
+
+- Static caching with invalidation on Magento urls (#94)
+
 ## [4.5.0](https://github.com/rapidez/statamic/releases/tag/4.5.0) - 2024-12-06
 
 ### Added

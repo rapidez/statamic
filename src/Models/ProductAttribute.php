@@ -72,13 +72,11 @@ class ProductAttribute extends Model
                     ->where('entity_type_code', 'catalog_product');
             });
 
-            // Join with attribute labels for the current store
             $builder->leftJoin('eav_attribute_label', function ($join) {
                 $join->on('eav_attribute.attribute_id', '=', 'eav_attribute_label.attribute_id')
                     ->where('eav_attribute_label.store_id', static::getCurrentStoreId());
             });
 
-            // Join with option values if it's a select/multiselect
             $builder->leftJoin('eav_attribute_option', 'eav_attribute.attribute_id', '=', 'eav_attribute_option.attribute_id')
                 ->leftJoin('eav_attribute_option_value as admin_value', function ($join) {
                     $join->on('eav_attribute_option.option_id', '=', 'admin_value.option_id')
@@ -89,7 +87,6 @@ class ProductAttribute extends Model
                         ->where('store_value.store_id', static::getCurrentStoreId());
                 });
 
-            // Select fields
             $builder->select([
                 'eav_attribute.*',
                 'eav_attribute_label.value as store_frontend_label',

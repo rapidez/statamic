@@ -33,7 +33,6 @@ class ProductAttributeOption extends Model
     protected static function booting()
     {
         static::addGlobalScope(function (Builder $builder) {
-            // Join with attribute to get attribute info
             $builder->join('eav_attribute', 'eav_attribute.attribute_id', '=', 'eav_attribute_option.attribute_id')
                 ->where('eav_attribute.entity_type_id', function ($query) {
                     $query->select('entity_type_id')
@@ -41,19 +40,16 @@ class ProductAttributeOption extends Model
                         ->where('entity_type_code', 'catalog_product');
                 });
 
-            // Join with option values for admin store (0)
             $builder->leftJoin('eav_attribute_option_value as admin_value', function ($join) {
                 $join->on('eav_attribute_option.option_id', '=', 'admin_value.option_id')
                     ->where('admin_value.store_id', 0);
             });
 
-            // Join with option values for current store
             $builder->leftJoin('eav_attribute_option_value as store_value', function ($join) {
                 $join->on('eav_attribute_option.option_id', '=', 'store_value.option_id')
                     ->where('store_value.store_id', static::getCurrentStoreId());
             });
 
-            // Select fields with fully qualified column names
             $builder->select([
                 'eav_attribute_option.option_id',
                 'eav_attribute_option.attribute_id',

@@ -123,7 +123,6 @@ class ProductAttribute extends Model
         $optionIds = array_filter(explode(',', $this->option_ids));
         $optionValues = array_filter(explode(',', $this->option_values));
 
-        // If counts don't match, return empty array to prevent array_combine error
         if (count($optionIds) !== count($optionValues)) {
             return [];
         }
@@ -152,7 +151,6 @@ class ProductAttribute extends Model
         return "product_attribute_{$this->attribute_id}_store_" . static::getCurrentStoreId();
     }
 
-    // Scopes for filtering
     public function scopeVisible($query)
     {
         return $query->where('is_visible', 1);

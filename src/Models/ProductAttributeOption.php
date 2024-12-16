@@ -6,7 +6,6 @@ use StatamicRadPack\Runway\Traits\HasRunwayResource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Statamic\Facades\Site;
 use Statamic\Statamic;
 
@@ -15,7 +14,7 @@ class ProductAttributeOption extends Model
     use HasRunwayResource;
 
     protected $table = 'eav_attribute_option';
-    
+
     protected $primaryKey = 'option_id';
 
     public $timestamps = false;
@@ -54,9 +53,11 @@ class ProductAttributeOption extends Model
                     ->where('store_value.store_id', static::getCurrentStoreId());
             });
 
-            // Select fields
+            // Select fields with fully qualified column names
             $builder->select([
-                'eav_attribute_option.*',
+                'eav_attribute_option.option_id',
+                'eav_attribute_option.attribute_id',
+                'eav_attribute_option.sort_order',
                 'eav_attribute.attribute_code',
                 'eav_attribute.frontend_label as attribute_label',
                 'admin_value.value as admin_value',
@@ -98,7 +99,18 @@ class ProductAttributeOption extends Model
         return "product_attribute_option_{$this->option_id}_store_" . static::getCurrentStoreId();
     }
 
-    // Scopes
+    public function scopeRunwaySearch(Builder $query, string $search)
+    {
+        return $query->where(function ($q) use ($search) {
+            $q->where('eav_attribute_option.option_id', 'LIKE', "%{$search}%")
+                ->orWhere('eav_attribute.attribute_code', 'LIKE', "%{$search}%")
+                ->orWhere('eav_attribute.frontend_label', 'LIKE', "%{$search}%")
+                ->orWhere('admin_value.value', 'LIKE', "%{$search}%")
+                ->orWhere('store_value.value', 'LIKE', "%{$search}%")
+                ->orWhere('eav_attribute_option.sort_order', 'LIKE', "%{$search}%");
+        });
+    }
+
     public function scopeByAttribute($query, $attributeId)
     {
         return $query->where('eav_attribute_option.attribute_id', $attributeId);

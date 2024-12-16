@@ -54,9 +54,13 @@ class RapidezStatamic
         return $tree;
     }
 
-    public function determineEntryUrl(Entry|Page $entry, string $nav = 'global-link'): string
+    public function determineEntryUrl(Entry|Page|string $entry, string $nav = 'global-link'): string
     {
         $cacheKey = $nav . '-' . config('rapidez.store');
+
+        if (is_string($entry)) {
+            return $entry;
+        }
 
         if ( ! isset($this->navCache[$nav][$entry->id()])) {
             $linkedRunwayResourceKey = $entry

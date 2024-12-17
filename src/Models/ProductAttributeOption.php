@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
-use Rapidez\Statamic\Traits\StoreIdTrait;
+use Rapidez\Statamic\Facades\RapidezStatamic;
 
 class ProductAttributeOption extends Model
 {
-    use HasRunwayResource, StoreIdTrait;
+    use HasRunwayResource;
 
     protected $table = 'eav_attribute_option';
 
@@ -41,7 +41,7 @@ class ProductAttributeOption extends Model
 
             $builder->leftJoin('eav_attribute_option_value as store_value', function ($join) {
                 $join->on('eav_attribute_option.option_id', '=', 'store_value.option_id')
-                    ->where('store_value.store_id', static::getCurrentStoreId());
+                    ->where('store_value.store_id', RapidezStatamic::getCurrentStoreId());
             });
 
             $builder->select([
@@ -61,21 +61,21 @@ class ProductAttributeOption extends Model
         return $this->belongsTo(ProductAttribute::class, 'attribute_id', 'attribute_id');
     }
 
-    public function AdminValue(): Attribute
+    public function adminValue(): Attribute
     {
         return Attribute::make(
             get: fn () => $this->attributes['admin_value'] ?? ''
         );
     }
 
-    public function StoreValue(): Attribute
+    public function storeValue(): Attribute
     {
         return Attribute::make(
             get: fn () => $this->attributes['store_value'] ?? $this->admin_value
         );
     }
 
-    public function DisplayValue(): Attribute
+    public function displayValue(): Attribute
     {
         return Attribute::make(
             get: fn () => $this->store_value ?: $this->admin_value
@@ -84,7 +84,7 @@ class ProductAttributeOption extends Model
 
     public function getCacheKey(): string
     {
-        return "product_attribute_option_{$this->option_id}_store_" . static::getCurrentStoreId();
+        return "product_attribute_option_{$this->option_id}_store_" . RapidezStatamic::getCurrentStoreId();
     }
 
     public function scopeRunwaySearch(Builder $query, string $search)

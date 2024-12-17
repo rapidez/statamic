@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Rapidez\Statamic\Traits\StoreIdTrait;
+use Rapidez\Statamic\Facades\RapidezStatamic;
 
 class ProductAttribute extends Model
 {
-    use HasRunwayResource, StoreIdTrait;
+    use HasRunwayResource;
 
     protected $table = 'eav_attribute';
     
@@ -49,7 +49,7 @@ class ProductAttribute extends Model
 
             $builder->leftJoin('eav_attribute_label', function ($join) {
                 $join->on('eav_attribute.attribute_id', '=', 'eav_attribute_label.attribute_id')
-                    ->where('eav_attribute_label.store_id', static::getCurrentStoreId());
+                    ->where('eav_attribute_label.store_id', RapidezStatamic::getCurrentStoreId());
             });
 
             $builder->leftJoin('eav_attribute_option', 'eav_attribute.attribute_id', '=', 'eav_attribute_option.attribute_id')
@@ -59,7 +59,7 @@ class ProductAttribute extends Model
                 })
                 ->leftJoin('eav_attribute_option_value as store_value', function ($join) {
                     $join->on('store_value.option_id', '=', 'eav_attribute_option.option_id')
-                        ->where('store_value.store_id', static::getCurrentStoreId());
+                        ->where('store_value.store_id', RapidezStatamic::getCurrentStoreId());
                 });
 
             $builder->select([
@@ -105,7 +105,7 @@ class ProductAttribute extends Model
 
     public function getCacheKey(): string
     {
-        return "product_attribute_{$this->attribute_id}_store_" . static::getCurrentStoreId();
+        return "product_attribute_{$this->attribute_id}_store_" . RapidezStatamic::getCurrentStoreId();
     }
 
     public function scopeVisible($query)

@@ -21,6 +21,8 @@ use Rapidez\Statamic\Http\Controllers\ImportsController;
 use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
 use Rapidez\Statamic\Listeners\ClearNavTreeCache;
 use Rapidez\Statamic\Listeners\SetCollectionsForNav;
+use Rapidez\Statamic\Models\ProductAttribute;
+use Rapidez\Statamic\Models\ProductAttributeOption;
 use Rapidez\Statamic\Tags\Alternates;
 use Statamic\Events\GlobalSetDeleted;
 use Statamic\Events\GlobalSetSaved;
@@ -33,6 +35,7 @@ use Statamic\Http\Controllers\FrontendController;
 use Statamic\Sites\Sites;
 use Statamic\StaticCaching\Middleware\Cache as StaticCache;
 use TorMorten\Eventy\Facades\Eventy;
+use Rapidez\Statamic\Observers\ModelObserver;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
@@ -56,6 +59,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootRoutes()
             ->bootViews()
             ->bootListeners()
+            ->bootObservers()
             ->bootRunway()
             ->bootComposers()
             ->bootPublishables()
@@ -128,6 +132,14 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                 'slug' => trim($brand->value_admin),
             ]);
         }
+
+        return $this;
+    }
+
+    public function bootObservers() : self
+    {
+        ProductAttribute::observe(ModelObserver::class);
+        ProductAttributeOption::observe(ModelObserver::class);
 
         return $this;
     }

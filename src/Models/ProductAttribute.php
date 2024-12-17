@@ -6,6 +6,7 @@ use StatamicRadPack\Runway\Traits\HasRunwayResource;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Rapidez\Statamic\Facades\RapidezStatamic;
@@ -78,13 +79,23 @@ class ProductAttribute extends Model
         });
     }
 
-   public function options(): Attribute
-   {
-       return Attribute::make(
-           get: fn () => !$this->option_ids || !$this->option_values ? [] : 
-               (count($optionIds = array_filter(explode(',', $this->option_ids))) === count($optionValues = array_filter(explode(',', $this->option_values))) ? array_combine($optionIds, $optionValues) : [])
-       );
-   }
+    public function options(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => collect([$this->option_ids, $this->option_values])
+                ->map(fn($value) => collect(explode(',', $value))->filter())
+                ->pipe(function (Collection $collections) {
+                    $optionIds = $collections[0];
+                    $optionValues = $collections[1];
+    
+                    if ($optionIds->count() === $optionValues->count()) {
+                        return $optionIds->combine($optionValues);
+                    }
+    
+                    return [];
+                })
+        );
+    }
 
    public function formattedOptions(): Attribute
    {
@@ -155,18 +166,5 @@ class ProductAttribute extends Model
     public function attributeOptions()
     {
         return $this->hasMany(ProductAttributeOption::class, 'attribute_id', 'attribute_id');
-    }
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::saved(function ($model) {
-            Cache::forget($model->getCacheKey());
-        });
-
-        static::deleted(function ($model) {
-            Cache::forget($model->getCacheKey());
-        });
     }
 }

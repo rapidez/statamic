@@ -113,17 +113,4 @@ class ProductAttributeOption extends Model
     {
         return $query->orderBy('eav_attribute_option.sort_order');
     }
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::saved(function ($model) {
-            Cache::forget($model->getCacheKey());
-        });
-
-        static::deleted(function ($model) {
-            Cache::forget($model->getCacheKey());
-        });
-    }
 }

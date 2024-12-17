@@ -98,19 +98,4 @@ class ProductAttributeOption extends Model
                 ->orWhere('eav_attribute_option.sort_order', 'LIKE', "%{$search}%");
         });
     }
-
-    public function scopeByAttribute($query, $attributeId)
-    {
-        return $query->where('eav_attribute_option.attribute_id', $attributeId);
-    }
-
-    public function scopeByAttributeCode($query, $attributeCode)
-    {
-        return $query->where('eav_attribute.attribute_code', $attributeCode);
-    }
-
-    public function scopeOrderBySort($query)
-    {
-        return $query->orderBy('eav_attribute_option.sort_order');
-    }
 }

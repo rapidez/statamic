@@ -3,27 +3,21 @@
 namespace Rapidez\Statamic\Models;
 
 use StatamicRadPack\Runway\Traits\HasRunwayResource;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
-use Statamic\Facades\Site;
-use Statamic\Statamic;
+use Rapidez\Statamic\Traits\StoreIdTrait;
 
 class ProductAttributeOption extends Model
 {
-    use HasRunwayResource;
+    use HasRunwayResource, StoreIdTrait;
 
     protected $table = 'eav_attribute_option';
 
     protected $primaryKey = 'option_id';
 
     public $timestamps = false;
-
-    protected $fillable = [
-        'option_id',
-        'attribute_id',
-        'sort_order',
-    ];
 
     protected $appends = [
         'admin_value',
@@ -62,32 +56,30 @@ class ProductAttributeOption extends Model
         });
     }
 
-    protected static function getCurrentStoreId(): string
-    {
-        return once(fn() => (Statamic::isCpRoute()
-            ? (Site::selected()->attributes['magento_store_id'] ?? '1')
-            : (Site::current()->attributes['magento_store_id'] ?? '1')
-        ));
-    }
-
     public function attribute()
     {
         return $this->belongsTo(ProductAttribute::class, 'attribute_id', 'attribute_id');
     }
 
-    public function getAdminValueAttribute()
+    public function AdminValue(): Attribute
     {
-        return $this->attributes['admin_value'] ?? '';
+        return Attribute::make(
+            get: fn () => $this->attributes['admin_value'] ?? ''
+        );
     }
 
-    public function getStoreValueAttribute()
+    public function StoreValue(): Attribute
     {
-        return $this->attributes['store_value'] ?? $this->admin_value;
+        return Attribute::make(
+            get: fn () => $this->attributes['store_value'] ?? $this->admin_value
+        );
     }
 
-    public function getDisplayValueAttribute()
+    public function DisplayValue(): Attribute
     {
-        return $this->store_value ?: $this->admin_value;
+        return Attribute::make(
+            get: fn () => $this->store_value ?: $this->admin_value
+        );
     }
 
     public function getCacheKey(): string

@@ -3,45 +3,20 @@
 namespace Rapidez\Statamic\Models;
 
 use StatamicRadPack\Runway\Traits\HasRunwayResource;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Statamic\Facades\Site;
-use Statamic\Statamic;
+use Rapidez\Statamic\Traits\StoreIdTrait;
 
 class ProductAttribute extends Model
 {
-    use HasRunwayResource;
+    use HasRunwayResource, StoreIdTrait;
 
     protected $table = 'eav_attribute';
     
     protected $primaryKey = 'attribute_id';
-
-    protected $fillable = [
-        'attribute_id',
-        'attribute_code',
-        'entity_type_id',
-        'frontend_input',
-        'frontend_label',
-        'is_required',
-        'is_user_defined',
-        'is_unique',
-        'is_visible',
-        'is_searchable',
-        'is_filterable',
-        'is_comparable',
-        'is_visible_on_front',
-        'is_html_allowed_on_front',
-        'is_used_for_price_rules',
-        'is_filterable_in_search',
-        'used_in_product_listing',
-        'used_for_sort_by',
-        'backend_type',
-        'backend_model',
-        'frontend_model',
-        'source_model',
-    ];
 
     protected $appends = [
         'options',
@@ -103,45 +78,30 @@ class ProductAttribute extends Model
         });
     }
 
-    protected static function getCurrentStoreId(): string
-    {
-        return once(fn() => (Statamic::isCpRoute()
-            ? (Site::selected()->attributes['magento_store_id'] ?? '1')
-            : (Site::current()->attributes['magento_store_id'] ?? '1')
-        ));
-    }
+   public function options(): Attribute
+   {
+       return Attribute::make(
+           get: fn () => !$this->option_ids || !$this->option_values ? [] : 
+               (count($optionIds = array_filter(explode(',', $this->option_ids))) === count($optionValues = array_filter(explode(',', $this->option_values))) ? array_combine($optionIds, $optionValues) : [])
+       );
+   }
 
-    public function getOptionsAttribute()
-    {
-        if (!$this->option_ids || !$this->option_values) {
-            return [];
-        }
+   public function formattedOptions(): Attribute
+   {
+       return Attribute::make(
+           get: fn () => empty($this->options) ? '' : 
+               collect($this->options)
+                   ->map(fn($value, $id) => "{$value} (ID: {$id})")
+                   ->join(', ')
+       );
+   }
 
-        $optionIds = array_filter(explode(',', $this->option_ids));
-        $optionValues = array_filter(explode(',', $this->option_values));
-
-        if (count($optionIds) !== count($optionValues)) {
-            return [];
-        }
-
-        return array_combine($optionIds, $optionValues);
-    }
-
-    public function getFormattedOptionsAttribute()
-    {
-        if (empty($this->options)) {
-            return '';
-        }
-
-        return collect($this->options)
-            ->map(fn($value, $id) => "{$value} (ID: {$id})")
-            ->join(', ');
-    }
-
-    public function getFrontendLabelAttribute()
-    {
-        return $this->store_frontend_label ?? $this->attributes['frontend_label'] ?? '';
-    }
+   public function frontendLabel(): Attribute
+   {
+       return Attribute::make(
+           get: fn () => $this->store_frontend_label ?? $this->attributes['frontend_label'] ?? ''
+       );
+   }
 
     public function getCacheKey(): string
     {
@@ -192,7 +152,7 @@ class ProductAttribute extends Model
         return $query->where('frontend_input', $type);
     }
 
-    public function options()
+    public function attributeOptions()
     {
         return $this->hasMany(ProductAttributeOption::class, 'attribute_id', 'attribute_id');
     }

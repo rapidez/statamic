@@ -2,6 +2,11 @@
 
 namespace Rapidez\Statamic;
 
+use Exception;
+use Statamic\Sites\Sites;
+use Statamic\Facades\Site;
+use Statamic\Facades\Entry;
+use Statamic\Facades\Utility;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
@@ -26,13 +31,11 @@ use Statamic\Events\GlobalSetDeleted;
 use Statamic\Events\GlobalSetSaved;
 use Statamic\Events\NavCreated;
 use Statamic\Events\NavTreeSaved;
-use Statamic\Facades\Entry;
-use Statamic\Facades\Site;
-use Statamic\Facades\Utility;
 use Statamic\Http\Controllers\FrontendController;
-use Statamic\Sites\Sites;
 use Statamic\StaticCaching\Middleware\Cache as StaticCache;
 use TorMorten\Eventy\Facades\Eventy;
+use Rapidez\Statamic\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
@@ -59,6 +62,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootRunway()
             ->bootComposers()
             ->bootPublishables()
+            ->bootUserModel()
             ->bootUtilities()
             ->bootSitemaps()
             ->bootStack();
@@ -195,6 +199,31 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/rapidez/statamic.php' => config_path('rapidez/statamic.php'),
         ], 'config');
+
+        return $this;
+    }
+
+    public function bootUserModel() : static
+    {
+        if (!class_exists('\App\Models\User')) {
+            config(['auth.providers.users.model' => User::class]);
+        }
+
+        $migrationPath = database_path('migrations/0001_01_01_000000_create_users_table.php');
+
+        if (!file_exists($migrationPath)) {
+            try {
+                $userTable = file_get_contents('https://raw.githubusercontent.com/laravel/laravel/refs/heads/11.x/database/migrations/0001_01_01_000000_create_users_table.php');
+
+                if (!$userTable) {
+                    throw new Exception('Failed to download the migration file.');
+                }
+
+                file_put_contents($migrationPath, $userTable);
+            } catch (Exception $e) {
+                Log::error('Error downloading migration file: ' . $e->getMessage());
+            }
+        }
 
         return $this;
     }

@@ -2,6 +2,7 @@
 
 namespace Rapidez\Statamic;
 
+use Exception;
 use Statamic\Sites\Sites;
 use Statamic\Facades\Site;
 use Statamic\Facades\Entry;
@@ -31,6 +32,7 @@ use Statamic\Events\NavCreated;
 use Statamic\Events\NavTreeSaved;
 use TorMorten\Eventy\Facades\Eventy;
 use Rapidez\Statamic\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
@@ -193,14 +195,24 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
     public function bootUserModel() : static
     {
-        if (!class_exists('\App\Models\User::class')) {
+        if (!class_exists('\App\Models\User')) {
             config(['auth.providers.users.model' => User::class]);
         }
 
-        if (!file_exists(database_path('migrations/0001_01_01_000000_create_users_table.php'))) {
-            $this->publishes([
-                __DIR__ . '/../database/migrations/0001_01_01_000000_create_users_table.php' => database_path('migrations/0001_01_01_000000_create_users_table.php'),
-            ], 'rapidez-statamic-user-migrations');
+        $migrationPath = database_path('migrations/0001_01_01_000000_create_users_table.php');
+
+        if (!file_exists($migrationPath)) {
+            try {
+                $userTable = file_get_contents('https://raw.githubusercontent.com/laravel/laravel/refs/heads/11.x/database/migrations/0001_01_01_000000_create_users_table.php');
+
+                if (!$userTable) {
+                    throw new Exception('Failed to download the migration file.');
+                }
+
+                file_put_contents($migrationPath, $userTable);
+            } catch (Exception $e) {
+                Log::error('Error downloading migration file: ' . $e->getMessage());
+            }
         }
 
         return $this;

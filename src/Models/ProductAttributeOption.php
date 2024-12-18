@@ -2,13 +2,16 @@
 
 namespace Rapidez\Statamic\Models;
 
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use StatamicRadPack\Runway\Traits\HasRunwayResource;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Cache;
 use Rapidez\Statamic\Facades\RapidezStatamic;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Rapidez\Statamic\Observers\ProductAttributeObserver;
 
+#[ObservedBy(ProductAttributeObserver::class)]
 class ProductAttributeOption extends Model
 {
     use HasRunwayResource;
@@ -56,7 +59,7 @@ class ProductAttributeOption extends Model
         });
     }
 
-    public function attribute()
+    public function attribute(): BelongsTo
     {
         return $this->belongsTo(ProductAttribute::class, 'attribute_id', 'attribute_id');
     }

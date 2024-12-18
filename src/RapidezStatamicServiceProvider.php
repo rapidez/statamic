@@ -59,7 +59,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootRoutes()
             ->bootViews()
             ->bootListeners()
-            ->bootObservers()
             ->bootRunway()
             ->bootComposers()
             ->bootPublishables()
@@ -132,14 +131,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                 'slug' => trim($brand->value_admin),
             ]);
         }
-
-        return $this;
-    }
-
-    public function bootObservers() : self
-    {
-        ProductAttribute::observe(ModelObserver::class);
-        ProductAttributeOption::observe(ModelObserver::class);
 
         return $this;
     }

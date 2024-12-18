@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Rapidez\Statamic\Facades\RapidezStatamic;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Rapidez\Statamic\Observers\ProductAttributeObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
+#[ObservedBy(ProductAttributeObserver::class)]
 class ProductAttribute extends Model
 {
     use HasRunwayResource;
@@ -119,51 +122,51 @@ class ProductAttribute extends Model
         return "product_attribute_{$this->attribute_id}_store_" . RapidezStatamic::getCurrentStoreId();
     }
 
-    public function scopeVisible($query)
+    public function scopeVisible($query): void
     {
-        return $query->where('is_visible', 1);
+        $query->where('is_visible', 1);
     }
 
-    public function scopeVisibleOnFront($query)
+    public function scopeVisibleOnFront($query): void
     {
-        return $query->where('is_visible_on_front', 1);
+        $query->where('is_visible_on_front', 1);
     }
 
-    public function scopeFilterable($query)
+    public function scopeFilterable($query): void
     {
-        return $query->where('is_filterable', 1);
+        $query->where('is_filterable', 1);
     }
 
-    public function scopeFilterableInSearch($query)
+    public function scopeFilterableInSearch($query): void
     {
-        return $query->where('is_filterable_in_search', 1);
+        $query->where('is_filterable_in_search', 1);
     }
 
-    public function scopeSearchable($query)
+    public function scopeSearchable($query): void
     {
-        return $query->where('is_searchable', 1);
+        $query->where('is_searchable', 1);
     }
 
-    public function scopeUsedInProductListing($query)
+    public function scopeUsedInProductListing($query): void
     {
-        return $query->where('used_in_product_listing', 1);
+        $query->where('used_in_product_listing', 1);
     }
 
-    public function scopeWithOptions($query)
+    public function scopeWithOptions($query): void
     {
-        return $query->whereIn('frontend_input', ['select', 'multiselect', 'swatch_visual', 'swatch_text']);
+        $query->whereIn('frontend_input', ['select', 'multiselect', 'swatch_visual', 'swatch_text']);
     }
 
-    public function scopeByInputType($query, $type)
+    public function scopeByInputType($query, $type): void
     {
         if (!isset(static::$inputTypes[$type])) {
-            return $query;
+            return;
         }
 
-        return $query->where('frontend_input', $type);
+        $query->where('frontend_input', $type);
     }
 
-    public function attributeOptions()
+    public function attributeOptions(): HasMany
     {
         return $this->hasMany(ProductAttributeOption::class, 'attribute_id', 'attribute_id');
     }

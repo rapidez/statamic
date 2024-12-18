@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Cache;
 use Rapidez\Statamic\Models\ProductAttribute;
 use Rapidez\Statamic\Models\ProductAttributeOption;
 
-class ModelObserver
+class ProductAttributeObserver
 {
     public function saved(ProductAttribute|ProductAttributeOption $model): void
     {

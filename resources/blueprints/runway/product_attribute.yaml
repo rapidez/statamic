@@ -1,0 +1,97 @@
+title: 'Product Attribute'
+tabs:
+  main:
+    display: Main
+    sections:
+      -
+        display: General
+        fields:
+          -
+            handle: attribute_id
+            field:
+              type: text
+              display: 'Attribute ID'
+              listable: true
+              read_only: true
+          -
+            handle: attribute_code
+            field:
+              type: text
+              display: 'Attribute Code'
+              listable: true
+              read_only: true
+          -
+            handle: frontend_label
+            field:
+              type: text
+              display: 'Frontend Label'
+              listable: true
+              read_only: true
+          -
+            handle: frontend_input
+            field:
+              type: select
+              display: 'Input Type'
+              listable: true
+              read_only: true
+              options:
+                text: 'Text Field'
+                textarea: 'Text Area'
+                date: 'Date'
+                boolean: 'Yes/No'
+                multiselect: 'Multiple Select'
+                select: 'Dropdown'
+                price: 'Price'
+                media_image: 'Media Image'
+                weee: 'Fixed Product Tax'
+                swatch_visual: 'Visual Swatch'
+                swatch_text: 'Text Swatch'
+          -
+            handle: is_required
+            field:
+              type: toggle
+              display: 'Required'
+              listable: true
+              read_only: true
+          -
+            handle: is_visible
+            field:
+              type: toggle
+              display: 'Visible'
+              listable: true
+              read_only: true
+          -
+            handle: is_searchable
+            field:
+              type: toggle
+              display: 'Searchable'
+              listable: true
+              read_only: true
+          -
+            handle: is_filterable
+            field:
+              type: toggle
+              display: 'Filterable'
+              listable: true
+              read_only: true
+          -
+            handle: is_comparable
+            field:
+              type: toggle
+              display: 'Comparable'
+              listable: true
+              read_only: true
+          -
+            handle: is_visible_on_front
+            field:
+              type: toggle
+              display: 'Visible on Frontend'
+              listable: true
+              read_only: true
+          -
+            handle: formatted_options
+            field:
+              type: textarea
+              display: 'Attribute Options'
+              listable: true
+              read_only: true

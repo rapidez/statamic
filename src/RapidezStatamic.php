@@ -21,7 +21,7 @@ class RapidezStatamic
             'You can only use a nav tag to get a navigation tree.'
         );
 
-        return Cache::rememberForever($tag . '-' . config('rapidez.store'), fn() => $this->buildMenu($tag));
+        return Cache::rememberForever($tag . '-tree-' . config('rapidez.store'), fn() => $this->buildMenu($tag));
     }
 
     protected function buildMenu(string $key): array

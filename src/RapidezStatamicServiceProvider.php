@@ -8,32 +8,45 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View as RenderedView;
+use Rapidez\Statamic\Actions\GenerateSitemapsAction;
 use Rapidez\Core\Facades\Rapidez;
 use Rapidez\Statamic\Commands\ImportBrands;
 use Rapidez\Statamic\Commands\ImportCategories;
+use Rapidez\Statamic\Commands\ImportProducts;
 use Rapidez\Statamic\Commands\InstallCommand;
+use Rapidez\Statamic\Commands\InvalidateCacheCommand;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
 use Rapidez\Statamic\Forms\JsDrivers\Vue;
 use Rapidez\Statamic\Http\Controllers\ImportsController;
-use Rapidez\Statamic\Http\Controllers\StatamicRewriteController;
 use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
+use Rapidez\Statamic\Listeners\ClearNavTreeCache;
+use Rapidez\Statamic\Listeners\SetCollectionsForNav;
+use Rapidez\Statamic\Models\ProductAttribute;
+use Rapidez\Statamic\Models\ProductAttributeOption;
 use Rapidez\Statamic\Tags\Alternates;
-use StatamicRadPack\Runway\Runway;
 use Statamic\Events\GlobalSetDeleted;
 use Statamic\Events\GlobalSetSaved;
+use Statamic\Events\NavCreated;
+use Statamic\Events\NavTreeSaved;
 use Statamic\Facades\Entry;
 use Statamic\Facades\Site;
 use Statamic\Facades\Utility;
+use Statamic\Http\Controllers\FrontendController;
 use Statamic\Sites\Sites;
-use Statamic\Statamic;
+use Statamic\StaticCaching\Middleware\Cache as StaticCache;
 use TorMorten\Eventy\Facades\Eventy;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->app->extend(Sites::class, function () {
-            return new SitesLinkedToMagentoStores(config('statamic.sites'));
+        $this->app->extend(Sites::class, fn () => new SitesLinkedToMagentoStores());
+
+        $this->app->singleton(RapidezStatamic::class);
+
+        $this->app->booted(function () {
+            $router = app(Router::class);
+            $router->pushMiddlewareToGroup('web', StaticCache::class);
         });
     }
 
@@ -49,8 +62,9 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootComposers()
             ->bootPublishables()
             ->bootUtilities()
-            ->bootStack()
-            ->bootBuilder();
+            ->bootBuilder()
+            ->bootSitemaps()
+            ->bootStack();
 
         Vue::register();
         Alternates::register();
@@ -72,6 +86,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ImportCategories::class,
             ImportBrands::class,
             InstallCommand::class,
+            InvalidateCacheCommand::class
         ]);
 
         return $this;
@@ -88,7 +103,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootRoutes() : self
     {
         if (config('rapidez.statamic.routes') && $this->currentSiteIsEnabled()) {
-            Rapidez::addFallbackRoute(StatamicRewriteController::class);
+            Rapidez::addFallbackRoute([FrontendController::class, 'index']);
         }
 
         return $this;
@@ -107,6 +122,19 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             Event::listen([GlobalSetSaved::class, GlobalSetDeleted::class], function () {
                 Cache::forget('statamic-globals-' . Site::selected()->handle());
             });
+
+            Event::listen(NavCreated::class, SetCollectionsForNav::class);
+            Event::listen(NavTreeSaved::class, ClearNavTreeCache::class);
+
+            Eventy::addFilter('rapidez.statamic.category.entry.data', fn($category) => [
+                'title' => $category->name,
+                'slug' => trim($category->url_key),
+            ]);
+
+            Eventy::addFilter('rapidez.statamic.product.entry.data', fn($product) => [
+                'title' => $product->name,
+                'slug' => trim($product->url_key),
+            ]);
 
             Eventy::addFilter('rapidez.statamic.brand.entry.data', fn($brand) => [
                 'title' => $brand->value_store,
@@ -211,6 +239,14 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         return $this;
     }
 
+    public function bootSitemaps(): static
+    {
+        Eventy::addAction('rapidez.sitemap.generate', fn() => GenerateSitemapsAction::generate(), 20, 1);
+
+        return $this;
+    }
+
+
     public function bootStack() : static
     {
         if (! $this->app->runningInConsole()) {
@@ -228,7 +264,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function getSiteHandleByStoreId(): string
     {
         $site = Site::all()
-            ->filter(fn($_site) => ($_site?->attributes()['magento_store_id'] ?? null) === config('rapidez.store'))
+            ->filter(fn($_site) => ($_site?->attributes()['magento_store_id'] ?? null) == config('rapidez.store'))
             ->first();
 
         return $site?->handle() ?? config('rapidez.store_code');

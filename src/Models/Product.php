@@ -11,6 +11,7 @@ use Rapidez\Statamic\Observers\RunwayObserver;
 use StatamicRadPack\Runway\Traits\HasRunwayResource;
 use Statamic\Facades\Site;
 use Statamic\Statamic;
+use Rapidez\Statamic\Facades\RapidezStatamic;
 
 #[ObservedBy([RunwayObserver::class])]
 class Product extends Model
@@ -32,9 +33,6 @@ class Product extends Model
 
     public function getTable()
     {
-        return 'catalog_product_flat_' . (Statamic::isCpRoute()
-            ? (Site::selected()->attributes['magento_store_id'] ?? '1')
-            : (Site::current()->attributes['magento_store_id'] ?? '1')
-        );
+        return 'catalog_product_flat_' . RapidezStatamic::getCurrentStoreId();
     }
 }

@@ -9,6 +9,7 @@ use Rapidez\Statamic\Models\Traits\HasContentEntry;
 use Statamic\Facades\Site;
 use Statamic\Statamic;
 use Rapidez\Statamic\Observers\RunwayObserver;
+use Rapidez\Statamic\Facades\RapidezStatamic;
 
 #[ObservedBy([RunwayObserver::class])]
 class Category extends Model
@@ -22,6 +23,6 @@ class Category extends Model
 
     public function getTable()
     {
-        return 'catalog_category_flat_store_'.(Statamic::isCpRoute() ? (Site::selected()->attributes['magento_store_id'] ?? '1') : (Site::current()->attributes['magento_store_id'] ?? '1'));
+        return 'catalog_category_flat_store_'.RapidezStatamic::getCurrentStoreId();
     }
 }

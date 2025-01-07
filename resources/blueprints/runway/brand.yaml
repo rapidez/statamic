@@ -5,27 +5,42 @@ tabs:
       -
         fields:
           -
-            handle: option_id
-            field:
-              type: integer
-              localizable: false
-              visibility: read_only
-          -
-            handle: sort_order
-            field:
-              type: integer
-              localizable: false
-              visibility: read_only
-          -
-            handle: value_admin
-            field:
-              type: text
-              localizable: false
-              visibility: read_only
-          -
-            handle: value_store
-            field:
-              type: text
-              localizable: false
-              visibility: read_only
+            import: page_builder
+  meta:
+    display: Meta
+    sections:
+    -
+      fields:
+      -
+        import: meta_data
+
+  magento:
+    display: Magento
+    sections:
+    -
+      fields:
+      -
+        handle: option_id
+        field:
+          type: integer
+          localizable: false
+          visibility: read_only
+      -
+        handle: sort_order
+        field:
+          type: integer
+          localizable: false
+          visibility: read_only
+      -
+        handle: value_admin
+        field:
+          type: text
+          localizable: false
+          visibility: read_only
+      -
+        handle: value_store
+        field:
+          type: text
+          localizable: false
+          visibility: read_only
 title: Brand

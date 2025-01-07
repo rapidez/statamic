@@ -90,6 +90,12 @@ class RapidezStatamic
                 default => '',
             };
 
+            if (!isset($entry->{$linkedRunwayResourceKey}['url_path'])) {
+                $this->navCache[$nav][$entry->id()] = '';
+                
+                return '';
+            }
+
             $this->navCache[$nav][$entry->id()] = '/' . $entry->{$linkedRunwayResourceKey}['url_path'] . $suffix;
             
             Cache::forever($cacheKey, $this->navCache[$nav]);

@@ -36,7 +36,6 @@ use Statamic\Http\Controllers\FrontendController;
 use Statamic\Sites\Sites;
 use Statamic\StaticCaching\Middleware\Cache as StaticCache;
 use TorMorten\Eventy\Facades\Eventy;
-use Rapidez\Statamic\Observers\ModelObserver;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
@@ -69,18 +68,28 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootComposers()
             ->bootPublishables()
             ->bootUtilities()
+            ->bootBuilder()
             ->bootSitemaps()
             ->bootStack();
 
         Vue::register();
         Alternates::register();
     }
+    
+    protected function bootBuilder(): self
+    {
+        config(['statamic.builder' => [
+            ...(config('statamic.builder') ?? []),
+            ...config('rapidez.statamic.builder'),
+        ]]);
+
+        return $this;
+    }
 
     public function bootCommands() : self
     {
         $this->commands([
             ImportCategories::class,
-            ImportProducts::class,
             ImportBrands::class,
             InstallCommand::class,
             InvalidateCacheCommand::class
@@ -92,6 +101,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootConfig() : self
     {
         $this->mergeConfigFrom(__DIR__.'/../config/rapidez/statamic.php', 'rapidez.statamic');
+        $this->mergeConfigFrom(__DIR__ . '/../config/rapidez/statamic/builder.php', 'rapidez.statamic.builder');
 
         return $this;
     }
@@ -161,7 +171,12 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                     ->where('collection', 'products')
                     ->where('site', $this->getSiteHandleByStoreId())
                     ->where('linked_product', config('frontend.product.sku'))
-                    ->first();
+                    ->first()
+
+                    // As the "product content" collection is removed
+                    // with it's blueprint we need to specify the
+                    // runway blueprint, but this doesn't work.
+                    ->blueprint('runway/product');
 
                 $view->with('content', optionalDeep($entry));
             });
@@ -203,6 +218,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__.'/../config/rapidez/statamic.php' => config_path('rapidez/statamic.php'),
+            __DIR__ . '/../config/rapidez/statamic/builder.php' => config_path('rapidez/statamic/builder.php'),
         ], 'config');
 
         return $this;
@@ -216,13 +232,10 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                 ->action(ImportsController::class)
                 ->title(__('Import'))
                 ->navTitle(__('Import'))
-                ->description(__('Import products or categories from Magento'))
+                ->description(__('Import categories from Magento'))
                 ->routes(function (Router $router) : void {
                     $router->post('/import-categories', [ImportsController::class, 'importCategories'])
                         ->name('import-categories');
-
-                    $router->post('/import-products', [ImportsController::class, 'importProducts'])
-                        ->name('import-products');
 
                     $router->post('/import-brands', [ImportsController::class, 'importBrands'])
                         ->name('import-brands');

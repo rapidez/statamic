@@ -2,17 +2,27 @@
 
 namespace Rapidez\Statamic\Models;
 
-use StatamicRadPack\Runway\Traits\HasRunwayResource;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Rapidez\Statamic\Collections\Products;
+use Rapidez\Statamic\Models\Traits\HasContentEntry;
+use Rapidez\Statamic\Observers\RunwayObserver;
+use StatamicRadPack\Runway\Traits\HasRunwayResource;
+use Statamic\Facades\Site;
+use Statamic\Statamic;
 use Rapidez\Statamic\Facades\RapidezStatamic;
 
+#[ObservedBy([RunwayObserver::class])]
 class Product extends Model
 {
-    use HasRunwayResource;
+    use HasRunwayResource, HasContentEntry;
     
     protected $primaryKey = 'sku';
     protected $keyType = 'string';
+
+    public string $linkField = 'linked_product';
+    public string $collection = 'products';
 
     protected static function booting()
     {

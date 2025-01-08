@@ -1,6 +1,15 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/4.6.1...4.6.1)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/4.6.2...4.6.2)
+## [4.6.2](https://github.com/rapidez/statamic/releases/tag/4.6.2) - 2025-01-08
+
+### Fixed
+
+- Change cache key for nav tree (#100)
+- Reload csrf token when Statamic reloads it (#103)
+- Return if url path is not set on the linked entry (#105)
+- Fixed infinite locking for certain requests (#108)
+
 ## [4.6.1](https://github.com/rapidez/statamic/releases/tag/4.6.1) - 2024-12-18
 
 ### Fixed

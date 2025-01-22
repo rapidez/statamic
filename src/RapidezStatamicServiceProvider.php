@@ -2,6 +2,7 @@
 
 namespace Rapidez\Statamic;
 
+use Illuminate\Foundation\Bootstrap\BootProviders;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
@@ -47,6 +48,11 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         $this->app->booted(function () {
             $router = app(Router::class);
             $router->pushMiddlewareToGroup('web', StaticCache::class);
+        });
+        $this->app->afterBootstrapping(BootProviders::class, function () {
+            // Prevent infinite locks by removing the static cache from the statamic.web middleware.
+            $router = app(Router::class);
+            $router->removeMiddlewareFromGroup('statamic.web', StaticCache::class);
         });
     }
 

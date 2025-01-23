@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/4.4.0...4.4.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/4.6.3...4.6.3)
+## [4.6.3](https://github.com/rapidez/statamic/releases/tag/4.6.3) - 2025-01-23
+
+### Fixed
+
+- StartPush on view composer (#110)
+
 ## [4.4.0](https://github.com/rapidez/statamic/releases/tag/4.4.0) - 2024-11-06
 
 ### Added

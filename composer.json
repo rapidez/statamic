@@ -34,7 +34,7 @@
         "justbetter/statamic-glide-directive": "^2.1",
         "rapidez/blade-directives": "^1.0",
         "rapidez/core": "^2.13|^3.0",
-        "rapidez/sitemap": "^1.1",
+        "rapidez/sitemap": "^3.0",
         "spatie/once": "*",
         "statamic-rad-pack/runway": "^7.6",
         "statamic/cms": "^5.29",

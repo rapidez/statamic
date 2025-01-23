@@ -2,21 +2,28 @@
 
 namespace Rapidez\Statamic\Models;
 
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use StatamicRadPack\Runway\Traits\HasRunwayResource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Rapidez\Statamic\Models\Traits\HasContentEntry;
+use Rapidez\Statamic\Observers\RunwayObserver;
 use Rapidez\Statamic\Facades\RapidezStatamic;
 use Statamic\Facades\Site;
 use Statamic\Statamic;
 
+#[ObservedBy([RunwayObserver::class])]
 class Brand extends Model
 {
-    use HasRunwayResource;
+    use HasRunwayResource, HasContentEntry;
 
     protected $table = 'eav_attribute_option';
 
     protected $primaryKey = 'option_id';
+
+    public string $linkField = 'linked_brand';
+    public string  $collection = 'brands';
 
     protected static function booting()
     {

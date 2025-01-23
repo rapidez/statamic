@@ -12,8 +12,6 @@ use Illuminate\View\View as RenderedView;
 use Rapidez\Statamic\Actions\GenerateSitemapsAction;
 use Rapidez\Core\Facades\Rapidez;
 use Rapidez\Statamic\Commands\ImportBrands;
-use Rapidez\Statamic\Commands\ImportCategories;
-use Rapidez\Statamic\Commands\ImportProducts;
 use Rapidez\Statamic\Commands\InstallCommand;
 use Rapidez\Statamic\Commands\InvalidateCacheCommand;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
@@ -82,14 +80,13 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ...(config('statamic.builder') ?? []),
             ...config('rapidez.statamic.builder'),
         ]]);
-
+            
         return $this;
     }
 
     public function bootCommands() : self
     {
         $this->commands([
-            ImportCategories::class,
             ImportBrands::class,
             InstallCommand::class,
             InvalidateCacheCommand::class
@@ -171,12 +168,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                     ->where('collection', 'products')
                     ->where('site', $this->getSiteHandleByStoreId())
                     ->where('linked_product', config('frontend.product.sku'))
-                    ->first()
-
-                    // As the "product content" collection is removed
-                    // with it's blueprint we need to specify the
-                    // runway blueprint, but this doesn't work.
-                    ->blueprint('runway/product');
+                    ->first();
 
                 $view->with('content', optionalDeep($entry));
             });
@@ -205,8 +197,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootPublishables() : self
     {
         $this->publishes([
-            __DIR__.'/../resources/blueprints/collections' => resource_path('blueprints/collections'),
-            __DIR__.'/../resources/content/collections' => base_path('content/collections'),
             __DIR__.'/../resources/content/assets' => base_path('content/assets'),
             __DIR__.'/../resources/fieldsets' => resource_path('fieldsets'),
             __DIR__.'/../resources/blueprints/runway' => resource_path('blueprints/vendor/runway'),
@@ -232,11 +222,8 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                 ->action(ImportsController::class)
                 ->title(__('Import'))
                 ->navTitle(__('Import'))
-                ->description(__('Import categories from Magento'))
+                ->description(__('Import brands from Magento'))
                 ->routes(function (Router $router) : void {
-                    $router->post('/import-categories', [ImportsController::class, 'importCategories'])
-                        ->name('import-categories');
-
                     $router->post('/import-brands', [ImportsController::class, 'importBrands'])
                         ->name('import-brands');
                 });

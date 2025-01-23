@@ -19,10 +19,6 @@ return [
 
     // Which collection and blueprint should be used for importing products?
     'import' => [
-        'categories' => [
-            'collection' => 'categories',
-            'blueprint' => 'category',
-        ],
         'brands' => [
             'collection' => 'brands',
             'blueprint' => 'brand',
@@ -58,14 +54,12 @@ return [
 
             \Rapidez\Statamic\Models\Category::class => [
                 'name' => 'Categories',
-                'read_only' => true,
                 'title_field' => 'name',
                 'cp_icon' => 'array',
             ],
 
             \Rapidez\Statamic\Models\Brand::class => [
                 'name' => 'Brands',
-                'read_only' => true,
                 'title_field' => 'value_store',
                 'cp_icon' => 'tags',
                 'order_by' => 'sort_order',

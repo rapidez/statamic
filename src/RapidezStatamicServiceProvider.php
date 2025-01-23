@@ -242,9 +242,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
     public function bootStack() : static
     {
-        if (! $this->app->runningInConsole()) {
-            View::startPush('head', view('statamic-glide-directive::partials.head'));
-        }
+        View::composer('rapidez::layouts.app', fn($view) => $view->getFactory()->startPush('head', view('statamic-glide-directive::partials.head')));
 
         return $this;
     }

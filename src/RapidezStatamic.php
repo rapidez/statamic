@@ -21,7 +21,7 @@ class RapidezStatamic
             'You can only use a nav tag to get a navigation tree.'
         );
 
-        return Cache::rememberForever($tag . '-' . config('rapidez.store'), fn() => $this->buildMenu($tag));
+        return Cache::rememberForever($tag . '-tree-' . config('rapidez.store'), fn() => $this->buildMenu($tag));
     }
 
     protected function buildMenu(string $key): array
@@ -76,6 +76,12 @@ class RapidezStatamic
                 str($linkedRunwayResourceKey)->contains('product') => Rapidez::config('catalog/seo/product_url_suffix', ''),
                 default => '',
             };
+
+            if (!isset($entry->{$linkedRunwayResourceKey}['url_path'])) {
+                $this->navCache[$nav][$entry->id()] = '';
+                
+                return '';
+            }
 
             $this->navCache[$nav][$entry->id()] = '/' . $entry->{$linkedRunwayResourceKey}['url_path'] . $suffix;
             

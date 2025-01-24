@@ -106,7 +106,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootRoutes(): self
     {
         if (config('rapidez.statamic.routes') && $this->currentSiteIsEnabled()) {
-            Rapidez::addFallbackRoute([FrontendController::class, 'index']);
+            Rapidez::addFallbackRoute(StatamicRewriteController::class);
         }
 
         return $this;

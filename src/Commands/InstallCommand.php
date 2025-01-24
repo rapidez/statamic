@@ -78,7 +78,7 @@ class InstallCommand extends Command
         $this->info('Starting User Setup...');
         $authConfig = config_path('auth.php');
 
-        if (!class_exists('\App\Models\User') && file_exists($authConfig)) {
+        if (!class_exists('\App\Models\User') && file_exists($authConfig) && config('auth.providers.users.model') !== 'Rapidez\Statamic\Models\User') {
             $authFile = Str::of(File::get($authConfig));
             $authFile = $authFile->replace(
                 'App\Models\User::class',
@@ -151,7 +151,11 @@ class InstallCommand extends Command
             );
         }
 
-        $this->call('statamic:auth:migration');
+        $files = glob(database_path('migrations/*_statamic_auth_tables.php'));
+
+        if (!$files) {
+            $this->call('statamic:auth:migration');
+        }
     }
 
     protected function setupEloquentDriver(): void
@@ -181,6 +185,29 @@ class InstallCommand extends Command
             );
         }
 
-        $this->call('statamic:install:eloquent-driver');
+        if (!$this->isEloquentDriverConfigured()) {
+            $this->call('statamic:install:eloquent-driver', [
+                '--repositories' => 'assets,collection_trees,entries,forms,form_submissions,global_variables,nav_trees,terms,tokens'
+            ]);
+        }
+    }
+
+    protected function isEloquentDriverConfigured(): bool
+    {
+        $eloquentRepositories = collect([
+            'assets',
+            'collection_trees',
+            'entries',
+            'forms',
+            'form_submissions',
+            'global_set_variables',
+            'navigation_trees',
+            'terms',
+            'tokens',
+        ]);
+
+        $remainingRepositories = $eloquentRepositories->filter(fn($repository) => config("statamic.eloquent-driver.{$repository}.driver") !== 'eloquent');
+
+        return $remainingRepositories->count() === 0;
     }
 }

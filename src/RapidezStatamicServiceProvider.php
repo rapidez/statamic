@@ -36,8 +36,6 @@ use Statamic\Sites\Sites;
 use Statamic\StaticCaching\Middleware\Cache as StaticCache;
 use TorMorten\Eventy\Facades\Eventy;
 use Statamic\Facades\Site as SiteFacade;
-use Statamic\Fieldtypes\Assets\Assets as StatamicAssets;
-use Statamic\Eloquent\Assets\AssetRepository as StatamicAssetRepository;
 use Statamic\View\Cascade as StatamicCascade;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
@@ -52,14 +50,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
         $this->app->extend(StatamicCascade::class, function () {
             return new \Rapidez\Statamic\View\Cascade(app()->request, SiteFacade::current());
-        });
-
-        $this->app->extend(StatamicAssetRepository::class, function () {
-            return new AssetRepository();
-        });
-
-        $this->app->extend(StatamicAssets::class, function () {
-            return new Assets();
         });
 
         $this->app->booted(function () {
@@ -110,7 +100,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootRoutes(): self
     {
         if (config('rapidez.statamic.routes') && $this->currentSiteIsEnabled()) {
-            Rapidez::addFallbackRoute(StatamicRewriteController::class);
+            Rapidez::addFallbackRoute([FrontendController::class, 'index']);
         }
 
         return $this;

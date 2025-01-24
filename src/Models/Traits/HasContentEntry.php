@@ -33,7 +33,7 @@ trait HasContentEntry
                 get: fn() => Entry::query()
                     ->where('collection', $this->collection)
                     ->where('site', Site::selected()->handle())
-                    ->where($this->linkField, $this->{$this->getKeyName()})
+                    ->where($this->linkField, $this?->{$this->getKeyName()} ?? null)
                     ->first(),
             )->shouldCache();    
         }

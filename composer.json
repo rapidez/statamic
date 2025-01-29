@@ -32,7 +32,7 @@
     "require": {
         "php": "^8.1|^8.2",
         "justbetter/statamic-glide-directive": "^2.1",
-        "rapidez/blade-directives": "^0.6",
+        "rapidez/blade-directives": "^0.6|^1.0",
         "rapidez/core": "^2.13|^3.0",
         "rapidez/sitemap": "^1.1",
         "spatie/once": "*",

@@ -35,7 +35,8 @@ use Statamic\Http\Controllers\FrontendController;
 use Statamic\Sites\Sites;
 use Statamic\StaticCaching\Middleware\Cache as StaticCache;
 use TorMorten\Eventy\Facades\Eventy;
-use Rapidez\Statamic\Observers\ModelObserver;
+use Statamic\Facades\Site as SiteFacade;
+use Statamic\View\Cascade as StatamicCascade;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
@@ -44,6 +45,13 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         $this->app->extend(Sites::class, fn () => new SitesLinkedToMagentoStores());
 
         $this->app->singleton(RapidezStatamic::class);
+
+        // Since we have our own way of exposing the globals to the view,
+        // we can overwrite Statamic's functionality so we don't query for the
+        // globals multiple times. In our way we cache the globals to increase performance.
+        $this->app->extend(StatamicCascade::class, function () {
+            return new \Rapidez\Statamic\View\Cascade(app()->request, SiteFacade::current());
+        });
 
         $this->app->booted(function () {
             $router = app(Router::class);

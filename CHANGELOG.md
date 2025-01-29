@@ -1,11 +1,25 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/4.6.3...4.6.3)
-## [4.6.3](https://github.com/rapidez/statamic/releases/tag/4.6.3) - 2025-01-23
+[Unreleased changes](https://github.com/rapidez/statamic/compare/5.0.0...5.0.0)
+## [5.0.0](https://github.com/rapidez/statamic/releases/tag/5.0.0) - 2025-01-29
+
+### Added
+
+- Rapidez v3 support (5a6d2b3)
+- Automatic sites config (#81)
+- Automatically set the static caching paths config (#102)
+- Attribute and attribute option Runway models (#97)
+
+### Changed
+
+- Hybrid Runway (#80)
+- Improved install command (#111)
+- Load Statamic fallback controller directly (#89)
 
 ### Fixed
 
-- StartPush on view composer (#110)
+- Arrayable link fix (#88)
+
 
 ## [4.4.0](https://github.com/rapidez/statamic/releases/tag/4.4.0) - 2024-11-06
 

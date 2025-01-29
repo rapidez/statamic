@@ -78,17 +78,11 @@ class InstallCommand extends Command
         $this->info('Starting User Setup...');
         $authConfig = config_path('auth.php');
 
-        if (!class_exists('\App\Models\User') && file_exists($authConfig) && config('auth.providers.users.model') !== 'Rapidez\Statamic\Models\User') {
-            $authFile = Str::of(File::get($authConfig));
-            $authFile = $authFile->replace(
-                'App\Models\User::class',
-                '\Rapidez\Statamic\Models\User::class'
-            );
-
-            File::put(
-                $authConfig,
-                $authFile->__toString()
-            );
+        if (!class_exists('\App\Models\User') && file_exists($authConfig)) {
+            $this->call('vendor:publish', [
+                '--provider' => 'Rapidez\Statamic\RapidezStatamicServiceProvider',
+                '--tag' => 'rapidez-user-model',
+            ]);
         }
 
         $migrationPath = database_path('migrations/0001_01_01_000000_create_users_table.php');

@@ -1,8 +1,0 @@
-title: 'Product content'
-propagate: true
-revisions: false
-slugs: false
-sort_dir: asc
-date_behavior:
-  past: public
-  future: private

@@ -32,6 +32,7 @@ class SitesLinkedToMagentoStores extends Sites
         return Cache::rememberForever('statamic_sites', function () {
             $sites = [];
             $stores = Rapidez::getStores();
+            $staticPaths = collect();
             $configModel = config('rapidez.models.config');
 
             foreach ($stores as $store) {
@@ -55,7 +56,13 @@ class SitesLinkedToMagentoStores extends Sites
                         'group' => $store['website_code'] ?? ''
                     ]
                 ];
+
+                if (config('statamic.static_caching.strategy') === 'full') {
+                    $staticPaths->put($store['code'], public_path('static') . '/' . str($url)->replace('https://', '')->replaceLast('/', '')->value());
+                }
             }
+            
+            config(['statamic.static_caching.strategies.full.path' => $staticPaths->toArray()]);
 
             return $sites ?: $this->getFallbackConfig();
         });

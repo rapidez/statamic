@@ -2,6 +2,7 @@
 
 namespace Rapidez\Statamic;
 
+use Illuminate\Foundation\Bootstrap\BootProviders;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
@@ -11,8 +12,6 @@ use Illuminate\View\View as RenderedView;
 use Rapidez\Statamic\Actions\GenerateSitemapsAction;
 use Rapidez\Core\Facades\Rapidez;
 use Rapidez\Statamic\Commands\ImportBrands;
-use Rapidez\Statamic\Commands\ImportCategories;
-use Rapidez\Statamic\Commands\ImportProducts;
 use Rapidez\Statamic\Commands\InstallCommand;
 use Rapidez\Statamic\Commands\InvalidateCacheCommand;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
@@ -57,6 +56,11 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             $router = app(Router::class);
             $router->pushMiddlewareToGroup('web', StaticCache::class);
         });
+        $this->app->afterBootstrapping(BootProviders::class, function () {
+            // Prevent infinite locks by removing the static cache from the statamic.web middleware.
+            $router = app(Router::class);
+            $router->removeMiddlewareFromGroup('statamic.web', StaticCache::class);
+        });
     }
 
     public function boot()
@@ -71,18 +75,27 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootComposers()
             ->bootPublishables()
             ->bootUtilities()
+            ->bootBuilder()
             ->bootSitemaps()
             ->bootStack();
 
         Vue::register();
         Alternates::register();
     }
+    
+    protected function bootBuilder(): self
+    {
+        config(['statamic.builder' => [
+            ...(config('statamic.builder') ?? []),
+            ...config('rapidez.statamic.builder'),
+        ]]);
+            
+        return $this;
+    }
 
     public function bootCommands() : self
     {
         $this->commands([
-            ImportCategories::class,
-            ImportProducts::class,
             ImportBrands::class,
             InstallCommand::class,
             InvalidateCacheCommand::class
@@ -94,6 +107,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootConfig() : self
     {
         $this->mergeConfigFrom(__DIR__.'/../config/rapidez/statamic.php', 'rapidez.statamic');
+        $this->mergeConfigFrom(__DIR__ . '/../config/rapidez/statamic/builder.php', 'rapidez.statamic.builder');
 
         return $this;
     }
@@ -192,8 +206,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootPublishables() : self
     {
         $this->publishes([
-            __DIR__.'/../resources/blueprints/collections' => resource_path('blueprints/collections'),
-            __DIR__.'/../resources/content/collections' => base_path('content/collections'),
             __DIR__.'/../resources/content/assets' => base_path('content/assets'),
             __DIR__.'/../resources/fieldsets' => resource_path('fieldsets'),
             __DIR__.'/../resources/blueprints/runway' => resource_path('blueprints/vendor/runway'),
@@ -205,7 +217,12 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__.'/../config/rapidez/statamic.php' => config_path('rapidez/statamic.php'),
+            __DIR__ . '/../config/rapidez/statamic/builder.php' => config_path('rapidez/statamic/builder.php'),
         ], 'config');
+
+        $this->publishes([
+            __DIR__.'/../src/Models/User.php' => app_path('Models/User.php'),
+        ], 'rapidez-user-model');
 
         return $this;
     }
@@ -218,14 +235,8 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                 ->action(ImportsController::class)
                 ->title(__('Import'))
                 ->navTitle(__('Import'))
-                ->description(__('Import products or categories from Magento'))
+                ->description(__('Import brands from Magento'))
                 ->routes(function (Router $router) : void {
-                    $router->post('/import-categories', [ImportsController::class, 'importCategories'])
-                        ->name('import-categories');
-
-                    $router->post('/import-products', [ImportsController::class, 'importProducts'])
-                        ->name('import-products');
-
                     $router->post('/import-brands', [ImportsController::class, 'importBrands'])
                         ->name('import-brands');
                 });
@@ -244,9 +255,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
     public function bootStack() : static
     {
-        if (! $this->app->runningInConsole()) {
-            View::startPush('head', view('statamic-glide-directive::partials.head'));
-        }
+        View::composer('rapidez::layouts.app', fn($view) => $view->getFactory()->startPush('head', view('statamic-glide-directive::partials.head')));
 
         return $this;
     }

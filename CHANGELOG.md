@@ -1,6 +1,14 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/4.6.2...4.6.2)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/4.6.3...4.6.3)
+## [4.6.3](https://github.com/rapidez/statamic/releases/tag/4.6.3) - 2025-01-29
+
+### Fixed
+
+- StartPush on view composer (#110)
+- Strict store id compare fix (#112)
+- Don't hydrate globals twice (#99)
+
 ## [4.6.2](https://github.com/rapidez/statamic/releases/tag/4.6.2) - 2025-01-08
 
 ### Fixed

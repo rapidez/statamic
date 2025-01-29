@@ -211,6 +211,10 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             __DIR__ . '/../config/rapidez/statamic/builder.php' => config_path('rapidez/statamic/builder.php'),
         ], 'config');
 
+        $this->publishes([
+            __DIR__.'/../src/Models/User.php' => app_path('Models/User.php'),
+        ], 'rapidez-user-model');
+
         return $this;
     }
 

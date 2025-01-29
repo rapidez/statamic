@@ -77,8 +77,20 @@ class InstallCommand extends Command
     {
         $this->info('Starting User Setup...');
         $authConfig = config_path('auth.php');
+        $userModel = app_path('Models/User.php');
 
-        if (!class_exists('\App\Models\User') && file_exists($authConfig)) {
+        if(class_exists('\App\Models\User') && file_exists($userModel)) {
+            $userModelFile = Str::of(File::get($userModel));
+            $userModelFile = $userModelFile->replace(
+                'use Illuminate\Foundation\Auth\User',
+                'use Rapidez\Statamic\Models\BaseUser'
+            );
+
+            File::put(
+                $userModel,
+                $userModelFile->__toString()
+            );
+        } else if (!class_exists('\App\Models\User') && file_exists($authConfig)) {
             $this->call('vendor:publish', [
                 '--provider' => 'Rapidez\Statamic\RapidezStatamicServiceProvider',
                 '--tag' => 'rapidez-user-model',

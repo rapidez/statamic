@@ -49,6 +49,9 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
         $this->app->singleton(RapidezStatamic::class);
 
+        // Since we have our own way of exposing the globals to the view,
+        // we can overwrite Statamic's functionality so we don't query for the
+        // globals multiple times. In our way we cache the globals to increase performance.
         $this->app->extend(StatamicCascade::class, function () {
             return new \Rapidez\Statamic\View\Cascade(app()->request, SiteFacade::current());
         });

@@ -18,7 +18,6 @@ use Rapidez\Core\Facades\Rapidez;
 use Rapidez\Statamic\Commands\InvalidateCacheCommand;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
 use Rapidez\Statamic\Http\Controllers\ImportsController;
-use Rapidez\Statamic\Http\Controllers\StatamicRewriteController;
 use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
 use Rapidez\Statamic\Listeners\ClearNavTreeCache;
 use Rapidez\Statamic\Listeners\SetCollectionsForNav;
@@ -93,7 +92,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootRoutes() : self
     {
         if (config('rapidez.statamic.routes') && $this->currentSiteIsEnabled()) {
-            Rapidez::addFallbackRoute(StatamicRewriteController::class);
+            Rapidez::addFallbackRoute([FrontendController::class, 'index']);
         }
 
         return $this;

@@ -32,6 +32,7 @@ use Statamic\Events\NavTreeSaved;
 use Statamic\Facades\Entry;
 use Statamic\Facades\Site;
 use Statamic\Facades\Utility;
+use Statamic\Http\Controllers\FrontendController;
 use Statamic\Sites\Sites;
 use Statamic\StaticCaching\Middleware\Cache as StaticCache;
 use TorMorten\Eventy\Facades\Eventy;

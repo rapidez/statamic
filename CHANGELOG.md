@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/4.6.4...4.6.4)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/4.6.5...4.6.5)
+## [4.6.5](https://github.com/rapidez/statamic/releases/tag/4.6.5) - 2025-02-19
+
+### Fixed
+
+- Forgot an import (#116)
+
 ## [4.6.4](https://github.com/rapidez/statamic/releases/tag/4.6.4) - 2025-02-19
 
 ### Fixed

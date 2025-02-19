@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/4.6.3...4.6.3)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/4.6.4...4.6.4)
+## [4.6.4](https://github.com/rapidez/statamic/releases/tag/4.6.4) - 2025-02-19
+
+### Fixed
+
+- Load Statamic fallback controller directly (#115)
+
 ## [4.6.3](https://github.com/rapidez/statamic/releases/tag/4.6.3) - 2025-01-29
 
 ### Fixed

@@ -42,8 +42,9 @@ class GenerateCollectionSitemapJob implements ShouldQueue, ShouldBeUnique
     protected function generateCollectionSitemap() : array
     {
         $entries = $this->collection->queryEntries()->where('site', $this->site->handle())->whereStatus('published')->get();
+        
         return $entries->map(fn (Entry $entry) => [
-            'loc' => $entry->url(),
+            'loc' => $entry->absoluteUrl(),
             'lastmod' => $entry->lastModified()
         ])->toArray();
     }

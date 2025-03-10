@@ -1,6 +1,41 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/4.6.0...4.6.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/4.6.5...4.6.5)
+## [4.6.5](https://github.com/rapidez/statamic/releases/tag/4.6.5) - 2025-02-19
+
+### Fixed
+
+- Forgot an import (#116)
+
+## [4.6.4](https://github.com/rapidez/statamic/releases/tag/4.6.4) - 2025-02-19
+
+### Fixed
+
+- Load Statamic fallback controller directly (#115)
+
+## [4.6.3](https://github.com/rapidez/statamic/releases/tag/4.6.3) - 2025-01-29
+
+### Fixed
+
+- StartPush on view composer (#110)
+- Strict store id compare fix (#112)
+- Don't hydrate globals twice (#99)
+
+## [4.6.2](https://github.com/rapidez/statamic/releases/tag/4.6.2) - 2025-01-08
+
+### Fixed
+
+- Change cache key for nav tree (#100)
+- Reload csrf token when Statamic reloads it (#103)
+- Return if url path is not set on the linked entry (#105)
+- Fixed infinite locking for certain requests (#108)
+
+## [4.6.1](https://github.com/rapidez/statamic/releases/tag/4.6.1) - 2024-12-18
+
+### Fixed
+
+- Correct sitemap public url (#98)
+
 ## [4.6.0](https://github.com/rapidez/statamic/releases/tag/4.6.0) - 2024-12-11
 
 ### Added

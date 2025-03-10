@@ -1,6 +1,15 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/4.6.5...4.6.5)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/4.6.6...4.6.6)
+## [4.6.6](https://github.com/rapidez/statamic/releases/tag/4.6.6) - 2025-03-10
+
+### Fixed
+
+- Set absolute url for sitemap entries (#120)
+
+
+
+
 ## [4.6.5](https://github.com/rapidez/statamic/releases/tag/4.6.5) - 2025-02-19
 
 ### Fixed

@@ -13,6 +13,7 @@ use Statamic\Facades\Taxonomy as TaxonomyFacade;
 use Statamic\Sites\Site;
 use Statamic\Entries\Collection;
 use TorMorten\Eventy\Facades\Eventy;
+use Statamic\Support\Str;
 
 class GenerateStoreSitemapJob implements ShouldQueue, ShouldBeUnique
 {
@@ -74,7 +75,7 @@ class GenerateStoreSitemapJob implements ShouldQueue, ShouldBeUnique
         $sitemaps = collect($storageDisk->files($storageDirectory))
             ->filter(fn($item) => str_starts_with($item, $storageDirectory . $sitemapPrefix))
             ->map(fn($item) => [
-                'loc' => url('storage/' . $item),
+                'loc' => Str::ensureRight($this->site->url(), '/') . 'storage/' . $item,
                 'lastmod' => $storageDisk->lastModified($item)
                     ? date('Y-m-d H:i:s', $storageDisk->lastModified($item))
                     : null

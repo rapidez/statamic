@@ -3,10 +3,12 @@
 namespace Rapidez\Statamic\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Rapidez\Core\Facades\Rapidez;
+use Statamic\Facades\File;
 use Statamic\StaticCaching\Cacher;
+use Statamic\StaticCaching\Cachers\Writer;
 
 class InvalidateCacheCommand extends Command
 {
@@ -18,18 +20,27 @@ class InvalidateCacheCommand extends Command
 
     public $latestCheck;
 
-    public function handle(Cacher $cacher): void
+    public function handle(Cacher $cacher, Writer $writer): void
     {
-        $this->latestCheck = Cache::get($this->signature);
+        try {
+            $this->latestCheck = File::get(config('statamic.static_caching.strategies.full.path') . '/.last-invalidation');
+        } catch (FileNotFoundException $e) {
+            $this->latestCheck = null;
+        }
+
+        $writer->write(
+            config('statamic.static_caching.strategies.full.path') . '/.last-invalidation',
+            // With this we're just making sure the comparison
+            // is done within the same timezone in MySQL.
+            DB::selectOne('SELECT NOW() AS `current_time`')->current_time
+        );
 
         if (!$this->latestCheck) {
             $this->info('Cleared all urls (as we do not have a latest check date yet)');
-            $this->setLatestCheckDate();
             $cacher->flush();
             return;
         }
 
-        $this->setLatestCheckDate();
         $stores = Rapidez::getStores();
 
         foreach ($stores as $store) {
@@ -113,14 +124,5 @@ class InvalidateCacheCommand extends Command
         $this->urls->transform(fn ($identifier) => url($identifier));
 
         return $this;
-    }
-
-    protected function setLatestCheckDate(): void
-    {
-        // With this we're just making sure the comparison
-        // is done within the same timezone in MySQL.
-        $now = DB::select('SELECT NOW() AS `current_time`');
-
-        Cache::forever($this->signature, $now[0]->current_time);
     }
 }

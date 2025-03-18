@@ -22,24 +22,15 @@ class InvalidateCacheCommand extends Command
 
     public function handle(Cacher $cacher, Writer $writer): void
     {
-        try {
-            $this->latestCheck = File::get(config('statamic.static_caching.strategies.full.path') . '/.last-invalidation');
-        } catch (FileNotFoundException $e) {
-            $this->latestCheck = null;
-        }
-
-        $writer->write(
-            config('statamic.static_caching.strategies.full.path') . '/.last-invalidation',
-            // With this we're just making sure the comparison
-            // is done within the same timezone in MySQL.
-            DB::selectOne('SELECT NOW() AS `current_time`')->current_time
-        );
+        $this->latestCheck = $this->getLatestCheckDate();
 
         if (!$this->latestCheck) {
             $this->info('Cleared all urls (as we do not have a latest check date yet)');
             $cacher->flush();
+            $this->setLatestCheckDate($writer);
             return;
         }
+        $this->setLatestCheckDate($writer);
 
         $stores = Rapidez::getStores();
 
@@ -124,5 +115,24 @@ class InvalidateCacheCommand extends Command
         $this->urls->transform(fn ($identifier) => url($identifier));
 
         return $this;
+    }
+
+    protected function getLatestCheckDate()
+    {
+        try {
+            return File::get(config('statamic.static_caching.strategies.full.path') . '/.last-invalidation');
+        } catch (FileNotFoundException $e) {
+            return null;
+        }
+    }
+
+    protected function setLatestCheckDate(Writer $writer): void
+    {
+        $writer->write(
+            config('statamic.static_caching.strategies.full.path') . '/.last-invalidation',
+            // With this we're just making sure the comparison
+            // is done within the same timezone in MySQL.
+            DB::selectOne('SELECT NOW() AS `current_time`')->current_time
+        );
     }
 }

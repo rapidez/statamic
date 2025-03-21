@@ -24,6 +24,7 @@ use Rapidez\Statamic\Http\Controllers\ImportsController;
 use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
 use Rapidez\Statamic\Listeners\ClearNavTreeCache;
 use Rapidez\Statamic\Listeners\SetCollectionsForNav;
+use Rapidez\Statamic\StaticCaching\CustomInvalidator;
 use Rapidez\Statamic\Tags\Alternates;
 use Statamic\Events\GlobalSetDeleted;
 use Statamic\Events\GlobalSetSaved;
@@ -80,6 +81,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootPublishables()
             ->bootUtilities()
             ->bootSitemaps()
+            ->bootStaticCaching()
             ->bootStack();
 
         Vue::register();
@@ -245,6 +247,17 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootSitemaps(): static
     {
         Eventy::addAction('rapidez.sitemap.generate', fn() => GenerateSitemapsAction::generate(), 20, 1);
+
+        return $this;
+    }
+
+    public function bootStaticCaching(): static
+    {
+        if (config('statamic.static_caching.invalidation.class')) {
+            return $this;
+        }
+        
+        config()->set('statamic.static_caching.invalidation.class', CustomInvalidator::class);
 
         return $this;
     }

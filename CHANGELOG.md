@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/4.6.6...4.6.6)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/4.6.7...4.6.7)
+## [4.6.7](https://github.com/rapidez/statamic/releases/tag/4.6.7) - 2025-03-12
+
+### Fixed
+
+- Fixed sitemap base url per site (#123)
+
 ## [4.6.6](https://github.com/rapidez/statamic/releases/tag/4.6.6) - 2025-03-10
 
 ### Fixed

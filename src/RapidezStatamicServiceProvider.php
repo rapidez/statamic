@@ -253,12 +253,13 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
     public function bootStaticCaching(): static
     {
-        if (config('statamic.static_caching.invalidation.class')) {
-            return $this;
+        if (!config('statamic.static_caching.invalidation.class')) {
+            config()->set(
+                'statamic.static_caching.invalidation.class',
+                CustomInvalidator::class
+            );
         }
         
-        config()->set('statamic.static_caching.invalidation.class', CustomInvalidator::class);
-
         return $this;
     }
 

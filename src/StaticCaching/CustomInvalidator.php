@@ -22,10 +22,6 @@ class CustomInvalidator extends DefaultInvalidator
             $urls[] = Str::ensureLeft($item->linked_category['url_path'], '/');
         }
 
-        if ($item instanceof Entry && $item->uri()) {
-            $urls[] = $item->uri();
-        }
-
         if (count($urls) >= 1) {
             $this->cacher->invalidateUrls($urls);
             return;

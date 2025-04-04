@@ -12,7 +12,7 @@ class RunwayObserver
     public function updating(Model $model)
     {
         $entry = $model->entry;
-        
+
         if (!$entry) {
             $entry = Entry::make()
                 ->collection($model->collection)

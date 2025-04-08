@@ -49,19 +49,16 @@ return [
             \Rapidez\Statamic\Models\Product::class => [
                 'name' => 'Products',
                 'title_field' => 'name',
-                'cp_icon' => 'table',
             ],
 
             \Rapidez\Statamic\Models\Category::class => [
                 'name' => 'Categories',
                 'title_field' => 'name',
-                'cp_icon' => 'array',
             ],
 
             \Rapidez\Statamic\Models\Brand::class => [
                 'name' => 'Brands',
                 'title_field' => 'value_store',
-                'cp_icon' => 'tags',
                 'order_by' => 'sort_order',
             ],
 
@@ -69,7 +66,6 @@ return [
                 'name' => 'Product Attributes',
                 'read_only' => true,
                 'title_field' => 'frontend_label',
-                'cp_icon' => 'tags',
                 'listing' => [
                     'columns' => [
                         'attribute_code',
@@ -99,7 +95,6 @@ return [
                 'name' => 'Product Attribute Options',
                 'read_only' => true,
                 'title_field' => 'display_value',
-                'cp_icon' => 'list-bullets',
                 'listing' => [
                     'columns' => [
                         'option_id',

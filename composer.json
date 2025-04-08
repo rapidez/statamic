@@ -36,7 +36,7 @@
         "rapidez/core": "^2.13|^3.0",
         "rapidez/sitemap": "^3.0",
         "spatie/once": "*",
-        "statamic-rad-pack/runway": "^7.6",
+        "statamic-rad-pack/runway": "^8.3",
         "statamic/cms": "^5.47",
         "statamic/eloquent-driver": "^4.9",
         "tdwesten/statamic-builder": "^1.0",

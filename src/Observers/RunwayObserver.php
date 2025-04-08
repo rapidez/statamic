@@ -12,7 +12,7 @@ class RunwayObserver
     public function updating(Model $model)
     {
         $entry = $model->entry;
-    
+
         if (!$entry) {
             $entry = Entry::make()
                 ->collection($model->collection)
@@ -41,13 +41,25 @@ class RunwayObserver
         return false;
     }
 
+    public function retrieved(Model $model)
+    {
+        $originalAttributes = $model->getAttributes();
+        
+        if ($model->exists && $model->entry) {
+            $model->setRawAttributes(array_merge(
+                $model->entry->data()->toArray(),
+                $originalAttributes
+            ));
+        }
+    }
+
     // Just to make sure you can't create or delete
-    public function creating(Model $product)
+    public function creating(Model $model)
     {
         return false;
     }
 
-    public function deleting(Model $product)
+    public function deleting(Model $model)
     {
         return false;
     }

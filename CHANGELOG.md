@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/4.6.7...4.6.7)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/4.6.8...4.6.8)
+## [4.6.8](https://github.com/rapidez/statamic/releases/tag/4.6.8) - 2025-03-20
+
+### Fixed
+
+- Persistent latest check with cache invalidation (#124)
+
 ## [4.6.7](https://github.com/rapidez/statamic/releases/tag/4.6.7) - 2025-03-12
 
 ### Fixed

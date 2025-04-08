@@ -1,6 +1,19 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/5.0.0...5.0.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/5.1.0...5.1.0)
+## [5.1.0](https://github.com/rapidez/statamic/releases/tag/5.1.0) - 2025-04-08
+
+### Changed
+
+- Install command: extend user model if it already exists (#114)
+- Updated statamic/cms dependency (#117)
+- Use retrieved event instead of overwriting getAttributes (#126)
+
+### Fixed
+
+- Set absolute url for sitemap entries (#118)
+- Persistent latest check with cache invalidation (#125)
+
 ## [5.0.0](https://github.com/rapidez/statamic/releases/tag/5.0.0) - 2025-01-29
 
 ### Added

@@ -45,9 +45,9 @@ class RunwayObserver
     {
         $originalAttributes = $model->getAttributes();
         
-        if ($model->exists && $modelEntry = ($model->entry ?? '')) {
+        if ($model->exists && $model->entry) {
             $model->setRawAttributes(array_merge(
-                $modelEntry->data()->toArray(),
+                $model->entry->data()->toArray(),
                 $originalAttributes
             ));
         }

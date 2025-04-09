@@ -36,6 +36,7 @@ use Statamic\StaticCaching\Middleware\Cache as StaticCache;
 use TorMorten\Eventy\Facades\Eventy;
 use Statamic\Facades\Site as SiteFacade;
 use Statamic\View\Cascade as StatamicCascade;
+use Rapidez\Statamic\StaticCaching\CustomInvalidator;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
@@ -77,6 +78,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootUtilities()
             ->bootBuilder()
             ->bootSitemaps()
+            ->bootStaticCaching()
             ->bootStack();
 
         Vue::register();
@@ -252,6 +254,17 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         return $this;
     }
 
+    public function bootStaticCaching(): static
+    {
+        if (!config('statamic.static_caching.invalidation.class')) {
+            config()->set(
+                'statamic.static_caching.invalidation.class',
+                CustomInvalidator::class
+            );
+        }
+        
+        return $this;
+    }
 
     public function bootStack() : static
     {

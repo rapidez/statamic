@@ -1,6 +1,13 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/5.1.0...5.1.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/5.2.0...5.2.0)
+## [5.2.0](https://github.com/rapidez/statamic/releases/tag/5.2.0) - 2025-04-11
+
+### Added
+
+- Custom cache invalidator (#127)
+- Compile assets from the install command (#128)
+
 ## [5.1.0](https://github.com/rapidez/statamic/releases/tag/5.1.0) - 2025-04-08
 
 ### Changed

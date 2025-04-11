@@ -43,6 +43,9 @@ class InstallCommand extends Command
             $this->call('statamic:make:user');
         }
 
+        $this->info('Running `yarn run prod`...');
+        passthru('yarn run prod');
+
         $this->info('Done 🚀');
     }
 

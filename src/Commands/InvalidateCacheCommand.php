@@ -59,6 +59,7 @@ class InvalidateCacheCommand extends Command
     {
         $products = config('rapidez.models.product')::withoutGlobalScopes()
             ->where('updated_at', '>=', $this->latestCheck)
+            ->orWhereIn('entity_id', $this->getUpdatedStockProducts())
             ->with(['parent:entity_id' => ['rewrites']])
             ->with('rewrites')
             ->get('entity_id');
@@ -72,6 +73,27 @@ class InvalidateCacheCommand extends Command
         }
 
         return $this;
+    }
+
+    protected function getUpdatedStockProducts()
+    {
+        $currentStock = DB::table('cataloginventory_stock_item')
+            ->pluck('qty', 'product_id')
+            ->toArray();
+
+        $previousStock = $this->getPreviousStock();
+
+        $this->setPreviousStock($currentStock);
+
+        return array_keys(
+            array_diff_assoc(
+                (array) $currentStock,
+                (array) $previousStock
+            ) + array_diff_assoc(
+                (array) $previousStock,
+                (array) $currentStock
+            )
+        );
     }
 
     protected function addCategoryUrls(): self
@@ -133,6 +155,24 @@ class InvalidateCacheCommand extends Command
             // With this we're just making sure the comparison
             // is done within the same timezone in MySQL.
             DB::selectOne('SELECT NOW() AS `current_time`')->current_time
+        );
+    }
+
+    protected function getPreviousStock()
+    {
+        try {
+            return json_decode(File::get(config('statamic.static_caching.strategies.full.path') . '/.product-stocks'), true, 512, JSON_THROW_ON_ERROR);
+        } catch (FileNotFoundException|\JsonException $e) {
+            return [];
+        }
+    }
+
+    protected function setPreviousStock(array $previousStock): void
+    {
+        $writer = app(Writer::class);
+        $writer->write(
+            config('statamic.static_caching.strategies.full.path') . '/.product-stocks',
+            json_encode($previousStock)
         );
     }
 }

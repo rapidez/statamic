@@ -1,45 +1,80 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/5.2.0...5.2.0)
-## [5.2.0](https://github.com/rapidez/statamic/releases/tag/5.2.0) - 2025-04-11
+[Unreleased changes](https://github.com/rapidez/statamic/compare/4.7.0...4.7.0)
+## [4.7.0](https://github.com/rapidez/statamic/releases/tag/4.7.0) - 2025-04-17
 
 ### Added
 
-- Custom cache invalidator (#127)
-- Compile assets from the install command (#128)
+- Custom cache invalidator (#122)
+- Invalidate product pages on stock changes (#129)
 
-## [5.1.0](https://github.com/rapidez/statamic/releases/tag/5.1.0) - 2025-04-08
-
-### Changed
-
-- Install command: extend user model if it already exists (#114)
-- Updated statamic/cms dependency (#117)
-- Use retrieved event instead of overwriting getAttributes (#126)
+## [4.6.8](https://github.com/rapidez/statamic/releases/tag/4.6.8) - 2025-03-20
 
 ### Fixed
 
-- Set absolute url for sitemap entries (#118)
-- Persistent latest check with cache invalidation (#125)
+- Persistent latest check with cache invalidation (#124)
 
-## [5.0.0](https://github.com/rapidez/statamic/releases/tag/5.0.0) - 2025-01-29
+## [4.6.7](https://github.com/rapidez/statamic/releases/tag/4.6.7) - 2025-03-12
+
+### Fixed
+
+- Fixed sitemap base url per site (#123)
+
+## [4.6.6](https://github.com/rapidez/statamic/releases/tag/4.6.6) - 2025-03-10
+
+### Fixed
+
+- Set absolute url for sitemap entries (#120)
+
+
+
+
+## [4.6.5](https://github.com/rapidez/statamic/releases/tag/4.6.5) - 2025-02-19
+
+### Fixed
+
+- Forgot an import (#116)
+
+## [4.6.4](https://github.com/rapidez/statamic/releases/tag/4.6.4) - 2025-02-19
+
+### Fixed
+
+- Load Statamic fallback controller directly (#115)
+
+## [4.6.3](https://github.com/rapidez/statamic/releases/tag/4.6.3) - 2025-01-29
+
+### Fixed
+
+- StartPush on view composer (#110)
+- Strict store id compare fix (#112)
+- Don't hydrate globals twice (#99)
+
+## [4.6.2](https://github.com/rapidez/statamic/releases/tag/4.6.2) - 2025-01-08
+
+### Fixed
+
+- Change cache key for nav tree (#100)
+- Reload csrf token when Statamic reloads it (#103)
+- Return if url path is not set on the linked entry (#105)
+- Fixed infinite locking for certain requests (#108)
+
+## [4.6.1](https://github.com/rapidez/statamic/releases/tag/4.6.1) - 2024-12-18
+
+### Fixed
+
+- Correct sitemap public url (#98)
+
+## [4.6.0](https://github.com/rapidez/statamic/releases/tag/4.6.0) - 2024-12-11
 
 ### Added
 
-- Rapidez v3 support (5a6d2b3)
-- Automatic sites config (#81)
-- Automatically set the static caching paths config (#102)
-- Attribute and attribute option Runway models (#97)
+- Static caching with invalidation on Magento urls (#94)
 
-### Changed
+## [4.5.0](https://github.com/rapidez/statamic/releases/tag/4.5.0) - 2024-12-06
 
-- Hybrid Runway (#80)
-- Improved install command (#111)
-- Load Statamic fallback controller directly (#89)
+### Added
 
-### Fixed
-
-- Arrayable link fix (#88)
-
+- Collections & taxonomies sitemaps with rapidez/sitemap (#93)
 
 ## [4.4.0](https://github.com/rapidez/statamic/releases/tag/4.4.0) - 2024-11-06
 

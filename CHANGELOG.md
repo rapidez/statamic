@@ -1,6 +1,13 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/4.6.8...4.6.8)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/4.7.0...4.7.0)
+## [4.7.0](https://github.com/rapidez/statamic/releases/tag/4.7.0) - 2025-04-17
+
+### Added
+
+- Custom cache invalidator (#122)
+- Invalidate product pages on stock changes (#129)
+
 ## [4.6.8](https://github.com/rapidez/statamic/releases/tag/4.6.8) - 2025-03-20
 
 ### Fixed

@@ -12,5 +12,13 @@ export default {
     render() {
         return this.$scopedSlots.default({ formData: this.formData });
     },
+    mounted() {
+        let token = this.$root.csrfToken
+        let csrfField = this.$el.querySelector('input[value="STATAMIC_CSRF_TOKEN"]')
+
+        if (csrfField && token && token !== 'STATAMIC_CSRF_TOKEN') {
+            csrfField.value = token
+        }
+    }
 }
 </script>

@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/4.7.0...4.7.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/...4.7.1)
+## [4.7.1](https://github.com/rapidez/statamic/releases/tag/4.7.1) - 2025-04-25
+
+### Fixed
+
+-  Replace CSRF token in the Vue form (#132)
+
 ## [4.7.0](https://github.com/rapidez/statamic/releases/tag/4.7.0) - 2025-04-17
 
 ### Added

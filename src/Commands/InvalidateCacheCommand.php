@@ -42,7 +42,7 @@ class InvalidateCacheCommand extends Command
                 $this->info('Cleared all urls (as we do not have a latest check date yet)');
                 $cacher->flush();
                 $this->setLatestCheckDate($writer);
-                return;
+                continue;
             }
             $this->setLatestCheckDate($writer);
 

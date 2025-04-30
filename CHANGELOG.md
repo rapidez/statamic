@@ -1,6 +1,31 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/4.6.6...4.6.6)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/...4.7.1)
+## [4.7.1](https://github.com/rapidez/statamic/releases/tag/4.7.1) - 2025-04-25
+
+### Fixed
+
+-  Replace CSRF token in the Vue form (#132)
+
+## [4.7.0](https://github.com/rapidez/statamic/releases/tag/4.7.0) - 2025-04-17
+
+### Added
+
+- Custom cache invalidator (#122)
+- Invalidate product pages on stock changes (#129)
+
+## [4.6.8](https://github.com/rapidez/statamic/releases/tag/4.6.8) - 2025-03-20
+
+### Fixed
+
+- Persistent latest check with cache invalidation (#124)
+
+## [4.6.7](https://github.com/rapidez/statamic/releases/tag/4.6.7) - 2025-03-12
+
+### Fixed
+
+- Fixed sitemap base url per site (#123)
+
 ## [4.6.6](https://github.com/rapidez/statamic/releases/tag/4.6.6) - 2025-03-10
 
 ### Fixed

@@ -20,22 +20,31 @@ class InvalidateCacheCommand extends Command
 
     public $latestCheck;
 
+    public $staticCachePath;
+
     public function handle(Cacher $cacher, Writer $writer): void
     {
-        $this->latestCheck = $this->getLatestCheckDate();
-
-        if (!$this->latestCheck) {
-            $this->info('Cleared all urls (as we do not have a latest check date yet)');
-            $cacher->flush();
-            $this->setLatestCheckDate($writer);
-            return;
-        }
-        $this->setLatestCheckDate($writer);
-
         $stores = Rapidez::getStores();
+        $staticCachePathConfig = 'statamic.static_caching.strategies.full.path';
 
         foreach ($stores as $store) {
             Rapidez::setStore($store);
+            
+            if (is_array(config('statamic.static_caching.strategies.full.path'))) {
+                $staticCachePathConfig = $staticCachePathConfig . '.' . $store['code'];
+            }
+            
+            $this->staticCachePath = config($staticCachePathConfig);
+            $this->latestCheck = $this->getLatestCheckDate();
+
+            if (!$this->latestCheck) {
+                $this->info('Cleared all urls (as we do not have a latest check date yet)');
+                $cacher->flush();
+                $this->setLatestCheckDate($writer);
+                return;
+            }
+            
+            $this->setLatestCheckDate($writer);
 
             $this->urls = collect();
 
@@ -141,7 +150,7 @@ class InvalidateCacheCommand extends Command
     protected function getLatestCheckDate()
     {
         try {
-            return File::get(config('statamic.static_caching.strategies.full.path') . '/.last-invalidation');
+            return File::get($this->staticCachePath . '/.last-invalidation');
         } catch (FileNotFoundException $e) {
             return null;
         }
@@ -150,7 +159,7 @@ class InvalidateCacheCommand extends Command
     protected function setLatestCheckDate(Writer $writer): void
     {
         $writer->write(
-            config('statamic.static_caching.strategies.full.path') . '/.last-invalidation',
+            $this->staticCachePath . '/.last-invalidation',
             // With this we're just making sure the comparison
             // is done within the same timezone in MySQL.
             DB::selectOne('SELECT NOW() AS `current_time`')->current_time
@@ -160,7 +169,7 @@ class InvalidateCacheCommand extends Command
     protected function getPreviousStock()
     {
         try {
-            return json_decode(File::get(config('statamic.static_caching.strategies.full.path') . '/.product-stocks'), true, 512, JSON_THROW_ON_ERROR);
+            return json_decode(File::get($this->staticCachePath . '/.product-stocks'), true, 512, JSON_THROW_ON_ERROR);
         } catch (FileNotFoundException|\JsonException $e) {
             return [];
         }
@@ -170,7 +179,7 @@ class InvalidateCacheCommand extends Command
     {
         $writer = app(Writer::class);
         $writer->write(
-            config('statamic.static_caching.strategies.full.path') . '/.product-stocks',
+            $this->staticCachePath . '/.product-stocks',
             json_encode($previousStock)
         );
     }

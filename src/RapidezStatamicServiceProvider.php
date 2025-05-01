@@ -75,7 +75,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootRunway()
             ->bootComposers()
             ->bootPublishables()
-            ->bootUtilities()
             ->bootBuilder()
             ->bootSitemaps()
             ->bootStaticCaching()
@@ -225,24 +224,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../src/Models/User.php' => app_path('Models/User.php'),
         ], 'rapidez-user-model');
-
-        return $this;
-    }
-
-    public function bootUtilities() : static
-    {
-        Utility::extend(function () : void {
-            Utility::register('imports')
-                ->icon('synchronize')
-                ->action(ImportsController::class)
-                ->title(__('Import'))
-                ->navTitle(__('Import'))
-                ->description(__('Import brands from Magento'))
-                ->routes(function (Router $router) : void {
-                    $router->post('/import-brands', [ImportsController::class, 'importBrands'])
-                        ->name('import-brands');
-                });
-        });
 
         return $this;
     }

@@ -1,6 +1,16 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/5.3.1...5.3.1)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/5.4.0...5.4.0)
+## [5.4.0](https://github.com/rapidez/statamic/releases/tag/5.4.0) - 2025-05-01
+
+### Fixed
+
+- Invalidate cache command multistore compatibility (#133)
+
+### Removed
+
+- Remove unused brands utility (#135)
+
 ## [5.3.1](https://github.com/rapidez/statamic/releases/tag/5.3.1) - 2025-04-25
 
 ### Fixed

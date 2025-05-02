@@ -78,12 +78,20 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootBuilder()
             ->bootSitemaps()
             ->bootStaticCaching()
-            ->bootStack();
+            ->bootStack()
+            ->bootTranslations();
 
         Vue::register();
         Alternates::register();
     }
-    
+
+    protected function bootTranslations(): self
+    {
+        $this->loadTranslationsFrom(__DIR__ . '/../lang', 'rapidez-statamic');
+
+        return $this;
+    }
+
     protected function bootBuilder(): self
     {
         config(['statamic.builder' => [

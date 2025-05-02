@@ -5,8 +5,8 @@
     @return
 @endif
 
-<form-conditions :initial-data='@json(Arr::pluck($form['fields'], 'default', 'handle'))' v-slot="{ formData }">
-    <form @attributes($form['attrs'])>
+<form-conditions :translations="@json(__('rapidez-statamic::frontend.form'))" :initial-data='@json(Arr::pluck($form['fields'], 'default', 'handle'))' v-slot="{ formData, submit }">
+    <form @submit.prevent="submit" @attributes($form['attrs'])>
         @foreach($form['params'] as $name => $value)
             <input type="hidden" name="{{ $name }}" value="{{ $value }}">
         @endforeach

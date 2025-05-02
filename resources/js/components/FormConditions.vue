@@ -48,7 +48,7 @@ export default {
                 }
             } else {
                 this.error = true
-                Notify(window.config.translations.packages.statamic.form.error, 'success')
+                Notify(window.config.translations.packages.statamic.form.error, 'error')
             }
         },
     },

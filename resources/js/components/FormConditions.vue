@@ -20,7 +20,7 @@ export default {
         };
     },
     render() {
-        return this.$scopedSlots.default({ formData: this.formData, submit: this.submit });
+        return this.$scopedSlots.default(this);
     },
     mounted() {
         let token = this.$root.csrfToken

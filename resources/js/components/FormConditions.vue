@@ -27,7 +27,6 @@ export default {
         return this.$scopedSlots.default({ formData: this.formData, submit: this.submit });
     },
     mounted() {
-        console.log(this.translations)
         let token = this.$root.csrfToken
         let csrfField = this.$el.querySelector('input[value="STATAMIC_CSRF_TOKEN"]')
 

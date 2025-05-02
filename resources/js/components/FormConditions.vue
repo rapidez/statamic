@@ -8,10 +8,6 @@ export default {
             type: Object,
             required: true,
         },
-        translations: {
-            type: Object,
-            default: () => ({}),
-        },
         callback: {
             type: Function,
         },
@@ -27,7 +23,6 @@ export default {
         return this.$scopedSlots.default({ formData: this.formData, submit: this.submit });
     },
     mounted() {
-        console.log(this.translations)
         let token = this.$root.csrfToken
         let csrfField = this.$el.querySelector('input[value="STATAMIC_CSRF_TOKEN"]')
 
@@ -47,13 +42,13 @@ export default {
 
             if (response.ok) {
                 this.success = true
-                Notify(this.translations.success, 'success')
+                Notify(window.config.translations.packages.statamic.form.success, 'success')
                 if (this.callback) {
                     await this.callback()
                 }
             } else {
                 this.error = true
-                Notify(this.translations.error, 'error')
+                Notify(window.config.translations.packages.statamic.form.error, 'success')
             }
         },
     },

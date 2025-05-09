@@ -25,9 +25,9 @@ class InvalidateCacheCommand extends Command
     public function handle(Cacher $cacher, Writer $writer): void
     {
         $stores = Rapidez::getStores();
-        $staticCachePathConfig = 'statamic.static_caching.strategies.full.path';
 
         foreach ($stores as $store) {
+            $staticCachePathConfig = 'statamic.static_caching.strategies.full.path';
             Rapidez::setStore($store);
            
             if (is_array(config('statamic.static_caching.strategies.full.path'))) {

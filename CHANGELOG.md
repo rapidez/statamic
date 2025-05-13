@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/4.7.2...4.7.2)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/4.7.3...4.7.3)
+## [4.7.3](https://github.com/rapidez/statamic/releases/tag/4.7.3) - 2025-05-13
+
+### Fixed
+
+- Invalidate cache command error fix (#139)
+
 ## [4.7.2](https://github.com/rapidez/statamic/releases/tag/4.7.2) - 2025-05-01
 
 ### Fixed

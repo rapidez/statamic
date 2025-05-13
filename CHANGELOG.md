@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/5.4.0...5.4.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/5.4.1...5.4.1)
+## [5.4.1](https://github.com/rapidez/statamic/releases/tag/5.4.1) - 2025-05-13
+
+### Fixed
+
+- Invalidate cache command error fix (#138)
+
 ## [5.4.0](https://github.com/rapidez/statamic/releases/tag/5.4.0) - 2025-05-01
 
 ### Fixed

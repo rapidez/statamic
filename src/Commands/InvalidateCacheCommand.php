@@ -29,7 +29,7 @@ class InvalidateCacheCommand extends Command
         foreach ($stores as $store) {
             $staticCachePathConfig = 'statamic.static_caching.strategies.full.path';
             $disabled = config('rapidez.statamic.sites.' . $store['code'] . '.attributes.disabled');
-            if (!in_array($store['code'], array_keys(config('rapidez.statamic.sites'))) || $disabled === false) {
+            if (!$disabled) {
                 continue;
             }
             

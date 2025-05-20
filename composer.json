@@ -37,7 +37,7 @@
         "rapidez/sitemap": "^3.0",
         "spatie/once": "*",
         "statamic-rad-pack/runway": "^8.3",
-        "statamic/cms": "^5.47",
+        "statamic/cms": "^5.55",
         "statamic/eloquent-driver": "^4.9",
         "tdwesten/statamic-builder": "^1.0",
         "tormjens/eventy": "^0.8"

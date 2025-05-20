@@ -40,15 +40,18 @@ export default {
                 body: new FormData(this.$el),
             })
 
+            let data = await response.json()
+
             if (response.ok) {
                 this.success = true
-                Notify(window.config.translations.packages.statamic.form.success, 'success')
+                Notify(window.config.statamic.translations.form.success, 'success')
                 if (this.callback) {
                     await this.callback()
                 }
             } else {
                 this.error = true
-                Notify(window.config.translations.packages.statamic.form.error, 'success')
+                Notify(window.config.statamic.translations.form.error, 'success')
+                console.error(data?.errors)
             }
         },
     },

@@ -17,9 +17,7 @@ use Rapidez\Statamic\Commands\ImportProducts;
 use Rapidez\Statamic\Commands\ImportCategories;
 use Rapidez\Core\Facades\Rapidez;
 use Rapidez\Statamic\Commands\InvalidateCacheCommand;
-use Rapidez\Statamic\Eloquent\Assets\AssetRepository;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
-use Rapidez\Statamic\Fieldtypes\Assets\Assets;
 use Rapidez\Statamic\Http\Controllers\ImportsController;
 use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
 use Rapidez\Statamic\Listeners\ClearNavTreeCache;
@@ -36,6 +34,7 @@ use Statamic\Facades\Utility;
 use Statamic\Http\Controllers\FrontendController;
 use Statamic\Sites\Sites;
 use Statamic\StaticCaching\Middleware\Cache as StaticCache;
+use Statamic\Http\Middleware\RedirectAbsoluteDomains;
 use TorMorten\Eventy\Facades\Eventy;
 use Statamic\Facades\Site as SiteFacade;
 use Statamic\View\Cascade as StatamicCascade;
@@ -65,6 +64,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             // Prevent infinite locks by removing the static cache from the statamic.web middleware.
             $router = app(Router::class);
             $router->removeMiddlewareFromGroup('statamic.web', StaticCache::class);
+            $router->pushMiddlewareToGroup('web', RedirectAbsoluteDomains::class);
         });
     }
 

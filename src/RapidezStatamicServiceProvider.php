@@ -16,12 +16,9 @@ use Rapidez\Statamic\Commands\InstallCommand;
 use Rapidez\Statamic\Commands\InvalidateCacheCommand;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
 use Rapidez\Statamic\Forms\JsDrivers\Vue;
-use Rapidez\Statamic\Http\Controllers\ImportsController;
 use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
 use Rapidez\Statamic\Listeners\ClearNavTreeCache;
 use Rapidez\Statamic\Listeners\SetCollectionsForNav;
-use Rapidez\Statamic\Models\ProductAttribute;
-use Rapidez\Statamic\Models\ProductAttributeOption;
 use Rapidez\Statamic\Tags\Alternates;
 use Statamic\Events\GlobalSetDeleted;
 use Statamic\Events\GlobalSetSaved;
@@ -33,6 +30,7 @@ use Statamic\Facades\Utility;
 use Statamic\Http\Controllers\FrontendController;
 use Statamic\Sites\Sites;
 use Statamic\StaticCaching\Middleware\Cache as StaticCache;
+use Statamic\Http\Middleware\RedirectAbsoluteDomains;
 use TorMorten\Eventy\Facades\Eventy;
 use Statamic\Facades\Site as SiteFacade;
 use Statamic\View\Cascade as StatamicCascade;
@@ -56,6 +54,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         $this->app->booted(function () {
             $router = app(Router::class);
             $router->pushMiddlewareToGroup('web', StaticCache::class);
+            $router->pushMiddlewareToGroup('web', RedirectAbsoluteDomains::class);
         });
         $this->app->afterBootstrapping(BootProviders::class, function () {
             // Prevent infinite locks by removing the static cache from the statamic.web middleware.

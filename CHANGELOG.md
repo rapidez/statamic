@@ -1,6 +1,16 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/5.4.1...5.4.1)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/5.5.0...5.5.0)
+## [5.5.0](https://github.com/rapidez/statamic/releases/tag/5.5.0) - 2025-05-21
+
+### Changed
+
+- Forms with Ajax (#137)
+
+### Fixed
+
+- Redirect domains ending with a dot (#140)
+
 ## [5.4.1](https://github.com/rapidez/statamic/releases/tag/5.4.1) - 2025-05-13
 
 ### Fixed

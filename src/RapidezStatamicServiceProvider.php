@@ -16,6 +16,7 @@ use Rapidez\Statamic\Commands\InstallCommand;
 use Rapidez\Statamic\Commands\InvalidateCacheCommand;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
 use Rapidez\Statamic\Forms\JsDrivers\Vue;
+use Rapidez\Statamic\Http\ViewComposers\ConfigComposer;
 use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
 use Rapidez\Statamic\Listeners\ClearNavTreeCache;
 use Rapidez\Statamic\Listeners\SetCollectionsForNav;
@@ -77,12 +78,20 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootBuilder()
             ->bootSitemaps()
             ->bootStaticCaching()
-            ->bootStack();
+            ->bootStack()
+            ->bootTranslations();
 
         Vue::register();
         Alternates::register();
     }
-    
+
+    protected function bootTranslations(): self
+    {
+        $this->loadTranslationsFrom(__DIR__ . '/../lang', 'rapidez-statamic');
+
+        return $this;
+    }
+
     protected function bootBuilder(): self
     {
         config(['statamic.builder' => [
@@ -199,6 +208,8 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             $this->app->singleton(StatamicGlobalDataComposer::class);
             View::composer('*', StatamicGlobalDataComposer::class);
         }
+
+        View::composer('rapidez::layouts.app', ConfigComposer::class);
 
         return $this;
     }

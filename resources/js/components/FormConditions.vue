@@ -50,7 +50,7 @@ export default {
                 }
             } else {
                 this.error = true
-                Notify(window.config.statamic.translations.form.error, 'success')
+                Notify(window.config.statamic.translations.form.error, 'error')
                 console.error(data?.errors)
             }
         },

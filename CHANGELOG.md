@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/5.5.0...5.5.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/5.6.0...5.6.0)
+## [5.6.0](https://github.com/rapidez/statamic/releases/tag/5.6.0) - 2025-06-05
+
+### Added
+
+- Rapidez v4 support (beab982)
+
 ## [5.5.0](https://github.com/rapidez/statamic/releases/tag/5.5.0) - 2025-05-21
 
 ### Changed

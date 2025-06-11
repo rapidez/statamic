@@ -23,11 +23,15 @@ class Brand extends Model
     protected $primaryKey = 'option_id';
 
     public string $linkField = 'linked_brand';
-    public string  $collection = 'brands';
+    public string $collection = 'brands';
 
     protected static function booting()
     {
         static::addGlobalScope(function (Builder $builder) {
+            $storeId = Statamic::isCpRoute()
+                ? (Site::selected()->attributes['magento_store_id'] ?? '1')
+                : (Site::current()->attributes['magento_store_id'] ?? '1');
+
             $renamedAdmin = DB::table('eav_attribute_option_value')
                 ->select(['value AS value_admin', 'option_id AS sub_option_id', 'store_id']);
 
@@ -43,11 +47,18 @@ class Brand extends Model
                     $join->on('admin_value.sub_option_id', '=', 'eav_attribute_option.option_id')
                          ->where('admin_value.store_id', 0);
                 })
-                ->leftJoinSub($renamedStore, 'store_value', function ($join) {
+                ->leftJoinSub($renamedStore, 'store_value', function ($join) use ($storeId) {
                     $join->on('store_value.sub_option_id', '=', 'eav_attribute_option.option_id')
-                         ->where('store_value.store_id', RapidezStatamic::getCurrentStoreId());
+                         ->where('store_value.store_id', $storeId);
                 })
                 ->where('attribute_id', config('rapidez.statamic.runway.brand_attribute_id'));
+
+            Rapidez::withStore($storeId, fn() => $builder->has('products'));
         });
+    }
+
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class, 'manufacturer', 'option_id');
     }
 }

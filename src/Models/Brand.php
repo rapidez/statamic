@@ -51,16 +51,18 @@ class Brand extends Model
                 })
                 ->where('attribute_id', config('rapidez.statamic.runway.brand_attribute_id'));
 
-            Rapidez::withStore(RapidezStatamic::getCurrentStoreId(), fn() => $builder->has('products'));
+            if (! config('rapidez.statamic.runway.show_brands_without_products')) {
+                Rapidez::withStore(RapidezStatamic::getCurrentStoreId(), fn() => $builder->has('products'));
+            }
         });
     }
 
     public function products(): HasMany
     {
         $brandAttribute = Cache::remember(
-            'rapidez-statamic-brand-attribute',
+            'runway-brand-attribute',
             now()->addDay(),
-            fn() => Attribute::find(config('rapidez.statamic.runway.brand_attribute_id')),
+            fn() => Attribute::find(config('rapidez.statamic.runway.brand_attribute_id'))?->code ?? 'manufacturer',
         );
 
         return $this->hasMany(Product::class, $brandAttribute, 'option_id');

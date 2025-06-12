@@ -37,6 +37,9 @@ return [
         // The attribute id used for the brand resource.
         'brand_attribute_id' => 83,
 
+        // Enable this to also include brands that do not have any products under them.
+        'show_brands_without_products' => false,
+
         // Only show these product visibilities.
         // VISIBILITY_NOT_VISIBLE    = 1;
         // VISIBILITY_IN_CATALOG     = 2;

@@ -6,12 +6,14 @@ use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use StatamicRadPack\Runway\Traits\HasRunwayResource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Rapidez\Core\Facades\Rapidez;
+use Rapidez\Core\Models\Attribute;
 use Rapidez\Statamic\Models\Traits\HasContentEntry;
 use Rapidez\Statamic\Observers\RunwayObserver;
 use Rapidez\Statamic\Facades\RapidezStatamic;
-use Statamic\Facades\Site;
-use Statamic\Statamic;
 
 #[ObservedBy([RunwayObserver::class])]
 class Brand extends Model
@@ -55,6 +57,12 @@ class Brand extends Model
 
     public function products(): HasMany
     {
-        return $this->hasMany(Product::class, 'manufacturer', 'option_id');
+        $brandAttribute = Cache::remember(
+            'rapidez-statamic-brand-attribute',
+            now()->addDay(),
+            fn() => Attribute::find(config('rapidez.statamic.runway.brand_attribute_id')),
+        );
+
+        return $this->hasMany(Product::class, $brandAttribute, 'option_id');
     }
 }

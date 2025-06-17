@@ -6,12 +6,14 @@ use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use StatamicRadPack\Runway\Traits\HasRunwayResource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Rapidez\Core\Facades\Rapidez;
+use Rapidez\Core\Models\Attribute;
 use Rapidez\Statamic\Models\Traits\HasContentEntry;
 use Rapidez\Statamic\Observers\RunwayObserver;
 use Rapidez\Statamic\Facades\RapidezStatamic;
-use Statamic\Facades\Site;
-use Statamic\Statamic;
 
 #[ObservedBy([RunwayObserver::class])]
 class Brand extends Model
@@ -23,7 +25,7 @@ class Brand extends Model
     protected $primaryKey = 'option_id';
 
     public string $linkField = 'linked_brand';
-    public string  $collection = 'brands';
+    public string $collection = 'brands';
 
     protected static function booting()
     {
@@ -48,6 +50,21 @@ class Brand extends Model
                          ->where('store_value.store_id', RapidezStatamic::getCurrentStoreId());
                 })
                 ->where('attribute_id', config('rapidez.statamic.runway.brand_attribute_id'));
+
+            if (! config('rapidez.statamic.runway.show_brands_without_products')) {
+                Rapidez::withStore(RapidezStatamic::getCurrentStoreId(), fn() => $builder->has('products'));
+            }
         });
+    }
+
+    public function products(): HasMany
+    {
+        $brandAttribute = Cache::remember(
+            'runway-brand-attribute',
+            now()->addDay(),
+            fn() => Attribute::find(config('rapidez.statamic.runway.brand_attribute_id'))?->code ?? 'manufacturer',
+        );
+
+        return $this->hasMany(Product::class, $brandAttribute, 'option_id');
     }
 }

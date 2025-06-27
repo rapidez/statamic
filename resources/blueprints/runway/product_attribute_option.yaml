@@ -1,0 +1,50 @@
+title: 'Product Attribute Option'
+tabs:
+  main:
+    display: Main
+    sections:
+      -
+        display: General
+        fields:
+          -
+            handle: option_id
+            field:
+              type: text
+              display: 'Option ID'
+              listable: true
+              read_only: true
+          -
+            handle: attribute_code
+            field:
+              type: text
+              display: 'Attribute Code'
+              listable: true
+              read_only: true
+          -
+            handle: attribute_label
+            field:
+              type: text
+              display: 'Attribute Label'
+              listable: true
+              read_only: true
+          -
+            handle: admin_value
+            field:
+              type: text
+              display: 'Admin Value'
+              listable: true
+              read_only: true
+          -
+            handle: store_value
+            field:
+              type: text
+              display: 'Store Value'
+              listable: true
+              read_only: true
+          -
+            handle: sort_order
+            field:
+              type: integer
+              display: 'Sort Order'
+              listable: true
+              read_only: true

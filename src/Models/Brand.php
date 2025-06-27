@@ -6,6 +6,7 @@ use StatamicRadPack\Runway\Traits\HasRunwayResource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Rapidez\Statamic\Facades\RapidezStatamic;
 use Statamic\Facades\Site;
 use Statamic\Statamic;
 
@@ -37,7 +38,7 @@ class Brand extends Model
                 })
                 ->leftJoinSub($renamedStore, 'store_value', function ($join) {
                     $join->on('store_value.sub_option_id', '=', 'eav_attribute_option.option_id')
-                         ->where('store_value.store_id', (Statamic::isCpRoute() ? (Site::selected()->attributes['magento_store_id'] ?? '1') : (Site::current()->attributes['magento_store_id'] ?? '1')));
+                         ->where('store_value.store_id', RapidezStatamic::getCurrentStoreId());
                 })
                 ->where('attribute_id', config('rapidez.statamic.runway.brand_attribute_id'));
         });

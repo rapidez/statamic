@@ -8,10 +8,19 @@ use Statamic\Eloquent\Entries\Entry;
 use Rapidez\Core\Facades\Rapidez;
 use Rapidez\Statamic\Exceptions\NavException;
 use Statamic\Structures\Page;
+use Statamic\Facades\Site;
 
 class RapidezStatamic
 {
     protected array $navCache = [];
+
+    public static function getCurrentStoreId(): string
+    {
+        return once(fn() => (Statamic::isCpRoute()
+            ? (Site::selected()->attributes['magento_store_id'] ?? '1')
+            : (Site::current()->attributes['magento_store_id'] ?? '1')
+        ));
+    }
 
     public function nav(string $tag): array
     {

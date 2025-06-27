@@ -5,8 +5,7 @@ namespace Rapidez\Statamic\Models;
 use StatamicRadPack\Runway\Traits\HasRunwayResource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Statamic\Facades\Site;
-use Statamic\Statamic;
+use Rapidez\Statamic\Facades\RapidezStatamic;
 
 class Product extends Model
 {
@@ -24,9 +23,6 @@ class Product extends Model
 
     public function getTable()
     {
-        return 'catalog_product_flat_' . once(fn() => (Statamic::isCpRoute()
-            ? (Site::selected()->attributes['magento_store_id'] ?? '1')
-            : (Site::current()->attributes['magento_store_id'] ?? '1')
-        ));
+        return 'catalog_product_flat_' . RapidezStatamic::getCurrentStoreId();
     }
 }

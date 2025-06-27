@@ -2,8 +2,8 @@
 
 namespace Rapidez\Statamic\Facades;
 
-use Illuminate\Support\Facades\Facade;
 use Rapidez\Statamic\RapidezStatamic as RapidezStatamicFacade;
+use Illuminate\Support\Facades\Facade;
 
 /**
  * @see \Rapidez\Statamic\RapidezStatamic

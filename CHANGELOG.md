@@ -1,6 +1,70 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/5.0.0...5.0.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/5.6.0...5.6.0)
+## [5.6.0](https://github.com/rapidez/statamic/releases/tag/5.6.0) - 2025-06-05
+
+### Added
+
+- Rapidez v4 support (beab982)
+
+## [5.5.0](https://github.com/rapidez/statamic/releases/tag/5.5.0) - 2025-05-21
+
+### Changed
+
+- Forms with Ajax (#137)
+
+### Fixed
+
+- Redirect domains ending with a dot (#140)
+
+## [5.4.1](https://github.com/rapidez/statamic/releases/tag/5.4.1) - 2025-05-13
+
+### Fixed
+
+- Invalidate cache command error fix (#138)
+
+## [5.4.0](https://github.com/rapidez/statamic/releases/tag/5.4.0) - 2025-05-01
+
+### Fixed
+
+- Invalidate cache command multistore compatibility (#133)
+
+### Removed
+
+- Remove unused brands utility (#135)
+
+## [5.3.1](https://github.com/rapidez/statamic/releases/tag/5.3.1) - 2025-04-25
+
+### Fixed
+
+- Replace CSRF token in the Vue form (#131)
+
+## [5.3.0](https://github.com/rapidez/statamic/releases/tag/5.3.0) - 2025-04-17
+
+### Added
+
+- Invalidate product pages on stock changes (#130)
+
+## [5.2.0](https://github.com/rapidez/statamic/releases/tag/5.2.0) - 2025-04-11
+
+### Added
+
+- Custom cache invalidator (#127)
+- Compile assets from the install command (#128)
+
+## [5.1.0](https://github.com/rapidez/statamic/releases/tag/5.1.0) - 2025-04-08
+
+### Changed
+
+- Install command: extend user model if it already exists (#114)
+- Updated statamic/cms dependency (#117)
+- Use retrieved event instead of overwriting getAttributes (#126)
+
+### Fixed
+
+- Set absolute url for sitemap entries (#118)
+- Persistent latest check with cache invalidation (#125)
+
 ## [5.0.0](https://github.com/rapidez/statamic/releases/tag/5.0.0) - 2025-01-29
 
 ### Added

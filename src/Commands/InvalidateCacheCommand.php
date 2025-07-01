@@ -20,22 +20,31 @@ class InvalidateCacheCommand extends Command
 
     public $latestCheck;
 
+    public $staticCachePath;
+
     public function handle(Cacher $cacher, Writer $writer): void
     {
-        $this->latestCheck = $this->getLatestCheckDate();
-
-        if (!$this->latestCheck) {
-            $this->info('Cleared all urls (as we do not have a latest check date yet)');
-            $cacher->flush();
-            $this->setLatestCheckDate($writer);
-            return;
-        }
-        $this->setLatestCheckDate($writer);
-
         $stores = Rapidez::getStores();
 
         foreach ($stores as $store) {
+            $staticCachePathConfig = 'statamic.static_caching.strategies.full.path';
             Rapidez::setStore($store);
+           
+            if (is_array(config('statamic.static_caching.strategies.full.path'))) {
+                $staticCachePathConfig = $staticCachePathConfig . '.' . $store['code'];
+            }
+
+            $this->staticCachePath = config($staticCachePathConfig);
+
+            $this->latestCheck = $this->getLatestCheckDate();
+
+            if (!$this->latestCheck) {
+                $this->info('Cleared all urls (as we do not have a latest check date yet)');
+                $cacher->flush();
+                $this->setLatestCheckDate($writer);
+                continue;
+            }
+            $this->setLatestCheckDate($writer);
 
             $this->urls = collect();
 
@@ -59,6 +68,7 @@ class InvalidateCacheCommand extends Command
     {
         $products = config('rapidez.models.product')::withoutGlobalScopes()
             ->where('updated_at', '>=', $this->latestCheck)
+            ->orWhereIn('entity_id', $this->getUpdatedStockProducts())
             ->with(['parent:entity_id' => ['rewrites']])
             ->with('rewrites')
             ->get('entity_id');
@@ -72,6 +82,27 @@ class InvalidateCacheCommand extends Command
         }
 
         return $this;
+    }
+
+    protected function getUpdatedStockProducts()
+    {
+        $currentStock = DB::table('cataloginventory_stock_item')
+            ->pluck('qty', 'product_id')
+            ->toArray();
+
+        $previousStock = $this->getPreviousStock();
+
+        $this->setPreviousStock($currentStock);
+
+        return array_keys(
+            array_diff_assoc(
+                (array) $currentStock,
+                (array) $previousStock
+            ) + array_diff_assoc(
+                (array) $previousStock,
+                (array) $currentStock
+            )
+        );
     }
 
     protected function addCategoryUrls(): self
@@ -120,7 +151,7 @@ class InvalidateCacheCommand extends Command
     protected function getLatestCheckDate()
     {
         try {
-            return File::get(config('statamic.static_caching.strategies.full.path') . '/.last-invalidation');
+            return File::get($this->staticCachePath . '/.last-invalidation');
         } catch (FileNotFoundException $e) {
             return null;
         }
@@ -129,10 +160,28 @@ class InvalidateCacheCommand extends Command
     protected function setLatestCheckDate(Writer $writer): void
     {
         $writer->write(
-            config('statamic.static_caching.strategies.full.path') . '/.last-invalidation',
+            $this->staticCachePath . '/.last-invalidation',
             // With this we're just making sure the comparison
             // is done within the same timezone in MySQL.
             DB::selectOne('SELECT NOW() AS `current_time`')->current_time
+        );
+    }
+
+    protected function getPreviousStock()
+    {
+        try {
+            return json_decode(File::get($this->staticCachePath . '/.product-stocks'), true, 512, JSON_THROW_ON_ERROR);
+        } catch (FileNotFoundException|\JsonException $e) {
+            return [];
+        }
+    }
+
+    protected function setPreviousStock(array $previousStock): void
+    {
+        $writer = app(Writer::class);
+        $writer->write(
+            $this->staticCachePath . '/.product-stocks',
+            json_encode($previousStock)
         );
     }
 }

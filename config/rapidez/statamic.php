@@ -37,6 +37,9 @@ return [
         // The attribute id used for the brand resource.
         'brand_attribute_id' => 83,
 
+        // Enable this to also include brands that do not have any products under them.
+        'show_brands_without_products' => false,
+
         // Only show these product visibilities.
         // VISIBILITY_NOT_VISIBLE    = 1;
         // VISIBILITY_IN_CATALOG     = 2;
@@ -49,19 +52,16 @@ return [
             \Rapidez\Statamic\Models\Product::class => [
                 'name' => 'Products',
                 'title_field' => 'name',
-                'cp_icon' => 'table',
             ],
 
             \Rapidez\Statamic\Models\Category::class => [
                 'name' => 'Categories',
                 'title_field' => 'name',
-                'cp_icon' => 'array',
             ],
 
             \Rapidez\Statamic\Models\Brand::class => [
                 'name' => 'Brands',
                 'title_field' => 'value_store',
-                'cp_icon' => 'tags',
                 'order_by' => 'sort_order',
             ],
 
@@ -69,7 +69,6 @@ return [
                 'name' => 'Product Attributes',
                 'read_only' => true,
                 'title_field' => 'frontend_label',
-                'cp_icon' => 'tags',
                 'listing' => [
                     'columns' => [
                         'attribute_code',
@@ -99,7 +98,6 @@ return [
                 'name' => 'Product Attribute Options',
                 'read_only' => true,
                 'title_field' => 'display_value',
-                'cp_icon' => 'list-bullets',
                 'listing' => [
                     'columns' => [
                         'option_id',

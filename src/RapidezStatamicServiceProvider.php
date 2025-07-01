@@ -16,12 +16,10 @@ use Rapidez\Statamic\Commands\InstallCommand;
 use Rapidez\Statamic\Commands\InvalidateCacheCommand;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
 use Rapidez\Statamic\Forms\JsDrivers\Vue;
-use Rapidez\Statamic\Http\Controllers\ImportsController;
+use Rapidez\Statamic\Http\ViewComposers\ConfigComposer;
 use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
 use Rapidez\Statamic\Listeners\ClearNavTreeCache;
 use Rapidez\Statamic\Listeners\SetCollectionsForNav;
-use Rapidez\Statamic\Models\ProductAttribute;
-use Rapidez\Statamic\Models\ProductAttributeOption;
 use Rapidez\Statamic\Tags\Alternates;
 use Statamic\Events\GlobalSetDeleted;
 use Statamic\Events\GlobalSetSaved;
@@ -33,9 +31,11 @@ use Statamic\Facades\Utility;
 use Statamic\Http\Controllers\FrontendController;
 use Statamic\Sites\Sites;
 use Statamic\StaticCaching\Middleware\Cache as StaticCache;
+use Statamic\Http\Middleware\RedirectAbsoluteDomains;
 use TorMorten\Eventy\Facades\Eventy;
 use Statamic\Facades\Site as SiteFacade;
 use Statamic\View\Cascade as StatamicCascade;
+use Rapidez\Statamic\StaticCaching\CustomInvalidator;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
@@ -55,6 +55,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         $this->app->booted(function () {
             $router = app(Router::class);
             $router->pushMiddlewareToGroup('web', StaticCache::class);
+            $router->pushMiddlewareToGroup('web', RedirectAbsoluteDomains::class);
         });
         $this->app->afterBootstrapping(BootProviders::class, function () {
             // Prevent infinite locks by removing the static cache from the statamic.web middleware.
@@ -74,15 +75,23 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootRunway()
             ->bootComposers()
             ->bootPublishables()
-            ->bootUtilities()
             ->bootBuilder()
             ->bootSitemaps()
-            ->bootStack();
+            ->bootStaticCaching()
+            ->bootStack()
+            ->bootTranslations();
 
         Vue::register();
         Alternates::register();
     }
-    
+
+    protected function bootTranslations(): self
+    {
+        $this->loadTranslationsFrom(__DIR__ . '/../lang', 'rapidez-statamic');
+
+        return $this;
+    }
+
     protected function bootBuilder(): self
     {
         config(['statamic.builder' => [
@@ -200,6 +209,8 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             View::composer('*', StatamicGlobalDataComposer::class);
         }
 
+        View::composer('rapidez::layouts.app', ConfigComposer::class);
+
         return $this;
     }
 
@@ -227,24 +238,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         return $this;
     }
 
-    public function bootUtilities() : static
-    {
-        Utility::extend(function () : void {
-            Utility::register('imports')
-                ->icon('synchronize')
-                ->action(ImportsController::class)
-                ->title(__('Import'))
-                ->navTitle(__('Import'))
-                ->description(__('Import brands from Magento'))
-                ->routes(function (Router $router) : void {
-                    $router->post('/import-brands', [ImportsController::class, 'importBrands'])
-                        ->name('import-brands');
-                });
-        });
-
-        return $this;
-    }
-
     public function bootSitemaps(): static
     {
         Eventy::addAction('rapidez.sitemap.generate', fn() => GenerateSitemapsAction::generate(), 20, 1);
@@ -252,6 +245,17 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         return $this;
     }
 
+    public function bootStaticCaching(): static
+    {
+        if (!config('statamic.static_caching.invalidation.class')) {
+            config()->set(
+                'statamic.static_caching.invalidation.class',
+                CustomInvalidator::class
+            );
+        }
+        
+        return $this;
+    }
 
     public function bootStack() : static
     {

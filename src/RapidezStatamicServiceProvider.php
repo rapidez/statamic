@@ -36,6 +36,8 @@ use TorMorten\Eventy\Facades\Eventy;
 use Statamic\Facades\Site as SiteFacade;
 use Statamic\View\Cascade as StatamicCascade;
 use Rapidez\Statamic\StaticCaching\CustomInvalidator;
+use Statamic\Facades\Blueprint;
+use Statamic\Statamic;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {

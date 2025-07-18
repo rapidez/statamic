@@ -188,6 +188,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                     ->where('linked_product', config('frontend.product.sku'))
                     ->first();
 
+                Blueprint::addNamespace('collections.products', resource_path('blueprints/vendor/runway'));
                 $view->with('content', optionalDeep($entry));
             });
         }
@@ -200,6 +201,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                     ->where('linked_category', config('frontend.category.entity_id'))
                     ->first();
 
+                Blueprint::addNamespace('collections.categories', resource_path('blueprints/vendor/runway'));
                 $view->with('content', optionalDeep($entry));
             });
         }

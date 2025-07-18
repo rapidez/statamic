@@ -41,9 +41,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        if (! app()->runningInConsole()) {
-            $this->app->extend(Sites::class, fn () => new SitesLinkedToMagentoStores());
-        }
+        $this->app->extend(Sites::class, fn () => new SitesLinkedToMagentoStores());
 
         $this->app->singleton(RapidezStatamic::class);
 

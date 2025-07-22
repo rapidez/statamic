@@ -3,7 +3,6 @@
 namespace Rapidez\Statamic\Observers;
 
 use Illuminate\Database\Eloquent\Model;
-use StatamicRadPack\Runway\Support\Json;
 use Statamic\Facades\Entry;
 use Statamic\Facades\Site;
 
@@ -26,7 +25,7 @@ class RunwayObserver
             // Is there a way we can detect this earlier?
             // So we know what's coming from for example
             // the blueprint as it's defined there.
-            if (Json::isJson($value)) {
+            if (is_string($value) && json_validate($value)) {
                 $attributes[$key] = json_decode((string) $value, true);
             }
         }

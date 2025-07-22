@@ -1,6 +1,19 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/5.6.0...5.6.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/5.7.0...5.7.0)
+## [5.7.0](https://github.com/rapidez/statamic/releases/tag/5.7.0) - 2025-07-22
+
+### Changed
+
+- Replaced install script with starter kit (#145)
+
+### Fixed
+
+- Filter out brands with no products (#143)
+- Remove json helper (#146)
+- Fix db query running on composer install (#147)
+- Runway blueprint namespace fix (#148)
+
 ## [5.6.0](https://github.com/rapidez/statamic/releases/tag/5.6.0) - 2025-06-05
 
 ### Added

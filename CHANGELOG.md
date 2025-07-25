@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/5.7.0...5.7.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/5.7.1...5.7.1)
+## [5.7.1](https://github.com/rapidez/statamic/releases/tag/5.7.1) - 2025-07-25
+
+### Fixed
+
+- Move try/catch around cache (#149)
+
 ## [5.7.0](https://github.com/rapidez/statamic/releases/tag/5.7.0) - 2025-07-22
 
 ### Changed

@@ -30,8 +30,8 @@ class SitesLinkedToMagentoStores extends Sites
 
     protected function getSavedSites()
     {
-        return Cache::rememberForever('statamic_sites', function () {
-            try {
+        try {
+            return Cache::rememberForever('statamic_sites', function () {
                 $sites = [];
                 $stores = Rapidez::getStores();
                 $staticPaths = collect();
@@ -67,9 +67,9 @@ class SitesLinkedToMagentoStores extends Sites
                 config(['statamic.static_caching.strategies.full.path' => $staticPaths->toArray()]);
 
                 return $sites ?: $this->getFallbackConfig();
-            } catch (PDOException) {
-                return $this->getFallbackConfig();
-            }
-        });
+            });
+        } catch (PDOException) {
+            return $this->getFallbackConfig();
+        }
     }
 }

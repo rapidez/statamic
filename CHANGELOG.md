@@ -1,6 +1,13 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/5.7.1...5.7.1)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/5.7.2...5.7.2)
+## [5.7.2](https://github.com/rapidez/statamic/releases/tag/5.7.2) - 2025-07-29
+
+### Fixed
+
+- Do not invalidate cache from disabled stores (#150)
+- Use new form labels (#151)
+
 ## [5.7.1](https://github.com/rapidez/statamic/releases/tag/5.7.1) - 2025-07-25
 
 ### Fixed

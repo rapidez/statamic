@@ -1,6 +1,13 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/4.7.3...4.7.3)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/4.7.4...4.7.4)
+## [4.7.4](https://github.com/rapidez/statamic/releases/tag/4.7.4) - 2025-07-29
+
+### Fixed
+
+- Redirect domains ending with a dot (#141)
+- Do not invalidate cache from disabled stores (#142)
+
 ## [4.7.3](https://github.com/rapidez/statamic/releases/tag/4.7.3) - 2025-05-13
 
 ### Fixed

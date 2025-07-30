@@ -1,6 +1,6 @@
 <label>
     <x-rapidez::label>{{ $field['display'] }}</x-rapidez::label>
-    <x-rapidez::textarea
+    <x-rapidez::input.textarea
         :name="$field['handle']"
         :value="$field['value']"
         :placeholder="$field['placeholder'] ?? false"

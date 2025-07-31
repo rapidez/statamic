@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/5.7.2...5.7.2)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/5.7.3...5.7.3)
+## [5.7.3](https://github.com/rapidez/statamic/releases/tag/5.7.3) - 2025-07-30
+
+### Fixed
+
+- Use input.select instead of select (#152)
+
 ## [5.7.2](https://github.com/rapidez/statamic/releases/tag/5.7.2) - 2025-07-29
 
 ### Fixed

@@ -11,10 +11,15 @@ export default {
         callback: {
             type: Function,
         },
+        ajaxResponse: {
+            type: Boolean,
+            default: false
+        }
     },
     data() {
         return {
             formData: this.initialData,
+            ajaxResponse: this.ajaxResponse,
             success: false,
             error: false,
         };
@@ -35,10 +40,18 @@ export default {
         async submit(event) {
             event.preventDefault()
 
-            const response = await rapidezFetch(this.$el.action, {
+            let settings = {
                 method: this.$el.method,
                 body: new FormData(this.$el),
-            })
+            };
+
+            if(this.ajaxResponse) {
+                settings.headers = {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }
+
+            const response = await rapidezFetch(this.$el.action, settings)
 
             let data = await response.json()
 

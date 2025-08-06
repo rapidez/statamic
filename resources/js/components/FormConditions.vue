@@ -19,7 +19,6 @@ export default {
     data() {
         return {
             formData: this.initialData,
-            ajaxResponse: this.ajaxResponse,
             success: false,
             error: false,
         };

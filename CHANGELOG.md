@@ -1,6 +1,38 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/5.6.0...5.6.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/5.7.3...5.7.3)
+## [5.7.3](https://github.com/rapidez/statamic/releases/tag/5.7.3) - 2025-07-30
+
+### Fixed
+
+- Use input.select instead of select (#152)
+
+## [5.7.2](https://github.com/rapidez/statamic/releases/tag/5.7.2) - 2025-07-29
+
+### Fixed
+
+- Do not invalidate cache from disabled stores (#150)
+- Use new form labels (#151)
+
+## [5.7.1](https://github.com/rapidez/statamic/releases/tag/5.7.1) - 2025-07-25
+
+### Fixed
+
+- Move try/catch around cache (#149)
+
+## [5.7.0](https://github.com/rapidez/statamic/releases/tag/5.7.0) - 2025-07-22
+
+### Changed
+
+- Replaced install script with starter kit (#145)
+
+### Fixed
+
+- Filter out brands with no products (#143)
+- Remove json helper (#146)
+- Fix db query running on composer install (#147)
+- Runway blueprint namespace fix (#148)
+
 ## [5.6.0](https://github.com/rapidez/statamic/releases/tag/5.6.0) - 2025-06-05
 
 ### Added

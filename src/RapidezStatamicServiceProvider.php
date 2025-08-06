@@ -36,6 +36,8 @@ use TorMorten\Eventy\Facades\Eventy;
 use Statamic\Facades\Site as SiteFacade;
 use Statamic\View\Cascade as StatamicCascade;
 use Rapidez\Statamic\StaticCaching\CustomInvalidator;
+use Statamic\Facades\Blueprint;
+use Statamic\Statamic;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
@@ -173,6 +175,11 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                 config('rapidez.statamic.runway.resources') ?? [],
                 config('runway.resources') ?? []
             )]);
+        }
+
+        if (! Statamic::isCpRoute()) {
+            Blueprint::addNamespace('collections.products', resource_path('blueprints/vendor/runway'));
+            Blueprint::addNamespace('collections.categories', resource_path('blueprints/vendor/runway'));
         }
 
         return $this;

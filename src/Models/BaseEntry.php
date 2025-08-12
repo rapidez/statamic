@@ -14,7 +14,7 @@ class BaseEntry extends Model
     use Searchable;
 
     protected $table = 'statamic_entries';
-    protected static $collection = 'pages';
+    protected static $collection;
 
     protected $casts = [
         'data' => 'json',
@@ -46,7 +46,19 @@ class BaseEntry extends Model
     public function toSearchableArray(): array
     {
         $entry = Entry::fromModel($this);
+
+        $data = [
+            'title' => $entry->title,
+            'url' => $entry->url,
+            'slug' => $entry->slug,
+            'date' => $entry->date,
+        ];
         
-        return Eventy::filter('index.' . static::getModelName() . '.data', $entry->toArray(), $entry);
+        return Eventy::filter('index.' . static::getModelName() . '.data', array_merge($data, $this->getAdditionalIndexData($entry)), $entry);
+    }
+
+    protected function getAdditionalIndexData(Entry $entry): array
+    {
+        return [];
     }
 }

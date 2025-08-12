@@ -43,13 +43,10 @@ class BaseEntry extends Model
         return 'statamic.' . static::$collection;
     }
 
-    /** @return array<mixed> */
     public function toSearchableArray(): array
     {
         $entry = Entry::fromModel($this);
-
-        /** @var array<mixed> $data */
-        $data = Eventy::filter('index.' . static::getModelName() . '.data', $entry->toArray(), $entry);
-        return $data;
+        
+        return Eventy::filter('index.' . static::getModelName() . '.data', $entry->toArray(), $entry);
     }
 }

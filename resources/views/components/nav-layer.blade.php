@@ -26,7 +26,7 @@ This is a mobile navigation slideover component for handling multi-level navigat
             @include('rapidez-statamic::navigation.header-button')
         </div>
     </x-slot:headerButton>
-    <div class="bg-inactive-100 flex w-full flex-1 flex-col">
+    <div class="bg flex w-full flex-1 flex-col">
         <ul class="mt-5 flex flex-col divide-y border-y bg-white">
             @if ($hasParent && $parentUrl)
                 <li>

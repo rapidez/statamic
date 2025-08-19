@@ -24,7 +24,7 @@
                         'col-span-6' => $field['width'] == '50',
                         'col-span-8' => $field['width'] == '66',
                         'col-span-9' => $field['width'] == '75',
-                        'col-span-12' => $field['width'] == '100', 
+                        'col-span-12' => $field['width'] == '100',
                     ])
                     v-if="{!! $form['show_field'][$field['handle']] ?? true !!}"
                 >
@@ -33,8 +33,8 @@
             @endforeach
         </div>
 
-        <x-rapidez::button type="submit">
+        <x-rapidez::button.secondary type="submit">
             @lang('Submit')
-        </x-rapidez::button>
+        </x-rapidez::button.secondary>
     </form>
 </form-conditions>

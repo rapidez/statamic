@@ -12,12 +12,12 @@
 
 <div class="container mb-16">
     <h1 class="text-3xl font-bold mb-4">@lang('All brands')</h1>
-    <div class="bg-inactive-100 p-4 rounded-xl">
+    <div class="bg p-4 rounded-xl">
         @foreach(array_merge(['0-9'], range('A','Z')) as $letter)
-            <a class="px-1 text-inactive hover:text-neutral transition" href="#{{ $letter }}" v-smooth-scroll="{}">{{ $letter }}</a>
+            <a class="px-1 text-muted hover:text transition" href="#{{ $letter }}" v-smooth-scroll="{}">{{ $letter }}</a>
         @endforeach
     </div>
-    
+
     <div class="mt-6">
         @foreach(array_merge(['0-9'], range('A','Z')) as $letter)
             @php
@@ -34,12 +34,12 @@
             @if ($brandsByLetter->count() > 0)
                 <div id="{{ $letter }}" class="mt-6">
                     <div class="mb-1 text-xl font-bold">{{ $letter }}</div>
-                    <ul class="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-6 gap-3 text-neutral text-sm">
+                    <ul class="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-6 gap-3 text text-sm">
                         @foreach($brandsByLetter as $brand)
                             <li class="col-span-1">
                                 <a
                                     href="{{ $brand->url() }}"
-                                    class="flex flex-1 items-center justify-center text-sm w-full border rounded-xl p-4 hover:border-primary h-32 md:text-base lg:h-40"
+                                    class="flex flex-1 items-center justify-center text-sm w-full border rounded-xl p-4 hover:border-emphasis h-32 md:text-base lg:h-40"
                                 >
                                     @if($brand->image)
                                         <div class="flex w-full h-full *:flex *:flex-1">

@@ -1,6 +1,24 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/5.7.3...5.7.3)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/6.0.0...6.0.0)
+## [6.0.0](https://github.com/rapidez/statamic/releases/tag/6.0.0) - 2025-08-26
+
+### Added
+
+- Rapidez v4 support (#158)
+
+## [5.8.0](https://github.com/rapidez/statamic/releases/tag/5.8.0) - 2025-08-26
+
+### Added
+
+- Searchable base model (#155)
+
+### Changed
+
+- Upgrade color names (#154)
+- Secondary button on forms (#156)
+- Undo Rapidez v4 support (d1a6fac)
+
 ## [5.7.3](https://github.com/rapidez/statamic/releases/tag/5.7.3) - 2025-07-30
 
 ### Fixed

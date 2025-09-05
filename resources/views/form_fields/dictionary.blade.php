@@ -1,0 +1,1 @@
+@includeFirstSafe(['form_fields.select', 'rapidez-statamic::form_fields.select'])

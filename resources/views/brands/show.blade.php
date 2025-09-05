@@ -22,7 +22,7 @@
                 @include('rapidez-statamic::page_builder.content', ['content' => $content])
             </div>
         @endif
-        <x-rapidez::listing query="{ terms: { '{{ $brandAttribute->code }}.keyword': ['{{ $title }}'] } }"/>
+        <x-rapidez::listing filter-query-string="{{ $brandAttribute->code }}:{{ $title }}" />
 
         @include('rapidez-statamic::page_builder')
     </div>

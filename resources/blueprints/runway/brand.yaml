@@ -5,7 +5,23 @@ tabs:
       -
         fields:
           -
+            handle: title
+            field:
+              type: text
+              required: true
+              localizable: true
+          -
+            handle: slug
+            field:
+              type: slug
+              localizable: true
+              validate:
+                - 'max:200'
+                - 'new \Statamic\Rules\UniqueEntryValue({collection}, {id}, {site})'
+          -
             import: page_builder
+          -
+            import: image
   meta:
     display: Meta
     sections:

@@ -9,14 +9,15 @@ use TorMorten\Eventy\Facades\Eventy;
 use Illuminate\Support\Facades\Storage;
 use Rapidez\Statamic\Actions\StatamicEntryAction;
 use Illuminate\Support\Facades\Schema;
+use Rapidez\Statamic\Contracts\ImportsBrands;
 
-class ImportBrands
+class ImportBrands implements ImportsBrands
 {
     public function __construct(
         protected StatamicEntryAction $statamicEntryAction
     ) {}
 
-    public function handle()
+    public function handle(): void
     {
         foreach (Site::all() as $site) {
             foreach (Brand::get() as $brand) {

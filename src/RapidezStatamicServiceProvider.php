@@ -14,6 +14,8 @@ use Rapidez\Core\Facades\Rapidez;
 use Rapidez\Statamic\Commands\ImportBrands;
 use Rapidez\Statamic\Commands\InstallCommand;
 use Rapidez\Statamic\Commands\InvalidateCacheCommand;
+use Rapidez\Statamic\Contracts\ImportsBrands;
+use Rapidez\Statamic\Actions\ImportBrands as ImportBrandsAction;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
 use Rapidez\Statamic\Forms\JsDrivers\Vue;
 use Rapidez\Statamic\Http\ViewComposers\ConfigComposer;
@@ -46,6 +48,8 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         $this->app->extend(Sites::class, fn () => new SitesLinkedToMagentoStores());
 
         $this->app->singleton(RapidezStatamic::class);
+        
+        $this->app->bind(ImportsBrands::class, ImportBrandsAction::class);
 
         // Since we have our own way of exposing the globals to the view,
         // we can overwrite Statamic's functionality so we don't query for the

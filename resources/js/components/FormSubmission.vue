@@ -6,10 +6,6 @@ export default {
     props: {
         callback: {
             type: Function,
-        },
-        ajaxResponse: {
-            type: Boolean,
-            default: true
         }
     },
     data() {
@@ -41,13 +37,10 @@ export default {
             let settings = {
                 method: this.$el.method,
                 body: new FormData(this.$el),
-            };
-
-            if(this.ajaxResponse) {
-                settings.headers = {
+                headers: {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
-            }
+            };
 
             const response = await rapidezFetch(this.$el.action, settings)
 

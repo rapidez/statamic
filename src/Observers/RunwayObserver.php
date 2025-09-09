@@ -16,7 +16,7 @@ class RunwayObserver
             $entry = Entry::make()
                 ->collection($model->collection)
                 ->locale(Site::selected()->handle())
-                ->data([$model->linkField => $model->{$model->getKeyName()}]);
+                ->data([$model->linkField => $model->{$model->linkKey ?? $model->getKeyName()}]);
         }
         
         $attributes = $model->getDirty();

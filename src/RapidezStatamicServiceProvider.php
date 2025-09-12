@@ -182,6 +182,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         }
 
         if (! Statamic::isCpRoute()) {
+            Blueprint::addNamespace('collections.brands', resource_path('blueprints/vendor/runway'));
             Blueprint::addNamespace('collections.products', resource_path('blueprints/vendor/runway'));
             Blueprint::addNamespace('collections.categories', resource_path('blueprints/vendor/runway'));
         }

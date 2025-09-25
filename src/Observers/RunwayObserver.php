@@ -52,7 +52,7 @@ class RunwayObserver
             ->keys()
             ->toArray();
 
-        // Exclude the potentional duplicated keys
+        // Exclude the potential duplicated keys
         // Ignore the Magento values in that case
         $originalAttributes = Arr::except(
             $model->getAttributes(),

@@ -1,6 +1,22 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/6.0.0...6.0.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/6.1.0...6.1.0)
+## [6.1.0](https://github.com/rapidez/statamic/releases/tag/6.1.0) - 2025-09-25
+
+### Added
+
+- Dictionary form field type (#157)
+
+### Changed
+
+- Forms with ajax (#153)
+
+### Fixed
+
+- Brands data fix (#160)
+- Brands blueprint fix (#161)
+- Merge conflicting fields correctly (#163)
+
 ## [6.0.0](https://github.com/rapidez/statamic/releases/tag/6.0.0) - 2025-08-26
 
 ### Added

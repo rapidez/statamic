@@ -42,7 +42,22 @@ class RunwayObserver
 
     public function retrieved(Model $model)
     {
-        $originalAttributes = $model->getAttributes();
+        $fieldsOnRunwayResource = $model
+            ->runwayResource()
+            ->blueprint()
+            ->fields()
+            ->all()
+            // Always keep these from Magento
+            ->except(['entity_id', 'name'])
+            ->keys()
+            ->toArray();
+
+        // Exclude the potential duplicated keys
+        // Ignore the Magento values in that case
+        $originalAttributes = Arr::except(
+            $model->getAttributes(),
+            $fieldsOnRunwayResource
+        );
         
         if ($model->exists && $model->entry) {
             $model->setRawAttributes(array_merge(

@@ -3,6 +3,7 @@
 namespace Rapidez\Statamic\Observers;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Statamic\Facades\Entry;
 use Statamic\Facades\Site;
 

@@ -47,8 +47,8 @@ class RunwayObserver
             ->blueprint()
             ->fields()
             ->all()
-            // Always keep these from Magento
-            ->except(['entity_id', 'name'])
+            // Filter all read_only variables because they should always come from magento
+            ->filter(fn($option) => $option->visibility() !== 'read_only')
             ->keys()
             ->toArray();
 

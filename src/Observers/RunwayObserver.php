@@ -5,6 +5,7 @@ namespace Rapidez\Statamic\Observers;
 use Illuminate\Database\Eloquent\Model;
 use Statamic\Facades\Entry;
 use Statamic\Facades\Site;
+use Statamic\Support\Arr;
 
 class RunwayObserver
 {

@@ -1,5 +1,5 @@
 <label>
-    <x-rapidez::label>{{ $field['display'] }}</x-rapidez::label>
+    <x-rapidez::label>@lang($field['display'])</x-rapidez::label>
     <x-rapidez::input.select
         :name="$field['handle']"
         :value="$field['old'] ?: $field['default'] ?? ''"

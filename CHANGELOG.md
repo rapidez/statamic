@@ -1,6 +1,15 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/6.1.0...6.1.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/6.1.1...6.1.1)
+## [6.1.1](https://github.com/rapidez/statamic/releases/tag/6.1.1) - 2025-09-30
+
+### Fixed
+
+- Fix missing Arr import (#164)
+- Improve filtering of attributes on retrieved models (#166)
+- Allow for arbitrary link keys instead of just the primary key (#159)
+- Add translations to labels in forms (#167)
+
 ## [6.1.0](https://github.com/rapidez/statamic/releases/tag/6.1.0) - 2025-09-25
 
 ### Added

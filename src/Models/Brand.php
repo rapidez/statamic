@@ -70,8 +70,8 @@ class Brand extends Model
 
     public function scopeRunwaySearch(Builder $query, string $search)
     {
-        return $query->where(function ($q) use ($search) {
-            $q->where('eav_attribute_option.option_id', 'LIKE', "%{$search}%")
+        return $query->where(function (Builder $query) use ($search) {
+            $query->where('eav_attribute_option.option_id', 'LIKE', "%{$search}%")
                 ->orWhere('value_admin', 'LIKE', "%{$search}%")
                 ->orWhere('value_store', 'LIKE', "%{$search}%")
                 ->orWhere('sort_order', 'LIKE', "%{$search}%");

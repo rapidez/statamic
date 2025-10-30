@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/6.2.0...6.2.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/6.2.1...6.2.1)
+## [6.2.1](https://github.com/rapidez/statamic/releases/tag/6.2.1) - 2025-10-30
+
+### Fixed
+
+- Hide brands collection and search fix (#169)
+
 ## [6.2.0](https://github.com/rapidez/statamic/releases/tag/6.2.0) - 2025-10-28
 
 ### Changed

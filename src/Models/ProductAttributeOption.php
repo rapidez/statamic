@@ -92,8 +92,8 @@ class ProductAttributeOption extends Model
 
     public function scopeRunwaySearch(Builder $query, string $search)
     {
-        return $query->where(function ($q) use ($search) {
-            $q->where('eav_attribute_option.option_id', 'LIKE', "%{$search}%")
+        return $query->where(function (Builder $query) use ($search) {
+            $query->where('eav_attribute_option.option_id', 'LIKE', "%{$search}%")
                 ->orWhere('eav_attribute.attribute_code', 'LIKE', "%{$search}%")
                 ->orWhere('eav_attribute.frontend_label', 'LIKE', "%{$search}%")
                 ->orWhere('admin_value.value', 'LIKE', "%{$search}%")

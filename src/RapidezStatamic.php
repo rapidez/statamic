@@ -9,6 +9,7 @@ use Rapidez\Core\Facades\Rapidez;
 use Rapidez\Statamic\Exceptions\NavException;
 use Statamic\Structures\Page;
 use Statamic\Facades\Site;
+use Illuminate\Support\Str;
 
 class RapidezStatamic
 {
@@ -56,10 +57,10 @@ class RapidezStatamic
             }
 
             $item['url'] = $this->determineEntryUrl($item['entry_id']->augmentable(), $nav);
-            
+
             $tree[] = $item;
         }
-        
+
         return $tree;
     }
 
@@ -92,12 +93,15 @@ class RapidezStatamic
 
             if (!isset($entry->{$linkedRunwayResourceKey}['url_path'])) {
                 $this->navCache[$nav][$entry->id()] = '';
-                
+
                 return '';
             }
 
-            $this->navCache[$nav][$entry->id()] = '/' . $entry->{$linkedRunwayResourceKey}['url_path'] . $suffix;
-            
+            $siteUrl = Str::finish(Site::current()->absoluteUrl(), '/');
+            $urlPath = $entry->{$linkedRunwayResourceKey}['url_path'] . $suffix;
+
+            $this->navCache[$nav][$entry->id()] = $siteUrl . $urlPath;
+
             Cache::forever($cacheKey, $this->navCache[$nav]);
         }
 

@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/6.2.1...6.2.1)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/6.2.2...6.2.2)
+## [6.2.2](https://github.com/rapidez/statamic/releases/tag/6.2.2) - 2025-11-04
+
+### Fixed
+
+- Include the base url in menu item urls (#170)
+
 ## [6.2.1](https://github.com/rapidez/statamic/releases/tag/6.2.1) - 2025-10-30
 
 ### Fixed

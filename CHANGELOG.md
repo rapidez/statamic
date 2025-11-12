@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/5.8.0...5.8.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/...5.8.1)
+## [5.8.1](https://github.com/rapidez/statamic/releases/tag/5.8.1) - 2025-09-17
+
+### Fixed
+
+- Brand blueprint fix (#162)
+
 ## [5.8.0](https://github.com/rapidez/statamic/releases/tag/5.8.0) - 2025-08-26
 
 ### Added

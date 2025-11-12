@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/4.7.4...4.7.4)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/4.8.0...4.8.0)
+## [4.8.0](https://github.com/rapidez/statamic/releases/tag/4.8.0) - 2025-11-11
+
+### Changed
+
+- Updated justbetter/statamic-glide-directive (#172)
+
 ## [4.7.4](https://github.com/rapidez/statamic/releases/tag/4.7.4) - 2025-07-29
 
 ### Fixed

@@ -3,6 +3,7 @@
 namespace Rapidez\Statamic;
 
 use Illuminate\Foundation\Bootstrap\BootProviders;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
@@ -48,7 +49,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         $this->app->extend(Sites::class, fn () => new SitesLinkedToMagentoStores());
 
         $this->app->singleton(RapidezStatamic::class);
-        
+
         $this->app->bind(ImportsBrands::class, ImportBrandsAction::class);
 
         // Since we have our own way of exposing the globals to the view,
@@ -85,7 +86,8 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootSitemaps()
             ->bootStaticCaching()
             ->bootStack()
-            ->bootTranslations();
+            ->bootTranslations()
+            ->bootUncacheable();
 
         Vue::register();
         Alternates::register();
@@ -104,7 +106,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ...(config('statamic.builder') ?? []),
             ...config('rapidez.statamic.builder'),
         ]]);
-            
+
         return $this;
     }
 
@@ -265,13 +267,23 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                 CustomInvalidator::class
             );
         }
-        
+
         return $this;
     }
 
-    public function bootStack() : static
+    public function bootStack(): static
     {
         View::composer('rapidez::layouts.app', fn($view) => $view->getFactory()->startPush('head', view('statamic-glide-directive::partials.head')));
+
+        return $this;
+    }
+
+    public function bootUncacheable(): static
+    {
+        Eventy::addFilter('uncacheable.response', function (Response $response) {
+            $response->header('X-Statamic-Uncacheable', 'true');
+            return $response;
+        });
 
         return $this;
     }

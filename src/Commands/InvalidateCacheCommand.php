@@ -3,10 +3,10 @@
 namespace Rapidez\Statamic\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Rapidez\Core\Facades\Rapidez;
-use Statamic\Facades\File;
 use Statamic\StaticCaching\Cacher;
 use Statamic\StaticCaching\Cachers\Writer;
 
@@ -22,6 +22,8 @@ class InvalidateCacheCommand extends Command
 
     public $staticCachePath;
 
+    private ?array $storeConfig = null;
+
     public function handle(Cacher $cacher, Writer $writer): void
     {
         $stores = Rapidez::getStores();
@@ -34,7 +36,7 @@ class InvalidateCacheCommand extends Command
             }
 
             Rapidez::setStore($store);
-           
+
             if (is_array(config('statamic.static_caching.strategies.full.path'))) {
                 $staticCachePathConfig = $staticCachePathConfig . '.' . $store['code'];
             }
@@ -46,10 +48,10 @@ class InvalidateCacheCommand extends Command
             if (!$this->latestCheck) {
                 $this->info('Cleared all urls (as we do not have a latest check date yet)');
                 $cacher->flush();
-                $this->setLatestCheckDate($writer);
+                $this->setLatestCheckDate();
                 continue;
             }
-            $this->setLatestCheckDate($writer);
+            $this->setLatestCheckDate();
 
             $this->urls = collect();
 
@@ -67,6 +69,8 @@ class InvalidateCacheCommand extends Command
 
             $this->info('Done invalidating');
         }
+
+        $this->saveInvalidateConfig();
     }
 
     protected function addProductsUrls(): self
@@ -153,40 +157,44 @@ class InvalidateCacheCommand extends Command
         return $this;
     }
 
-    protected function getLatestCheckDate()
+    protected function getLatestCheckDate(): ?string
     {
-        try {
-            return File::get($this->staticCachePath . '/.last-invalidation');
-        } catch (FileNotFoundException $e) {
-            return null;
-        }
+        return Arr::get($this->getInvalidateConfig(), config('rapidez.store_code') . '.last-invalidation');
     }
 
-    protected function setLatestCheckDate(Writer $writer): void
+    protected function setLatestCheckDate(): void
     {
-        $writer->write(
-            $this->staticCachePath . '/.last-invalidation',
-            // With this we're just making sure the comparison
-            // is done within the same timezone in MySQL.
-            DB::selectOne('SELECT NOW() AS `current_time`')->current_time
-        );
+        Arr::set($this->getInvalidateConfig(), config('rapidez.store_code') . '.last-invalidation', DB::selectOne('SELECT NOW() AS `current_time`')->current_time);
     }
 
-    protected function getPreviousStock()
+    /**
+     * @return ?array<int,float>
+     */
+    protected function getPreviousStock(): ?array
     {
-        try {
-            return json_decode(File::get($this->staticCachePath . '/.product-stocks'), true, 512, JSON_THROW_ON_ERROR);
-        } catch (FileNotFoundException|\JsonException $e) {
-            return [];
-        }
+        return Arr::get($this->getInvalidateConfig(), config('rapidez.store_code') . '.product-stocks');
     }
 
     protected function setPreviousStock(array $previousStock): void
     {
-        $writer = app(Writer::class);
-        $writer->write(
-            $this->staticCachePath . '/.product-stocks',
-            json_encode($previousStock)
-        );
+        Arr::set($this->getInvalidateConfig(), config('rapidez.store_code') . '.product-stocks', $previousStock);
+    }
+
+    protected function &getInvalidateConfig(): array
+    {
+        try {
+            $this->storeConfig ??= json_decode(Storage::disk('local')->get('invalidate-cache-config.json') ?? '[]', true, 512, JSON_THROW_ON_ERROR);
+
+            return $this->storeConfig;
+        } catch (\JsonException $e) {
+            $this->storeConfig ??= [];
+
+            return $this->storeConfig;
+        }
+    }
+
+    protected function saveInvalidateConfig(): void
+    {
+        Storage::disk('local')->put('invalidate-cache-config.json', json_encode($this->storeConfig ?? []));
     }
 }

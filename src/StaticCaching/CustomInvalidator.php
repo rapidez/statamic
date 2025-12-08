@@ -36,3 +36,4 @@ class CustomInvalidator extends DefaultInvalidator
         parent::invalidate($item);
     }
 }
+

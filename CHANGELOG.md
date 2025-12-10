@@ -1,6 +1,18 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/...6.2.2)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/6.3.0...6.3.0)
+## [6.3.0](https://github.com/rapidez/statamic/releases/tag/6.3.0) - 2025-12-10
+
+### Added
+
+- Support uncacheable middleware (#171)
+
+### Fixed
+
+- Use the correct site from Statamic (#173)
+- Fixed broken invalidate command (#175)
+- Also invalidate on NavTree changes (#177)
+
 ## [6.2.2](https://github.com/rapidez/statamic/releases/tag/6.2.2) - 2025-11-04
 
 ### Fixed

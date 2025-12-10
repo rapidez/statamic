@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/...5.8.1)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/...5.8.2)
+## [5.8.2](https://github.com/rapidez/statamic/releases/tag/5.8.2) - 2025-11-14
+
+### Fixed
+
+- Use the correct site from Statamic (#174)
+
 ## [5.8.1](https://github.com/rapidez/statamic/releases/tag/5.8.1) - 2025-09-17
 
 ### Fixed

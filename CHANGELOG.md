@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/4.8.0...4.8.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/4.8.1...4.8.1)
+## [4.8.1](https://github.com/rapidez/statamic/releases/tag/4.8.1) - 2025-12-05
+
+### Fixed
+
+- Fixed broken invalidate command (#176)
+
 ## [4.8.0](https://github.com/rapidez/statamic/releases/tag/4.8.0) - 2025-11-11
 
 ### Changed

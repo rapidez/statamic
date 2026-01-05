@@ -19,9 +19,9 @@ class RunwayObserver
                 ->locale(Site::selected()->handle())
                 ->data([$model->linkField => $model->{$model->linkKey ?? $model->getKeyName()}]);
         }
-        
+
         $attributes = $model->getDirty();
-        
+
         foreach ($attributes as $key => $value) {
             // Is there a way we can detect this earlier?
             // So we know what's coming from for example
@@ -33,8 +33,8 @@ class RunwayObserver
 
         $entry->merge($attributes);
 
-        // When we save via the facade we can bypass the auto generation 
-        // of title and slug, we want this because there's no blueprint 
+        // When we save via the facade we can bypass the auto generation
+        // of title and slug, we want this because there's no blueprint
         // for the collection. We don't need this for now.
         Entry::save($entry);
 
@@ -43,6 +43,10 @@ class RunwayObserver
 
     public function retrieved(Model $model)
     {
+        if (!$model->exists) {
+            return;
+        }
+
         $fieldsOnRunwayResource = $model
             ->runwayResource()
             ->blueprint()
@@ -55,17 +59,12 @@ class RunwayObserver
 
         // Exclude the potential duplicated keys
         // Ignore the Magento values in that case
-        $originalAttributes = Arr::except(
+        $filteredAttributes = Arr::except(
             $model->getAttributes(),
             $fieldsOnRunwayResource
         );
-        
-        if ($model->exists && $model->entry) {
-            $model->setRawAttributes(array_merge(
-                $model->entry->data()->toArray(),
-                $originalAttributes
-            ));
-        }
+
+        $model->setRawAttributes($filteredAttributes);
     }
 
     // Just to make sure you can't create or delete

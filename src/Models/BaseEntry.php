@@ -53,12 +53,19 @@ class BaseEntry extends Model
             'slug' => $entry->slug,
             'date' => $entry->date,
         ];
-        
+
         return Eventy::filter('index.' . static::getModelName() . '.data', array_merge($data, $this->getAdditionalIndexData($entry)), $entry);
     }
 
     protected function getAdditionalIndexData(Entry $entry): array
     {
         return [];
+    }
+
+    protected function throwMissingAttributeExceptionIfApplicable($key)
+    {
+        if ($key == 'subquery.relation_id') {
+            return $this->relation_id;
+        }
     }
 }

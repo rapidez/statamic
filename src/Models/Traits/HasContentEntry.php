@@ -2,25 +2,36 @@
 
 namespace Rapidez\Statamic\Models\Traits;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Statamic\Facades\Entry;
-use Statamic\Facades\Site;
-use Statamic\Statamic;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\DB;
+use Rapidez\Statamic\Models\BaseEntry;
 
 trait HasContentEntry
 {
-    protected function entry(): Attribute
+    public function entry(): BelongsTo
     {
-        if (!app()->runningInConsole()) {
-            return Attribute::make(
-                get: fn() => Entry::query()
-                    ->where('collection', $this->collection)
-                    ->where('site', Statamic::isCpRoute() ? Site::selected()->handle() : Site::current()->handle())
-                    ->where($this->linkField, $this?->{$this->linkKey ?? $this->getKeyName()} ?? null)
-                    ->first(),
-            )->shouldCache();    
+        return $this
+            ->belongsTo(
+                BaseEntry::class,
+                $this->linkKey ?? $this->getKeyName(),
+                'subquery.relation_id',
+            )
+            ->joinSub(
+                DB::table('statamic_entries')
+                    ->selectRaw('JSON_UNQUOTE(JSON_EXTRACT(`statamic_entries`.`data`, "$.'.$this->linkField.'")) AS relation_id')
+                    ->addSelect('id'),
+                'subquery',
+                'statamic_entries.id', '=', 'subquery.id'
+            )
+            ->withoutGlobalScopes();
+    }
+
+    public function throwMissingAttributeExceptionIfApplicable($key)
+    {
+        if ($this->relationLoaded('entry') && $this->entry) {
+            return $this->entry?->data[$key] ?? null;
         }
-        
-        return Attribute::make();
+
+        return null;
     }
 }

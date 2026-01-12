@@ -30,17 +30,27 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": "^8.1",
-        "justbetter/statamic-glide-directive": "^3.0",
+        "php": "^8.4",
+        "justbetter/statamic-glide-directive": "dev-feature/statamic-6",
         "rapidez/blade-directives": "^1.0",
         "rapidez/core": "^4.0",
         "rapidez/sitemap": "^4.0",
         "spatie/once": "*",
-        "statamic-rad-pack/runway": "^8.3",
-        "statamic/cms": "^5.55",
-        "statamic/eloquent-driver": "^4.9",
-        "tdwesten/statamic-builder": "^1.0",
+        "statamic-rad-pack/runway": "^9.0",
+        "statamic/cms": "^6.0",
+        "statamic/eloquent-driver": "dev-master",
+        "tdwesten/statamic-builder": "dev-feature/statamic-6",
         "tormjens/eventy": "^0.8"
+    },
+    "repositories": {
+        "statamic-glide-directive": {
+            "type": "path",
+            "url": "/Users/kevinmeijer/sites/statamic-packages/statamic-glide-directive"
+        },
+        "statamic-builder": {
+            "type": "vcs",
+            "url": "git@github.com:kevinmeijer97/statamic-builder.git"
+        }
     },
     "autoload": {
         "psr-4": {

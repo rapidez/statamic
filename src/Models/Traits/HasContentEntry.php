@@ -3,12 +3,18 @@
 namespace Rapidez\Statamic\Models\Traits;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Rapidez\Statamic\Models\QueryBuilder\EntryFieldSortableBuilder;
 use Statamic\Facades\Entry;
 use Statamic\Facades\Site;
 use Statamic\Statamic;
 
 trait HasContentEntry
 {
+    public function newEloquentBuilder($query)
+    {
+        return new EntryFieldSortableBuilder($query);
+    }
+
     protected function entry(): Attribute
     {
         if (!app()->runningInConsole()) {

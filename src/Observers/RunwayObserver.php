@@ -51,6 +51,7 @@ class RunwayObserver
             // Filter all read_only variables because they should always come from magento
             ->filter(fn($option) => $option->visibility() !== 'read_only')
             ->keys()
+            ->filter(fn($key) => boolval($model->entry?->data()[$key] ?? null))
             ->toArray();
 
         // Exclude the potential duplicated keys
@@ -61,8 +62,20 @@ class RunwayObserver
         );
         
         if ($model->exists && $model->entry) {
+            $entryData = $model->entry->data()->toArray();
+            
+            // Get configured listing columns if they exist
+            $resourceConfig = config('runway.resources.' . get_class($model), []);
+            $listingColumns = $resourceConfig['listing']['columns'] ?? null;
+            
+            // If listing columns are configured, only merge entry data for those columns
+            // This prevents entry blueprint fields from showing up in listings when not in the config
+            if ($listingColumns !== null && is_array($listingColumns)) {
+                $entryData = Arr::only($entryData, $listingColumns);
+            }
+            
             $model->setRawAttributes(array_merge(
-                $model->entry->data()->toArray(),
+                $entryData,
                 $originalAttributes
             ));
         }

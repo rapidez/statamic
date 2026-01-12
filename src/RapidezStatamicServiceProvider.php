@@ -25,12 +25,10 @@ use Rapidez\Statamic\Listeners\ClearNavTreeCache;
 use Rapidez\Statamic\Listeners\SetCollectionsForNav;
 use Rapidez\Statamic\Tags\Alternates;
 use Statamic\Events\GlobalSetDeleted;
-use Statamic\Events\GlobalSetSaved;
 use Statamic\Events\NavCreated;
 use Statamic\Events\NavTreeSaved;
 use Statamic\Facades\Entry;
 use Statamic\Facades\Site;
-use Statamic\Facades\Utility;
 use Statamic\Http\Controllers\FrontendController;
 use Statamic\Sites\Sites;
 use Statamic\StaticCaching\Middleware\Cache as StaticCache;
@@ -39,6 +37,7 @@ use TorMorten\Eventy\Facades\Eventy;
 use Statamic\Facades\Site as SiteFacade;
 use Statamic\View\Cascade as StatamicCascade;
 use Rapidez\Statamic\StaticCaching\CustomInvalidator;
+use Statamic\Events\GlobalVariablesSaved;
 use Statamic\Facades\Blueprint;
 use Statamic\Statamic;
 
@@ -148,7 +147,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootListeners() : self
     {
         if ($this->currentSiteIsEnabled()) {
-            Event::listen([GlobalSetSaved::class, GlobalSetDeleted::class], function () {
+            Event::listen([GlobalVariablesSaved::class, GlobalSetDeleted::class], function () {
                 Cache::forget('statamic-globals-' . Site::selected()->handle());
             });
 

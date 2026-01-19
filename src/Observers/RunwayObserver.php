@@ -3,6 +3,7 @@
 namespace Rapidez\Statamic\Observers;
 
 use Illuminate\Database\Eloquent\Model;
+use Statamic\Eloquent\Entries\Entry as StatamicEntry;
 use Statamic\Facades\Entry;
 use Statamic\Facades\Site;
 use Statamic\Support\Arr;
@@ -11,7 +12,7 @@ class RunwayObserver
 {
     public function updating(Model $model)
     {
-        $entry = $model->entry;
+        $entry = StatamicEntry::fromModel($model->entry);
 
         if (!$entry) {
             $entry = Entry::make()
@@ -29,6 +30,10 @@ class RunwayObserver
             if (is_string($value) && json_validate($value)) {
                 $attributes[$key] = json_decode((string) $value, true);
             }
+        }
+
+        if ($attributes['slug'] ?? null) {
+            $entry->slug($attributes['slug']);
         }
 
         $entry->merge($attributes);

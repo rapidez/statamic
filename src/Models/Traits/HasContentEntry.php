@@ -32,6 +32,6 @@ trait HasContentEntry
             return $this->entry?->data[$key] ?? null;
         }
 
-        return null;
+        return parent::throwMissingAttributeExceptionIfApplicable($key);
     }
 }

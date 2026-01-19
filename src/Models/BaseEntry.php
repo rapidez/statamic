@@ -67,5 +67,7 @@ class BaseEntry extends Model
         if ($key == 'subquery.relation_id') {
             return $this->relation_id;
         }
+
+        return parent::throwMissingAttributeExceptionIfApplicable($key);
     }
 }

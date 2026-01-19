@@ -5,6 +5,7 @@ namespace Rapidez\Statamic\Models\Traits;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 use Rapidez\Statamic\Models\BaseEntry;
+use Statamic\Facades\Site;
 
 trait HasContentEntry
 {

@@ -17,9 +17,10 @@ use Rapidez\Statamic\Facades\RapidezStatamic;
 class Product extends Model
 {
     use HasRunwayResource, HasContentEntry;
-    
+
     protected $primaryKey = 'sku';
     protected $keyType = 'string';
+    protected $with = ['entry'];
 
     public string $linkField = 'linked_product';
     public string $collection = 'products';

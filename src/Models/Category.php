@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use StatamicRadPack\Runway\Traits\HasRunwayResource;
 use Illuminate\Database\Eloquent\Model;
 use Rapidez\Statamic\Models\Traits\HasContentEntry;
-use Statamic\Facades\Site;
-use Statamic\Statamic;
 use Rapidez\Statamic\Observers\RunwayObserver;
 use Rapidez\Statamic\Facades\RapidezStatamic;
 
@@ -15,8 +13,9 @@ use Rapidez\Statamic\Facades\RapidezStatamic;
 class Category extends Model
 {
     use HasRunwayResource, HasContentEntry;
-    
+
     protected $primaryKey = 'entity_id';
+    protected $with = ['entry'];
 
     public string $linkField = 'linked_category';
     public string  $collection = 'categories';

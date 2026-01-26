@@ -14,6 +14,10 @@ class Product extends CoreProduct
 {
     use HasRunwayResource, HasContentEntry;
 
+    protected $primaryKey = 'sku';
+    protected $keyType = 'string';
+    protected $with = ['entry'];
+
     public string $linkField = 'linked_product';
     public string $collection = 'products';
 

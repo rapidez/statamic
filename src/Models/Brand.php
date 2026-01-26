@@ -21,8 +21,8 @@ class Brand extends Model
     use HasRunwayResource, HasContentEntry;
 
     protected $table = 'eav_attribute_option';
-
     protected $primaryKey = 'option_id';
+    protected $with = ['entry'];
 
     public string $linkField = 'linked_brand';
     public string $collection = 'brands';

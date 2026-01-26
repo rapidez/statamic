@@ -75,20 +75,22 @@ class InvalidateCacheCommand extends Command
 
     protected function addProductsUrls(): self
     {
-        $products = config('rapidez.models.product')::query()
+        $productIds = config('rapidez.models.product')::query()
             ->where('updated_at', '>=', $this->latestCheck)
             ->orWhereIn('entity_id', $this->getUpdatedStockProducts())
-            ->with(['parents:entity_id' => ['rewrites']])
-            ->with('rewrites')
-            ->get();
+            ->pluck('entity_id');
 
-        foreach ($products as $product) {
-            $this->addUrls($this->getUrlsFromRewrites($product->rewrites));
+        $parentIds = config('rapidez.models.product_super_link')::whereIn('product_id', $productIds)
+            ->groupBy('parent_id')
+            ->pluck('parent_id');
 
-            foreach ($product->parents as $parent) {
-                $this->addUrls($this->getUrlsFromRewrites($parent->rewrites));
-            }
-        }
+        $allIds = $productIds->merge($parentIds)->unique();
+
+        $rewrites = config('rapidez.models.rewrite')::whereIn('entity_id', $allIds)
+            ->where('entity_type', 'product')
+            ->pluck('request_path');
+
+        $this->addUrls($rewrites);
 
         return $this;
     }
@@ -116,7 +118,7 @@ class InvalidateCacheCommand extends Command
 
     protected function addCategoryUrls(): self
     {
-        $categories = config('rapidez.models.category')::withoutGlobalScopes()
+        $categories = config('rapidez.models.category')::query()
             ->where('updated_at', '>=', $this->latestCheck)
             ->get('entity_id');
 

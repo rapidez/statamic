@@ -62,12 +62,17 @@ class RunwayObserver
             ->keys()
             ->toArray();
 
+        // TODO: SKU seems to get filtered out here by default, as it doesn't seem to have the read_only visibility?
+        // Make sure SKU never gets filtered because otherwise we can't generate URLs in runway.
+
         // Exclude the potential duplicated keys
         // Ignore the Magento values in that case
         $filteredAttributes = Arr::except(
             $model->getAttributes(),
             $fieldsOnRunwayResource
         );
+
+        dd($fieldsOnRunwayResource, $filteredAttributes);
 
         $model->setRawAttributes($filteredAttributes);
     }

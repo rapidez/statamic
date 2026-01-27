@@ -13,7 +13,6 @@ class Category extends CoreCategory
 {
     use HasRunwayResource, HasContentEntry;
 
-    protected $primaryKey = 'entity_id';
     protected $with = ['entry'];
 
     public string $linkField = 'linked_category';

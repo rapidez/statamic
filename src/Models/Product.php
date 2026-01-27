@@ -16,15 +16,24 @@ class Product extends CoreProduct
 
     protected $primaryKey = 'sku';
     protected $keyType = 'string';
-    protected $with = ['entry'];
 
     public string $linkField = 'linked_product';
+    public string $linkKey = 'sku';
     public string $collection = 'products';
+
+    protected function getAttributeRelationKey(): string
+    {
+        return 'entity_id';
+    }
 
     protected static function booting()
     {
+        parent::booting();
+
         static::addGlobalScope(function (Builder $builder) {
             $builder->whereInAttribute('visibility', config('rapidez.statamic.runway.product_visibility'));
         });
+
+        static::addGlobalScope(fn ($builder) => $builder->with('entry'));
     }
 }

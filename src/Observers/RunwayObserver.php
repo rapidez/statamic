@@ -72,8 +72,6 @@ class RunwayObserver
             $fieldsOnRunwayResource
         );
 
-        dd($fieldsOnRunwayResource, $filteredAttributes);
-
         $model->setRawAttributes($filteredAttributes);
     }
 

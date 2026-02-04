@@ -48,15 +48,17 @@ export default {
         async submit(event) {
             event.preventDefault()
 
+            const form = event.currentTarget || event.target.closest('form')
+
             let settings = {
-                method: this.$el.method,
-                body: new FormData(this.$el),
+                method: form.method,
+                body: new FormData(form),
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             };
 
-            const response = await rapidezFetch(this.$el.action, settings)
+            const response = await rapidezFetch(form.action, settings)
 
             let data = await response.json()
 

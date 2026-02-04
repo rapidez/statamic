@@ -1,9 +1,11 @@
 import 'Vendor/rapidez/core/resources/js/vue'
+import FormConditions from './components/FormConditions.vue'
+import FormSubmission from './components/FormSubmission.vue'
 
 document.addEventListener('vue:loaded', (e) => {
     const vue = e.detail.vue
-    vue.component('form-conditions', () => import('./components/FormConditions.vue'))
-    vue.component('form-submission', () => import('./components/FormSubmission.vue'))
+    vue.component('form-conditions', FormConditions)
+    vue.component('form-submission', FormSubmission)
 })
 
 document.addEventListener('statamic:nocache.replaced', (e) => {

@@ -14,17 +14,11 @@ class Product extends CoreProduct
 {
     use HasRunwayResource, HasContentEntry;
 
-    protected $primaryKey = 'sku';
-    protected $keyType = 'string';
+    protected $primaryKey = 'entity_id';
 
     public string $linkField = 'linked_product';
     public string $linkKey = 'sku';
     public string $collection = 'products';
-
-    protected function getAttributeRelationKey(): string
-    {
-        return 'entity_id';
-    }
 
     protected static function booting(): void
     {

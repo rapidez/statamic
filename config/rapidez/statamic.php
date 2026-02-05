@@ -10,7 +10,7 @@ return [
     // Should the data from Statamic be fetched? The entry
     // data will be available as $content witin views.
     'fetch' => [
-        // Product ID will be matched with the "linked_product" ID.
+        // Product SKU will be matched with the "linked_product" SKU.
         'product' => true,
 
         // Category ID will be matched with the "linked_category" ID.

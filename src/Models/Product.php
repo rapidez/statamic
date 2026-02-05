@@ -26,7 +26,7 @@ class Product extends CoreProduct
         return 'entity_id';
     }
 
-    protected static function booting()
+    protected static function booting(): void
     {
         parent::booting();
 

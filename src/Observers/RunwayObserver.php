@@ -58,12 +58,11 @@ class RunwayObserver
             ->fields()
             ->all()
             // Filter all read_only variables because they should always come from magento
-            ->filter(fn($option) => $option->visibility() !== 'read_only')
+            ->filter(fn($option, $key) =>
+                $option->visibility() !== 'read_only' && $model->getKeyName() !== $key
+            )
             ->keys()
             ->toArray();
-
-        // TODO: SKU seems to get filtered out here by default, as it doesn't seem to have the read_only visibility?
-        // Make sure SKU never gets filtered because otherwise we can't generate URLs in runway.
 
         // Exclude the potential duplicated keys
         // Ignore the Magento values in that case
@@ -71,8 +70,6 @@ class RunwayObserver
             $model->getAttributes(),
             $fieldsOnRunwayResource
         );
-
-        dd($fieldsOnRunwayResource, $filteredAttributes);
 
         $model->setRawAttributes($filteredAttributes);
     }

@@ -13,8 +13,13 @@ class Category extends CoreCategory
 {
     use HasRunwayResource, HasContentEntry;
 
-    protected $with = ['entry'];
-
     public string $linkField = 'linked_category';
     public string $collection = 'categories';
+
+    protected static function booting(): void
+    {
+        parent::booting();
+
+        static::addGlobalScope(fn ($builder) => $builder->with('entry'));
+    }
 }

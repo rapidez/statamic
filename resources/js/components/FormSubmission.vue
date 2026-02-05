@@ -24,10 +24,22 @@ export default {
         });
     },
     mounted() {
-        let token = window?.app?.config?.globalProperties?.csrfToken
-        let csrfField = this.$el.querySelector('input[value="STATAMIC_CSRF_TOKEN"]')
+        const token = window?.app?.config?.globalProperties?.csrfToken
 
-        if (csrfField && token && token !== 'STATAMIC_CSRF_TOKEN') {
+        if (!token || token === 'STATAMIC_CSRF_TOKEN') {
+            return
+        }
+
+        let root = this.$el
+
+        // In Vue 3 this.$el can be a comment/fragment; walk up to the nearest element node.
+        while (root && root.nodeType !== 1) {
+            root = root.parentNode
+        }
+
+        const csrfField = root?.querySelector?.('input[value="STATAMIC_CSRF_TOKEN"]')
+
+        if (csrfField) {
             csrfField.value = token
         }
     },
@@ -36,15 +48,17 @@ export default {
         async submit(event) {
             event.preventDefault()
 
+            const form = event.currentTarget || event.target.closest('form')
+
             let settings = {
-                method: this.$el.method,
-                body: new FormData(this.$el),
+                method: form.method,
+                body: new FormData(form),
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             };
 
-            const response = await rapidezFetch(this.$el.action, settings)
+            const response = await rapidezFetch(form.action, settings)
 
             let data = await response.json()
 

@@ -3,6 +3,7 @@
 namespace Rapidez\Statamic\Observers;
 
 use Illuminate\Database\Eloquent\Model;
+use Statamic\Eloquent\Entries\Entry as StatamicEntry;
 use Statamic\Facades\Entry;
 use Statamic\Facades\Site;
 use Statamic\Support\Arr;
@@ -11,17 +12,15 @@ class RunwayObserver
 {
     public function updating(Model $model)
     {
-        $entry = $model->entry;
-
-        if (!$entry) {
+        if (!$model->entry || !$entry = StatamicEntry::fromModel($model->entry)) {
             $entry = Entry::make()
                 ->collection($model->collection)
                 ->locale(Site::selected()->handle())
                 ->data([$model->linkField => $model->{$model->linkKey ?? $model->getKeyName()}]);
         }
-        
+
         $attributes = $model->getDirty();
-        
+
         foreach ($attributes as $key => $value) {
             // Is there a way we can detect this earlier?
             // So we know what's coming from for example
@@ -31,10 +30,14 @@ class RunwayObserver
             }
         }
 
+        if ($attributes['slug'] ?? null) {
+            $entry->slug($attributes['slug']);
+        }
+
         $entry->merge($attributes);
 
-        // When we save via the facade we can bypass the auto generation 
-        // of title and slug, we want this because there's no blueprint 
+        // When we save via the facade we can bypass the auto generation
+        // of title and slug, we want this because there's no blueprint
         // for the collection. We don't need this for now.
         Entry::save($entry);
 
@@ -43,42 +46,31 @@ class RunwayObserver
 
     public function retrieved(Model $model)
     {
+        if (!$model->exists) {
+            return;
+        }
+
         $fieldsOnRunwayResource = $model
             ->runwayResource()
             ->blueprint()
             ->fields()
             ->all()
             // Filter all read_only variables because they should always come from magento
-            ->filter(fn($option) => $option->visibility() !== 'read_only')
+            ->filter(fn($option, $key) =>
+                $option->visibility() !== 'read_only' && $model->getKeyName() !== $key
+            )
             ->keys()
             ->filter(fn($key) => boolval($model->entry?->data()[$key] ?? null))
             ->toArray();
 
         // Exclude the potential duplicated keys
         // Ignore the Magento values in that case
-        $originalAttributes = Arr::except(
+        $filteredAttributes = Arr::except(
             $model->getAttributes(),
             $fieldsOnRunwayResource
         );
-        
-        if ($model->exists && $model->entry) {
-            $entryData = $model->entry->data()->toArray();
-            
-            // Get configured listing columns if they exist
-            $resourceConfig = config('runway.resources.' . get_class($model), []);
-            $listingColumns = $resourceConfig['listing']['columns'] ?? null;
-            
-            // If listing columns are configured, only merge entry data for those columns
-            // This prevents entry blueprint fields from showing up in listings when not in the config
-            if ($listingColumns !== null && is_array($listingColumns)) {
-                $entryData = Arr::only($entryData, $listingColumns);
-            }
-            
-            $model->setRawAttributes(array_merge(
-                $entryData,
-                $originalAttributes
-            ));
-        }
+
+        $model->setRawAttributes($filteredAttributes);
     }
 
     // Just to make sure you can't create or delete

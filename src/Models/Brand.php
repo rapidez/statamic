@@ -21,8 +21,8 @@ class Brand extends Model
     use HasRunwayResource, HasContentEntry;
 
     protected $table = 'eav_attribute_option';
-
     protected $primaryKey = 'option_id';
+    protected $with = ['entry'];
 
     public string $linkField = 'linked_brand';
     public string $collection = 'brands';
@@ -52,20 +52,17 @@ class Brand extends Model
                 ->where('attribute_id', config('rapidez.statamic.runway.brand_attribute_id'));
 
             if (! config('rapidez.statamic.runway.show_brands_without_products')) {
-                Rapidez::withStore(RapidezStatamic::getCurrentStoreId(), fn() => $builder->has('products'));
+                $brandAttribute = Cache::remember(
+                    'runway-brand-attribute',
+                    now()->addDay(),
+                    fn() => Attribute::find(config('rapidez.statamic.runway.brand_attribute_id'))?->code ?? 'manufacturer',
+                );
+
+                Rapidez::withStore(RapidezStatamic::getCurrentStoreId(), function() use (&$builder, $brandAttribute) {
+                    $builder->whereExists(Product::query()->whereAttributeNotNull($brandAttribute));
+                });
             }
         });
-    }
-
-    public function products(): HasMany
-    {
-        $brandAttribute = Cache::remember(
-            'runway-brand-attribute',
-            now()->addDay(),
-            fn() => Attribute::find(config('rapidez.statamic.runway.brand_attribute_id'))?->code ?? 'manufacturer',
-        );
-
-        return $this->hasMany(Product::class, $brandAttribute, 'option_id');
     }
 
     public function scopeRunwaySearch(Builder $query, string $search)

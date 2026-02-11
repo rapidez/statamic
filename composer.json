@@ -33,20 +33,14 @@
         "php": "^8.4",
         "justbetter/statamic-glide-directive": "dev-feature/statamic-6",
         "rapidez/blade-directives": "^1.0",
-        "rapidez/core": "^4.0",
-        "rapidez/sitemap": "^4.0",
+        "rapidez/core": "^5.0",
+        "rapidez/sitemap": "^5.0",
         "spatie/once": "*",
         "statamic-rad-pack/runway": "^9.0",
         "statamic/cms": "^6.0",
-        "statamic/eloquent-driver": "dev-master",
+        "statamic/eloquent-driver": "^5.1",
         "tdwesten/statamic-builder": "dev-feature/statamic-6",
         "tormjens/eventy": "^0.8"
-    },
-    "repositories": {
-        "statamic-builder": {
-            "type": "vcs",
-            "url": "git@github.com:kevinmeijer97/statamic-builder.git"
-        }
     },
     "autoload": {
         "psr-4": {

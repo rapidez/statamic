@@ -44,8 +44,8 @@ trait HasContentEntry
 
     public function throwMissingAttributeExceptionIfApplicable($key)
     {
-        if ($this->relationLoaded('entry') && $this->entry) {
-            return $this->entry?->data[$key] ?? null;
+        if ($this->relationLoaded('entry') && $this->entry && array_key_exists($key, $this->entry->data ?? [])) {
+            return $this->entry->data[$key];
         }
 
         return parent::throwMissingAttributeExceptionIfApplicable($key);

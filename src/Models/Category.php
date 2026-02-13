@@ -3,25 +3,23 @@
 namespace Rapidez\Statamic\Models;
 
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Rapidez\Core\Models\Category as CoreCategory;
 use StatamicRadPack\Runway\Traits\HasRunwayResource;
-use Illuminate\Database\Eloquent\Model;
 use Rapidez\Statamic\Models\Traits\HasContentEntry;
 use Rapidez\Statamic\Observers\RunwayObserver;
-use Rapidez\Statamic\Facades\RapidezStatamic;
 
 #[ObservedBy([RunwayObserver::class])]
-class Category extends Model
+class Category extends CoreCategory
 {
     use HasRunwayResource, HasContentEntry;
 
-    protected $primaryKey = 'entity_id';
-    protected $with = ['entry'];
-
     public string $linkField = 'linked_category';
-    public string  $collection = 'categories';
+    public string $collection = 'categories';
 
-    public function getTable()
+    protected static function booting(): void
     {
-        return 'catalog_category_flat_store_'.RapidezStatamic::getCurrentStoreId();
+        parent::booting();
+
+        static::addGlobalScope(fn ($builder) => $builder->with('entry'));
     }
 }

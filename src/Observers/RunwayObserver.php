@@ -12,9 +12,7 @@ class RunwayObserver
 {
     public function updating(Model $model)
     {
-        $entry = StatamicEntry::fromModel($model->entry);
-
-        if (!$entry) {
+        if (!$model->entry || !$entry = StatamicEntry::fromModel($model->entry)) {
             $entry = Entry::make()
                 ->collection($model->collection)
                 ->locale(Site::selected()->handle())
@@ -58,7 +56,9 @@ class RunwayObserver
             ->fields()
             ->all()
             // Filter all read_only variables because they should always come from magento
-            ->filter(fn($option) => $option->visibility() !== 'read_only')
+            ->filter(fn($option, $key) =>
+                $option->visibility() !== 'read_only' && $model->getKeyName() !== $key
+            )
             ->keys()
             ->toArray();
 

@@ -75,7 +75,7 @@ class InvalidateCacheCommand extends Command
 
     protected function addProductsUrls(): self
     {
-        $productIds = config('rapidez.models.product')::toBase()
+        config('rapidez.models.product')::toBase()
             ->where('updated_at', '>=', $this->latestCheck)
             ->orWhereIn('entity_id', $this->getUpdatedStockProducts())
             ->orderBy('entity_id')
@@ -94,7 +94,6 @@ class InvalidateCacheCommand extends Command
 
                 $this->addUrls($rewrites);
             });
-
 
         return $this;
     }

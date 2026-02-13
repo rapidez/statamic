@@ -2,8 +2,6 @@
 
 namespace Rapidez\Statamic\Collections;
 
-use Statamic\Facades\Site;
-
 class Brands extends Base
 {
     protected string $handle = 'brands';

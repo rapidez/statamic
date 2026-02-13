@@ -1,6 +1,18 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/6.3.0...6.3.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/7.0.0...7.0.0)
+## [7.0.0](https://github.com/rapidez/statamic/releases/tag/7.0.0) - 2026-02-13
+
+### Added
+
+- Rapidez v5 support (#178)
+
+## [6.3.1](https://github.com/rapidez/statamic/releases/tag/6.3.1) - 2026-01-23
+
+### Fixed
+
+- Fix N+1 query by using relation data (#179)
+
 ## [6.3.0](https://github.com/rapidez/statamic/releases/tag/6.3.0) - 2025-12-10
 
 ### Added

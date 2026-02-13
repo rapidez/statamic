@@ -75,14 +75,14 @@ class InvalidateCacheCommand extends Command
 
     protected function addProductsUrls(): self
     {
-        $productIds = config('rapidez.models.product')::withoutGlobalScopes()->toBase()
+        config('rapidez.models.product')::toBase()
             ->where('updated_at', '>=', $this->latestCheck)
             ->orWhereIn('entity_id', $this->getUpdatedStockProducts())
             ->orderBy('entity_id')
             ->chunk(100, function($products) {
                 $productIds = $products->pluck('entity_id');
 
-                $parentIds = config('rapidez.models.product_link')::whereIn('product_id', $productIds)
+                $parentIds = config('rapidez.models.product_super_link')::whereIn('product_id', $productIds)
                     ->groupBy('parent_id')
                     ->pluck('parent_id');
 
@@ -121,7 +121,7 @@ class InvalidateCacheCommand extends Command
 
     protected function addCategoryUrls(): self
     {
-        $categories = config('rapidez.models.category')::withoutGlobalScopes()
+        $categories = config('rapidez.models.category')::query()
             ->where('updated_at', '>=', $this->latestCheck)
             ->get('entity_id');
 

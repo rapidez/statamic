@@ -4,35 +4,30 @@ namespace Rapidez\Statamic\Models;
 
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Rapidez\Statamic\Collections\Products;
+use Rapidez\Core\Models\Product as CoreProduct;
 use Rapidez\Statamic\Models\Traits\HasContentEntry;
 use Rapidez\Statamic\Observers\RunwayObserver;
 use StatamicRadPack\Runway\Traits\HasRunwayResource;
-use Statamic\Facades\Site;
-use Statamic\Statamic;
-use Rapidez\Statamic\Facades\RapidezStatamic;
 
 #[ObservedBy([RunwayObserver::class])]
-class Product extends Model
+class Product extends CoreProduct
 {
     use HasRunwayResource, HasContentEntry;
-    
-    protected $primaryKey = 'sku';
-    protected $keyType = 'string';
+
+    protected $primaryKey = 'entity_id';
 
     public string $linkField = 'linked_product';
+    public string $linkKey = 'sku';
     public string $collection = 'products';
 
-    protected static function booting()
+    protected static function booting(): void
     {
-        static::addGlobalScope(function (Builder $builder) {
-            $builder->whereIn('visibility', config('rapidez.statamic.runway.product_visibility'));
-        });
-    }
+        parent::booting();
 
-    public function getTable()
-    {
-        return 'catalog_product_flat_' . RapidezStatamic::getCurrentStoreId();
+        static::addGlobalScope(function (Builder $builder) {
+            $builder->whereInAttribute('visibility', config('rapidez.statamic.runway.product_visibility'));
+        });
+
+        static::addGlobalScope(fn ($builder) => $builder->with('entry'));
     }
 }

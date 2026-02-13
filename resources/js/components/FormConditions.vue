@@ -1,6 +1,8 @@
 <script>
 import '/public/vendor/statamic/frontend/js/helpers.js'
-Vue.prototype.Statamic = window.Statamic
+if (window?.app?.config?.globalProperties) {
+    window.app.config.globalProperties.Statamic = window.Statamic
+}
 
 export default {
     props: {
@@ -15,7 +17,7 @@ export default {
         };
     },
     render() {
-        return this.$scopedSlots.default({
+        return this?.$slots?.default?.({
             formData: this.formData
         });
     },

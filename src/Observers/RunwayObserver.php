@@ -60,7 +60,17 @@ class RunwayObserver
                 $option->visibility() !== 'read_only' && $model->getKeyName() !== $key
             )
             ->keys()
-            ->filter(fn($key) => boolval($model->entry?->data()[$key] ?? null))
+            ->filter(function($key) use ($model) {
+                if (!$model->entry) {
+                    return false;
+                }
+                
+                // Entry is an Eloquent EntryModel with data property (array), not a method
+                // Check if entry has data property and if the key exists
+                $entryData = $model->entry->data ?? [];
+                
+                return boolval($entryData[$key] ?? null);
+            })
             ->toArray();
 
         // Exclude the potential duplicated keys

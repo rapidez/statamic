@@ -75,20 +75,25 @@ class InvalidateCacheCommand extends Command
 
     protected function addProductsUrls(): self
     {
-        $products = config('rapidez.models.product')::withoutGlobalScopes()
+        config('rapidez.models.product')::withoutGlobalScopes()->toBase()
             ->where('updated_at', '>=', $this->latestCheck)
             ->orWhereIn('entity_id', $this->getUpdatedStockProducts())
-            ->with(['parent:entity_id' => ['rewrites']])
-            ->with('rewrites')
-            ->get('entity_id');
+            ->orderBy('entity_id')
+            ->chunk(100, function($products) {
+                $productIds = $products->pluck('entity_id');
 
-        foreach ($products as $product) {
-            $this->addUrls($this->getUrlsFromRewrites($product->rewrites));
+                $parentIds = config('rapidez.models.product_link')::whereIn('product_id', $productIds)
+                    ->groupBy('parent_id')
+                    ->pluck('parent_id');
 
-            if ($product->parent) {
-                $this->addUrls($this->getUrlsFromRewrites($product->parent->rewrites));
-            }
-        }
+                $allIds = $productIds->merge($parentIds)->unique();
+
+                $rewrites = config('rapidez.models.rewrite')::whereIn('entity_id', $allIds)
+                    ->where('entity_type', 'product')
+                    ->pluck('request_path');
+
+                $this->addUrls($rewrites);
+            });
 
         return $this;
     }

@@ -3,7 +3,6 @@
 namespace Rapidez\Statamic;
 
 use Illuminate\Foundation\Bootstrap\BootProviders;
-use Illuminate\Http\Response;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
@@ -35,6 +34,7 @@ use Statamic\Http\Controllers\FrontendController;
 use Statamic\Sites\Sites;
 use Statamic\StaticCaching\Middleware\Cache as StaticCache;
 use Statamic\Http\Middleware\RedirectAbsoluteDomains;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use TorMorten\Eventy\Facades\Eventy;
 use Statamic\Facades\Site as SiteFacade;
 use Statamic\View\Cascade as StatamicCascade;
@@ -280,7 +280,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
     public function bootUncacheable(): static
     {
-        Eventy::addFilter('uncacheable.response', function (Response $response) {
+        Eventy::addFilter('uncacheable.response', function (SymfonyResponse $response) {
             $response->header('X-Statamic-Uncacheable', 'true');
             return $response;
         });

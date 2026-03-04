@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use StatamicRadPack\Runway\Traits\HasRunwayResource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Rapidez\Core\Facades\Rapidez;
@@ -14,6 +13,7 @@ use Rapidez\Core\Models\Attribute;
 use Rapidez\Statamic\Models\Traits\HasContentEntry;
 use Rapidez\Statamic\Observers\RunwayObserver;
 use Rapidez\Statamic\Facades\RapidezStatamic;
+use Rapidez\Statamic\Models\QueryBuilder\EntryFieldSortableBuilder;
 
 #[ObservedBy([RunwayObserver::class])]
 class Brand extends Model
@@ -73,5 +73,10 @@ class Brand extends Model
                 ->orWhere('value_store', 'LIKE', "%{$search}%")
                 ->orWhere('sort_order', 'LIKE', "%{$search}%");
         });
+    }
+
+    public function newEloquentBuilder($query): Builder
+    {
+        return new EntryFieldSortableBuilder($query);
     }
 }

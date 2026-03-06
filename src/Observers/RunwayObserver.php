@@ -12,9 +12,7 @@ class RunwayObserver
 {
     public function updating(Model $model)
     {
-        $entry = StatamicEntry::fromModel($model->entry);
-
-        if (!$entry) {
+        if (!$model->entry || !$entry = StatamicEntry::fromModel($model->entry)) {
             $entry = Entry::make()
                 ->collection($model->collection)
                 ->locale(Site::selected()->handle())

@@ -2,4 +2,3 @@ yarn.lock
 composer.lock
 node_modules/
 vendor
-node_modules

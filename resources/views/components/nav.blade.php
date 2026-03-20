@@ -13,7 +13,7 @@
 </nav>
 
 <nav class="relative border-y max-lg:hidden">
-    <ul class="text [&>:not(:hover)]:hover:text-muted flex items-center justify-center gap-8 text-sm font-semibold">
+    <ul class="text hover:[&>:not(:hover)]:text-muted flex items-center justify-center gap-8 text-sm font-semibold">
         @foreach ($navData as $item)
             <li class="group">
                 <a class="relative flex py-5 transition" href="{{ $item['url'] }}">
@@ -30,7 +30,7 @@
                                 @foreach ($item['children'] as $item)
                                     <li class="flex break-inside-avoid flex-col gap-1 pb-5">
                                         <a href="{{ $item['url'] }}">{{ $item['title'] }}</a>
-                                        <ul class="[&>:not(:hover)]:hover:text-muted flex flex-col font-medium">
+                                        <ul class="hover:[&>:not(:hover)]:text-muted flex flex-col font-medium">
                                             @foreach ($item['children'] as $item)
                                                 <li class="transition">
                                                     <a href="{{ $item['url'] }}">{{ $item['title'] }}</a>

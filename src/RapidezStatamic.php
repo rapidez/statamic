@@ -3,6 +3,7 @@
 namespace Rapidez\Statamic;
 
 use Illuminate\Support\Facades\Cache;
+use Rapidez\BladeDirectives\OptionalDeep;
 use Statamic\Statamic;
 use Statamic\Eloquent\Entries\Entry;
 use Rapidez\Core\Facades\Rapidez;

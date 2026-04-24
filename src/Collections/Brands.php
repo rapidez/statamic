@@ -31,9 +31,4 @@ class Brands extends Base
     {
         return 'rapidez-statamic::brands.show';
     }
-
-    public function visible(): bool
-    {
-        return false;
-    }
 }

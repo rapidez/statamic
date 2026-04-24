@@ -18,12 +18,10 @@
             <h1 class="font-bold text-3xl mb-5">{{ $title }}</h1>
         @endif
         @if ($content)
-            <div class="prose prose-green max-w-none">
-                @include('rapidez-statamic::page_builder.content', ['content' => $content])
-            </div>
+            @include('rapidez-statamic::page_builder', ['content' => $content])
         @endif
         <x-rapidez::listing filter-query-string="{{ $brandAttribute->code }}:{{ $title }}" />
 
-        @include('rapidez-statamic::page_builder')
+        @include('rapidez-statamic::page_builder', ['content' => $bottom_content])
     </div>
 @endsection

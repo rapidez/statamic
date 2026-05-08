@@ -8,7 +8,7 @@ return [
     'routes' => true,
 
     // Should the data from Statamic be fetched? The entry
-    // data will be available as $content witin views.
+    // data will be available as $content within views.
     'fetch' => [
         // Product SKU will be matched with the "linked_product" SKU.
         'product' => true,

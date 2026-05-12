@@ -3,6 +3,7 @@
 namespace Rapidez\Statamic\Models;
 
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Rapidez\Core\Models\Product as CoreProduct;
 use Rapidez\Statamic\Models\Traits\HasContentEntry;
@@ -67,5 +68,24 @@ class Product extends CoreProduct
     protected function name(): Attribute
     {
         return Attribute::get(fn (): ?string => $this->value('name'));
+    }
+
+    /**
+     * Runway's default search only includes columns on the entity table; product names are EAV.
+     */
+    #[Scope]
+    protected function runwaySearch(Builder $query, string $searchQuery): void
+    {
+        $term = '%'.$searchQuery.'%';
+        $table = $query->getModel()->getTable();
+
+        $query->where(function (Builder $q) use ($term, $searchQuery, $table): void {
+            $q->whereAttribute('name', 'like', $term)
+                ->orWhere($table.'.sku', 'like', $term);
+
+            if (is_numeric($searchQuery)) {
+                $q->orWhere($q->getModel()->getQualifiedKeyName(), $searchQuery);
+            }
+        });
     }
 }

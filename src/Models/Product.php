@@ -2,6 +2,7 @@
 
 namespace Rapidez\Statamic\Models;
 
+use Override;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -55,13 +56,16 @@ class Product extends CoreProduct
             $nameSubquery = DB::table($table.'_varchar')
                 ->where('attribute_id', $nameAttribute->attribute_id)
                 ->where('store_id', config('rapidez.store'))
-                ->selectRaw('entity_id as name_entity_id, value as magento_name_value');
+                ->select(
+                    'entity_id as name_entity_id',
+                    'value as magento_name_value',
+                );
 
             $builder
                 ->leftJoinSub($nameSubquery, 'magento_name_attr', function ($join) use ($table): void {
                     $join->on('magento_name_attr.name_entity_id', '=', $table.'.entity_id');
                 })
-                ->addSelect(DB::raw('magento_name_attr.magento_name_value as name'));
+                ->addSelect('magento_name_attr.magento_name_value as name');
         });
     }
 

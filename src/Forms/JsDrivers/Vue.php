@@ -15,7 +15,7 @@ class Vue extends AbstractJsDriver
         $conditions = Statamic::modify($field->conditions())->toJson()->entities();
 
         return [
-            'show_field' => 'Statamic.$conditions.showField('.$conditions.', formData)',
+            'show_field' => 'Statamic.$conditions.showField('.$conditions.', formData, \''.$field->handle().'\')',
         ];
     }
 }

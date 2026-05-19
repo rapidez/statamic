@@ -8,6 +8,10 @@ export default {
     props: {
         callback: {
             type: Function,
+        },
+        redirectUrl: {
+            type: String,
+            default: null,
         }
     },
     data() {
@@ -65,8 +69,13 @@ export default {
             if (response.ok) {
                 this.success = true
                 Notify(window.config.statamic.translations.form.success, 'success')
+
                 if (this.callback) {
                     await this.callback()
+                }
+
+                if (this.redirectUrl) {
+                    window.location.href = this.redirectUrl
                 }
             } else {
                 this.error = true

@@ -8,7 +8,7 @@ document.addEventListener('vue:loaded', (e) => {
     vue.component('form-submission', FormSubmission)
 })
 
-document.addEventListener('statamic:nocache.replaced', (e) => {
+document.addEventListener('statamic:csrf.replaced', (e) => {
     const token = e?.detail?.csrf
     if (token) {
         if (window?.app?.config?.globalProperties) {

@@ -30,16 +30,16 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": "^8.1",
-        "justbetter/statamic-glide-directive": "^3.0",
+        "php": "^8.4",
+        "justbetter/statamic-glide-directive": "^4.0",
         "rapidez/blade-directives": "^1.0",
         "rapidez/core": "^5.0",
         "rapidez/sitemap": "^5.0",
         "spatie/once": "*",
-        "statamic-rad-pack/runway": "^8.3",
-        "statamic/cms": "^5.55",
-        "statamic/eloquent-driver": "^4.9",
-        "tdwesten/statamic-builder": "^1.0",
+        "statamic-rad-pack/runway": "^9.0",
+        "statamic/cms": "^6.0",
+        "statamic/eloquent-driver": "^5.1",
+        "tdwesten/statamic-builder": "^3.0",
         "tormjens/eventy": "^0.8"
     },
     "autoload": {

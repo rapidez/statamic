@@ -3,6 +3,7 @@
 namespace Rapidez\Statamic;
 
 use Illuminate\Support\Facades\Cache;
+use Rapidez\BladeDirectives\OptionalDeep;
 use Statamic\Statamic;
 use Statamic\Eloquent\Entries\Entry;
 use Rapidez\Core\Facades\Rapidez;
@@ -64,9 +65,13 @@ class RapidezStatamic
         return $tree;
     }
 
-    public function determineEntryUrl(Entry|Page|string $entry, string $nav = 'global-link'): string
+    public function determineEntryUrl(Entry|Page|string|OptionalDeep $entry, string $nav = 'global-link'): string
     {
         $cacheKey = $nav . '-' . config('rapidez.store');
+
+        if ($entry instanceof OptionalDeep) {
+            $entry = $entry->get();
+        }
 
         if (is_string($entry)) {
             return $entry;

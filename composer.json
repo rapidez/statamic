@@ -31,7 +31,7 @@
     "prefer-stable": true,
     "require": {
         "php": "^8.4",
-        "justbetter/statamic-glide-directive": "dev-feature/statamic-6",
+        "justbetter/statamic-glide-directive": "^4.0",
         "league/html-to-markdown": "^5.1",
         "rapidez/blade-directives": "^1.0",
         "rapidez/core": "^5.0",
@@ -40,7 +40,7 @@
         "statamic-rad-pack/runway": "^9.0",
         "statamic/cms": "^6.0",
         "statamic/eloquent-driver": "^5.1",
-        "tdwesten/statamic-builder": "dev-80-statamic-v6",
+        "tdwesten/statamic-builder": "^3.0",
         "tormjens/eventy": "^0.8"
     },
     "autoload": {

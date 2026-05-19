@@ -90,20 +90,14 @@ class RapidezStatamic
                 return $entry->url() ?? '';
             }
 
-            $suffix = match (true) {
-                str($linkedRunwayResourceKey)->contains('category') => Rapidez::config('catalog/seo/category_url_suffix', ''),
-                str($linkedRunwayResourceKey)->contains('product') => Rapidez::config('catalog/seo/product_url_suffix', ''),
-                default => '',
-            };
-
-            if (!isset($entry->{$linkedRunwayResourceKey}['url_path'])) {
+            if (!isset($entry->{$linkedRunwayResourceKey}['url'])) {
                 $this->navCache[$nav][$entry->id()] = '';
 
                 return '';
             }
 
             $siteUrl = Str::finish(Site::current()->absoluteUrl(), '/');
-            $urlPath = $entry->{$linkedRunwayResourceKey}['url_path'] . $suffix;
+            $urlPath = ltrim($entry->{$linkedRunwayResourceKey}['url'], '/');
 
             $this->navCache[$nav][$entry->id()] = $siteUrl . $urlPath;
 

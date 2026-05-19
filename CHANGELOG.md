@@ -1,6 +1,23 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/7.0.0...7.0.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/8.0.0...8.0.0)
+## [8.0.0](https://github.com/rapidez/statamic/releases/tag/8.0.0) - 2026-05-19
+
+### Added
+
+- Magento pages migration options (#189)
+
+### Changed
+
+- Statamic 6 upgrade (#191)
+- Tailwind 4 update (#186)
+
+### Fixed
+
+- Minimize memory usage for retrieving product rewrite URLs (#181)
+- Fix response typehint in boot (#184)
+- Added Support for OptionalDeep in determineEntryUrl (#188)
+
 ## [7.0.0](https://github.com/rapidez/statamic/releases/tag/7.0.0) - 2026-02-13
 
 ### Added

@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/8.0.0...8.0.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/8.0.1...8.0.1)
+## [8.0.1](https://github.com/rapidez/statamic/releases/tag/8.0.1) - 2026-05-19
+
+### Fixed
+
+- Fix url from entries with Rapidez 5.x (#192)
+
 ## [8.0.0](https://github.com/rapidez/statamic/releases/tag/8.0.0) - 2026-05-19
 
 ### Added

@@ -92,7 +92,7 @@ class RapidezStatamic
             }
 
             $siteUrl = Str::finish(Site::current()->absoluteUrl(), '/');
-            $urlPath = ltrim($entry->{$linkedRunwayResourceKey}['url'], ',');
+            $urlPath = ltrim($entry->{$linkedRunwayResourceKey}['url'], '/');
 
             $this->navCache[$nav][$entry->id()] = $siteUrl . $urlPath;
 

@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/7.0.0...7.0.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/...7.0.1)
+## [7.0.1](https://github.com/rapidez/statamic/releases/tag/7.0.1) - 2026-02-13
+
+### Fixed
+
+- Minimize memory usage for retrieving product rewrite URLs (#182)
+
 ## [7.0.0](https://github.com/rapidez/statamic/releases/tag/7.0.0) - 2026-02-13
 
 ### Added

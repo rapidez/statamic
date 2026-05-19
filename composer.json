@@ -32,6 +32,7 @@
     "require": {
         "php": "^8.4",
         "justbetter/statamic-glide-directive": "^4.0",
+        "league/html-to-markdown": "^5.1",
         "rapidez/blade-directives": "^1.0",
         "rapidez/core": "^5.0",
         "rapidez/sitemap": "^5.0",

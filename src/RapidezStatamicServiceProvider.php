@@ -16,6 +16,7 @@ use Rapidez\Statamic\Commands\InstallCommand;
 use Rapidez\Statamic\Commands\InvalidateCacheCommand;
 use Rapidez\Statamic\Contracts\ImportsBrands;
 use Rapidez\Statamic\Actions\ImportBrands as ImportBrandsAction;
+use Rapidez\Statamic\Commands\MigrateCmsPages;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
 use Rapidez\Statamic\Forms\JsDrivers\Vue;
 use Rapidez\Statamic\Http\ViewComposers\ConfigComposer;
@@ -114,7 +115,8 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         $this->commands([
             ImportBrands::class,
             InstallCommand::class,
-            InvalidateCacheCommand::class
+            InvalidateCacheCommand::class,
+            MigrateCmsPages::class
         ]);
 
         return $this;
@@ -124,6 +126,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/rapidez/statamic.php', 'rapidez.statamic');
         $this->mergeConfigFrom(__DIR__ . '/../config/rapidez/statamic/builder.php', 'rapidez.statamic.builder');
+        $this->mergeConfigFrom(__DIR__ . '/../config/rapidez/statamic/migration.php', 'rapidez.statamic.migration');
 
         return $this;
     }
@@ -242,6 +245,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/rapidez/statamic.php' => config_path('rapidez/statamic.php'),
             __DIR__ . '/../config/rapidez/statamic/builder.php' => config_path('rapidez/statamic/builder.php'),
+            __DIR__ . '/../config/rapidez/statamic/migration.php' => config_path('rapidez/statamic/migration.php'),
         ], 'config');
 
         $this->publishes([

@@ -42,6 +42,9 @@
         "tdwesten/statamic-builder": "^1.0",
         "tormjens/eventy": "^0.8"
     },
+    "conflict": {
+        "rapidez/statamic-glide-directive": "<3.3.0"
+    },
     "autoload": {
         "psr-4": {
             "Rapidez\\Statamic\\": "src"

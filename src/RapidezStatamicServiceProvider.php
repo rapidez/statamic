@@ -85,7 +85,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootBuilder()
             ->bootSitemaps()
             ->bootStaticCaching()
-            ->bootStack()
             ->bootTranslations()
             ->bootUncacheable();
 
@@ -267,13 +266,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                 CustomInvalidator::class
             );
         }
-
-        return $this;
-    }
-
-    public function bootStack(): static
-    {
-        View::composer('rapidez::layouts.app', fn($view) => $view->getFactory()->startPush('head', view('statamic-glide-directive::partials.head')));
 
         return $this;
     }

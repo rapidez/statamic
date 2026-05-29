@@ -44,7 +44,7 @@
         "tormjens/eventy": "^0.8"
     },
     "conflict": {
-        "rapidez/statamic-glide-directive": "<4.1.0"
+        "justbetter/statamic-glide-directive": "<4.1.0"
     },
     "autoload": {
         "psr-4": {

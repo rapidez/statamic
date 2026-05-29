@@ -81,8 +81,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootPublishables()
             ->bootUtilities()
             ->bootSitemaps()
-            ->bootStaticCaching()
-            ->bootStack();
+            ->bootStaticCaching();
 
         Vue::register();
         Alternates::register();
@@ -260,14 +259,6 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             );
         }
         
-        return $this;
-    }
-
-
-    public function bootStack(): static
-    {
-        View::composer('rapidez::layouts.app', fn($view) => $view->getFactory()->startPush('head', view('statamic-glide-directive::partials.head')));
-
         return $this;
     }
 

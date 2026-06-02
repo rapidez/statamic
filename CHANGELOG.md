@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/...5.8.2)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/5.8.3...5.8.3)
+## [5.8.3](https://github.com/rapidez/statamic/releases/tag/5.8.3) - 2026-06-02
+
+### Fixed
+
+- Fix for 3.3.0 of glide directive and above (#197)
+
 ## [5.8.2](https://github.com/rapidez/statamic/releases/tag/5.8.2) - 2025-11-14
 
 ### Fixed

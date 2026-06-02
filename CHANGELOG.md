@@ -1,6 +1,16 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/6.3.2...6.3.2)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/6.4.0...6.4.0)
+## [6.4.0](https://github.com/rapidez/statamic/releases/tag/6.4.0) - 2026-06-02
+
+### Changed
+
+- Use brand collection instead of Runway model (#187)
+
+### Fixed
+
+- Fix for 3.3.0 of glide directive and above (#199)
+
 ## [6.3.2](https://github.com/rapidez/statamic/releases/tag/6.3.2) - 2026-03-10
 
 ### Fixed

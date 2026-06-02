@@ -63,6 +63,7 @@ return [
                 'name' => 'Brands',
                 'title_field' => 'value_store',
                 'order_by' => 'sort_order',
+                'hidden' => true,
             ],
 
             \Rapidez\Statamic\Models\ProductAttribute::class => [

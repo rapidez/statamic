@@ -1,0 +1,44 @@
+tabs:
+  main:
+    display: Main
+    sections:
+      -
+        fields:
+          -
+            handle: title
+            field:
+              type: text
+              required: true
+              localizable: true
+      -
+        display: 'Content bovenkant'
+        fields:
+          -
+            import: page_builder
+      -
+        display: 'Content onderkant'
+        fields:
+          -
+            import: page_builder
+            prefix: bottom_
+  sidebar:
+    display: Sidebar
+    sections:
+      -
+        fields:
+          -
+            handle: slug
+            field:
+              type: slug
+              localizable: true
+              validate:
+                - 'max:200'
+                - 'new \Statamic\Rules\UniqueEntryValue({collection}, {id}, {site})'
+  meta:
+    display: Meta
+    sections:
+    -
+      fields:
+      -
+        import: meta_data
+title: Brand

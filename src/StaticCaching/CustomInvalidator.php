@@ -2,6 +2,7 @@
 
 namespace Rapidez\Statamic\StaticCaching;
 
+use Illuminate\Support\Facades\Cache;
 use Statamic\Eloquent\Globals\GlobalSet;
 use Statamic\Eloquent\Structures\Nav;
 use Statamic\Eloquent\Structures\NavTree;
@@ -19,6 +20,7 @@ class CustomInvalidator extends DefaultInvalidator
             || $item instanceof NavTree
             || $this->rules === 'all'
         ) {
+            Cache::flush();
             return $this->cacher->flush();
         }
 

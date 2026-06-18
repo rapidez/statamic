@@ -7,6 +7,7 @@ use Statamic\Eloquent\Globals\GlobalSet;
 use Statamic\Eloquent\Structures\Nav;
 use Statamic\Eloquent\Structures\NavTree;
 use Statamic\Entries\Entry;
+use Statamic\Forms\Form;
 use Statamic\StaticCaching\DefaultInvalidator;
 use Statamic\Support\Str;
 
@@ -18,6 +19,7 @@ class CustomInvalidator extends DefaultInvalidator
             $item instanceof GlobalSet
             || $item instanceof Nav
             || $item instanceof NavTree
+            || $item instanceof Form
             || $this->rules === 'all'
         ) {
             Cache::flush();

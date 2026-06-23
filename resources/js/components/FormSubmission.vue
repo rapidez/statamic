@@ -1,4 +1,5 @@
 <script>
+import { useEventListener } from '@vueuse/core'
 import '/public/vendor/statamic/frontend/js/helpers.js'
 if (window?.app?.config?.globalProperties) {
     window.app.config.globalProperties.Statamic = window.Statamic
@@ -46,6 +47,14 @@ export default {
         if (csrfField) {
             csrfField.value = token
         }
+
+        // Recursively open up any `details` accordions that have errors in them
+        useEventListener(this.$el, 'invalid', (event) => {
+            let current = event.target
+            while(current = current.parentElement.closest('details')) {
+                current.open = true
+            }
+        }, true)
     },
 
     methods: {

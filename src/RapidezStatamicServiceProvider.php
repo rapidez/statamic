@@ -189,6 +189,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             Blueprint::addNamespace('collections.products', resource_path('blueprints/vendor/runway'));
             Blueprint::addNamespace('collections.categories', resource_path('blueprints/vendor/runway'));
         }
+        Blueprint::addNamespace('vendor.runway', resource_path('blueprints/vendor/runway'));
 
         return $this;
     }

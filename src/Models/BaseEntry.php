@@ -14,6 +14,7 @@ class BaseEntry extends Model
     use Searchable;
 
     protected $table = 'statamic_entries';
+    protected $keyType = 'string';
     protected static $collection;
 
     protected $casts = [

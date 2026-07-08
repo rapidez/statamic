@@ -1,6 +1,17 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/8.1.0...8.1.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/8.1.1...8.1.1)
+## [8.1.1](https://github.com/rapidez/statamic/releases/tag/8.1.1) - 2026-07-08
+
+### Fixed
+
+- Also flush application cache on global flush (#201)
+- Also flush cache on form change (#203)
+- Open details accordions when there are errors (#205)
+- Fix replicators not working from Runway resource blueprints (#208)
+- Support non-integer key types (#209)
+- Added form fields checkboxes and radio's (#210)
+
 ## [8.1.0](https://github.com/rapidez/statamic/releases/tag/8.1.0) - 2026-06-02
 
 ### Changed

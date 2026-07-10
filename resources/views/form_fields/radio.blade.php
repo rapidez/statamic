@@ -1,3 +1,6 @@
+@if ($field['display'] ?? false)
+    <x-rapidez::label>@lang($field['display'])</x-rapidez::label>
+@endif
 @foreach($field['options'] as $key => $label)
     <x-rapidez::input.radio
         :name="$field['handle']"

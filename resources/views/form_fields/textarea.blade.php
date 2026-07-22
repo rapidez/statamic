@@ -1,5 +1,7 @@
 <label>
-    <x-rapidez::label>@lang($field['display'])</x-rapidez::label>
+    @if ($field['display'] ?? false)
+        <x-rapidez::label>@lang($field['display'])</x-rapidez::label>
+    @endif
     <x-rapidez::input.textarea
         :name="$field['handle']"
         :value="$field['value']"

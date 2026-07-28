@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/4.8.2...4.8.2)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/4.9.0...4.9.0)
+## [4.9.0](https://github.com/rapidez/statamic/releases/tag/4.9.0) - 2026-07-28
+
+### Added
+
+- Laravel 12 support (#212)
+
 ## [4.8.2](https://github.com/rapidez/statamic/releases/tag/4.8.2) - 2026-06-02
 
 ### Fixed

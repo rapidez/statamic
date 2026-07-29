@@ -54,8 +54,9 @@
     "config": {
         "sort-packages": true,
         "allow-plugins": {
+            "php-http/discovery": true,
             "pixelfear/composer-dist-plugin": true,
-            "php-http/discovery": true
+            "rapidez/composer-template-diff-plugin": true
         }
     },
     "extra": {

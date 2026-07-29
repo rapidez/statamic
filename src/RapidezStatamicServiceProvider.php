@@ -292,6 +292,8 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     public function bootRunwayLinkTypes(): static
     {
         Statamic::booted(function (): void {
+            Runway::discoverResources();
+            
             foreach (['product', 'category'] as $handle) {
                 if (Runway::hasResource($handle)) {
                     Link::extend(ResourceLinkType::PREFIX.$handle, MagentoRunwayLinkType::class);

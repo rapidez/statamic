@@ -90,6 +90,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootSitemaps()
             ->bootStaticCaching()
             ->bootTranslations()
+            ->bootRunwayLinkTypes()
             ->bootUncacheable();
 
         Vue::register();

@@ -1,6 +1,20 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/8.1.1...8.1.1)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/8.2.0...8.2.0)
+## [8.2.0](https://github.com/rapidez/statamic/releases/tag/8.2.0) - 2026-08-11
+
+### Added
+
+- Product and category custom links types (#213)
+
+### Changed
+
+- Added form input labels (#211)
+
+### Fixed
+
+- Form conditions Vue 3 fix (#214)
+
 ## [8.1.1](https://github.com/rapidez/statamic/releases/tag/8.1.1) - 2026-07-08
 
 ### Fixed

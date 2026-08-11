@@ -3,6 +3,10 @@
 namespace Rapidez\Statamic;
 
 use Illuminate\Foundation\Bootstrap\BootProviders;
+use Rapidez\Statamic\Extend\Link\MagentoRunwayLinkType;
+use Statamic\Fieldtypes\Link;
+use StatamicRadPack\Runway\ResourceLinkType;
+use StatamicRadPack\Runway\Runway;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
@@ -86,6 +90,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootSitemaps()
             ->bootStaticCaching()
             ->bootTranslations()
+            ->bootRunwayLinkTypes()
             ->bootUncacheable();
 
         Vue::register();
@@ -279,6 +284,21 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         Eventy::addFilter('uncacheable.response', function (SymfonyResponse $response) {
             $response->header('X-Statamic-Uncacheable', 'true');
             return $response;
+        });
+
+        return $this;
+    }
+
+    public function bootRunwayLinkTypes(): static
+    {
+        Statamic::booted(function (): void {
+            Runway::discoverResources();
+            
+            foreach (['product', 'category'] as $handle) {
+                if (Runway::hasResource($handle)) {
+                    Link::extend(ResourceLinkType::PREFIX.$handle, MagentoRunwayLinkType::class);
+                }
+            }
         });
 
         return $this;

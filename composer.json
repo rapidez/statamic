@@ -37,8 +37,8 @@
         "rapidez/core": "^5.0",
         "rapidez/sitemap": "^5.0",
         "spatie/once": "*",
-        "statamic-rad-pack/runway": "^9.0",
-        "statamic/cms": "^6.0",
+        "statamic-rad-pack/runway": "^9.6",
+        "statamic/cms": "^6.26",
         "statamic/eloquent-driver": "^5.1",
         "tdwesten/statamic-builder": "^3.0",
         "tormjens/eventy": "^0.8"
@@ -54,8 +54,9 @@
     "config": {
         "sort-packages": true,
         "allow-plugins": {
+            "php-http/discovery": true,
             "pixelfear/composer-dist-plugin": true,
-            "php-http/discovery": true
+            "rapidez/composer-template-diff-plugin": true
         }
     },
     "extra": {

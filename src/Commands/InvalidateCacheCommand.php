@@ -4,8 +4,10 @@ namespace Rapidez\Statamic\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Rapidez\Core\Actions\GetLatestIndexTimestamp;
 use Rapidez\Core\Facades\Rapidez;
 use Statamic\StaticCaching\Cacher;
 use Statamic\StaticCaching\Cachers\Writer;
@@ -22,6 +24,7 @@ class InvalidateCacheCommand extends Command
 
     public $staticCachePath;
 
+    private bool $ignoreCatalogData = false;
     private ?array $storeConfig = null;
 
     public function handle(Cacher $cacher, Writer $writer): void
@@ -51,6 +54,12 @@ class InvalidateCacheCommand extends Command
                 $this->setLatestCheckDate();
                 continue;
             }
+
+            if (resolve(GetLatestIndexTimestamp::class)->get() <= Carbon::parse(this->latestCheck)) {
+                $this->ignoreCatalogData = true;
+                $this->info('Index timestamp has not changed. Ignoring catalog data.');
+            }
+
             $this->setLatestCheckDate();
 
             $this->urls = collect();
@@ -75,6 +84,10 @@ class InvalidateCacheCommand extends Command
 
     protected function addProductsUrls(): self
     {
+        if ($this->ignoreCatalogData) {
+            return $this;
+        }
+
         config('rapidez.models.product')::withoutGlobalScopes()->toBase()
             ->where('updated_at', '>=', $this->latestCheck)
             ->orWhereIn('entity_id', $this->getUpdatedStockProducts())
@@ -121,6 +134,10 @@ class InvalidateCacheCommand extends Command
 
     protected function addCategoryUrls(): self
     {
+        if ($this->ignoreCatalogData) {
+            return $this;
+        }
+
         $categories = config('rapidez.models.category')::withoutGlobalScopes()
             ->where('updated_at', '>=', $this->latestCheck)
             ->get('entity_id');
@@ -169,7 +186,7 @@ class InvalidateCacheCommand extends Command
 
     protected function setLatestCheckDate(): void
     {
-        Arr::set($this->getInvalidateConfig(), config('rapidez.store_code') . '.last-invalidation', DB::selectOne('SELECT NOW() AS `current_time`')->current_time);
+        Arr::set($this->getInvalidateConfig(), config('rapidez.store_code') . '.last-invalidation', resolve(GetLatestIndexTimestamp::class)->get());
     }
 
     /**

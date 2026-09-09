@@ -1,6 +1,13 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/7.1.0...7.1.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/...7.1.1)
+## [7.1.1](https://github.com/rapidez/statamic/releases/tag/7.1.1) - 2026-06-23
+
+### Fixed
+
+- Open details accordions when there are errors (#204)
+- Also flush application cache on global flush (#207)
+
 ## [7.1.0](https://github.com/rapidez/statamic/releases/tag/7.1.0) - 2026-06-02
 
 ### Changed

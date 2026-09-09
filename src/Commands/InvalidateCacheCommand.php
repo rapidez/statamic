@@ -4,6 +4,7 @@ namespace Rapidez\Statamic\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Rapidez\Core\Actions\GetLatestIndexTimestamp;
@@ -23,6 +24,7 @@ class InvalidateCacheCommand extends Command
 
     public $staticCachePath;
 
+    private bool $ignoreCatalogData = false;
     private ?array $storeConfig = null;
 
     public function handle(Cacher $cacher, Writer $writer): void
@@ -53,6 +55,11 @@ class InvalidateCacheCommand extends Command
                 continue;
             }
 
+            if (resolve(GetLatestIndexTimestamp::class)->get() <= Carbon::parse(this->latestCheck)) {
+                $this->ignoreCatalogData = true;
+                $this->info('Index timestamp has not changed. Ignoring catalog data.');
+            }
+
             $this->setLatestCheckDate();
 
             $this->urls = collect();
@@ -77,6 +84,10 @@ class InvalidateCacheCommand extends Command
 
     protected function addProductsUrls(): self
     {
+        if ($this->ignoreCatalogData) {
+            return $this;
+        }
+
         config('rapidez.models.product')::withoutGlobalScopes()->toBase()
             ->where('updated_at', '>=', $this->latestCheck)
             ->orWhereIn('entity_id', $this->getUpdatedStockProducts())
@@ -123,6 +134,10 @@ class InvalidateCacheCommand extends Command
 
     protected function addCategoryUrls(): self
     {
+        if ($this->ignoreCatalogData) {
+            return $this;
+        }
+
         $categories = config('rapidez.models.category')::withoutGlobalScopes()
             ->where('updated_at', '>=', $this->latestCheck)
             ->get('entity_id');

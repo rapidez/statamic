@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Rapidez\Core\Actions\GetLatestIndexTimestamp;
 use Rapidez\Core\Facades\Rapidez;
 use Statamic\StaticCaching\Cacher;
 use Statamic\StaticCaching\Cachers\Writer;
@@ -51,6 +52,7 @@ class InvalidateCacheCommand extends Command
                 $this->setLatestCheckDate();
                 continue;
             }
+
             $this->setLatestCheckDate();
 
             $this->urls = collect();
@@ -169,7 +171,7 @@ class InvalidateCacheCommand extends Command
 
     protected function setLatestCheckDate(): void
     {
-        Arr::set($this->getInvalidateConfig(), config('rapidez.store_code') . '.last-invalidation', DB::selectOne('SELECT NOW() AS `current_time`')->current_time);
+        Arr::set($this->getInvalidateConfig(), config('rapidez.store_code') . '.last-invalidation', resolve(GetLatestIndexTimestamp::class)->get());
     }
 
     /**

@@ -1,6 +1,14 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/6.4.0...6.4.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/6.4.1...6.4.1)
+## [6.4.1](https://github.com/rapidez/statamic/releases/tag/6.4.1) - 2026-09-09
+
+### Fixed
+
+- Open details accordions when there are errors (#202)
+- Also flush application cache on global flush (#206)
+- Use GetLatestIndexTimestamp for cache invalidation (#215)
+
 ## [6.4.0](https://github.com/rapidez/statamic/releases/tag/6.4.0) - 2026-06-02
 
 ### Changed

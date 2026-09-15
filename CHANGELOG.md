@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/6.4.1...6.4.1)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/6.4.2...6.4.2)
+## [6.4.2](https://github.com/rapidez/statamic/releases/tag/6.4.2) - 2026-09-15
+
+### Fixed
+
+- Fix missing $ (#216)
+
 ## [6.4.1](https://github.com/rapidez/statamic/releases/tag/6.4.1) - 2026-09-09
 
 ### Fixed

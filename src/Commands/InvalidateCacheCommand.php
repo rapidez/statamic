@@ -55,7 +55,7 @@ class InvalidateCacheCommand extends Command
                 continue;
             }
 
-            if (resolve(GetLatestIndexTimestamp::class)->get() <= Carbon::parse(this->latestCheck)) {
+            if (resolve(GetLatestIndexTimestamp::class)->get() <= Carbon::parse($this->latestCheck)) {
                 $this->ignoreCatalogData = true;
                 $this->info('Index timestamp has not changed. Ignoring catalog data.');
             }

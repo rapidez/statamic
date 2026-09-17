@@ -8,10 +8,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Storage;
+use Rapidez\Core\Facades\Rapidez;
+use Statamic\Entries\Collection;
 use Statamic\Facades\Collection as StatamicCollection;
 use Statamic\Facades\Taxonomy as TaxonomyFacade;
 use Statamic\Sites\Site;
-use Statamic\Entries\Collection;
 use TorMorten\Eventy\Facades\Eventy;
 
 class GenerateStoreSitemapJob implements ShouldQueue, ShouldBeUnique
@@ -24,9 +25,12 @@ class GenerateStoreSitemapJob implements ShouldQueue, ShouldBeUnique
 
     public function handle(): void
     {
-        $this->createCollectionSitemaps();
-        $this->createTaxonomySitemaps();
-        $this->addSitemapFilter();
+        $storeId = $this->site->attribute('magento_store_id') ?? config('rapidez.store');
+        Rapidez::withStore($storeId, function () {
+            $this->createCollectionSitemaps();
+            $this->createTaxonomySitemaps();
+            $this->addSitemapFilter();
+        });
     }
 
     protected function createCollectionSitemaps() : void
@@ -64,7 +68,7 @@ class GenerateStoreSitemapJob implements ShouldQueue, ShouldBeUnique
 
     protected function addSitemapFilter() : void
     {
-        $storeId = $this->site->attribute('magento_store_id');
+        $storeId = config('rapidez.store');
         $storageDisk = Storage::disk(config('rapidez-sitemap.disk', 'public'));
         $path = trim(config('rapidez-sitemap.path', 'rapidez-sitemaps'), '/');
         $storageDirectory = $path.'/'.$storeId.'/';

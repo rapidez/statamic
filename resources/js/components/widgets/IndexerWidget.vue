@@ -21,9 +21,9 @@
 
         <ConfirmationModal
             :open="confirming"
-            :title="labels.confirm_title"
-            :body-text="labels.confirm_body"
-            :button-text="labels.confirm_button"
+            :title="labels.confirm.title"
+            :body-text="labels.confirm.body"
+            :button-text="labels.confirm.button"
             :busy="busy"
             @update:open="onModalOpenChange"
             @confirm="runIndexer"
@@ -76,7 +76,8 @@ async function runIndexer() {
 
     try {
         const response = await app.$axios.post(runUrl);
-        app.$toast.success(response.data?.message || labels.success_completed);
+        const successKey = response.data?.queued ? 'queued' : 'completed';
+        app.$toast.success(response.data?.message || labels.success[successKey]);
 
         if (!response.data?.queued) {
             latestIndexedAt.value = new Date().toISOString();

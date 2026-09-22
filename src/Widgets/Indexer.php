@@ -25,11 +25,15 @@ class Indexer extends Widget
                 'run' => __('rapidez-statamic::messages.indexer_run'),
                 'last_run' => __('rapidez-statamic::messages.indexer_last_run'),
                 'never_run' => __('rapidez-statamic::messages.indexer_never_run'),
-                'confirm_title' => __('rapidez-statamic::messages.indexer_confirm_title'),
-                'confirm_body' => __('rapidez-statamic::messages.indexer_confirm_body'),
-                'confirm_button' => __('rapidez-statamic::messages.indexer_confirm_button'),
-                'success_queued' => __('rapidez-statamic::messages.indexer_success_queued'),
-                'success_completed' => __('rapidez-statamic::messages.indexer_success_completed'),
+                'confirm' => [
+                    'title' => __('rapidez-statamic::messages.indexer_confirm_title'),
+                    'body' => __('rapidez-statamic::messages.indexer_confirm_body'),
+                    'button' => __('rapidez-statamic::messages.indexer_confirm_button'),
+                ],
+                'success' => [
+                    'queued' => __('rapidez-statamic::messages.indexer_success_queued'),
+                    'completed' => __('rapidez-statamic::messages.indexer_success_completed'),
+                ],
                 'error' => __('rapidez-statamic::messages.indexer_error'),
             ],
         ]);

@@ -145,5 +145,18 @@ return [
 
     'sitemap' => [
         'prefix' => env('STATAMIC_SITEMAP_PREFIX', 'statamic_sitemap_')
-    ]
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Dashboard indexer widget
+    |--------------------------------------------------------------------------
+    |
+    | When enabled, the "Indexer" dashboard widget is automatically added to
+    | the Control Panel dashboard for users with the "run rapidez indexer"
+    | permission.
+    |
+    */
+
+    'dashboard_indexer_widget' => env('RAPIDEZ_STATAMIC_DASHBOARD_INDEXER_WIDGET', true),
 ];

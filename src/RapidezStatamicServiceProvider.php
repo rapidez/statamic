@@ -3,48 +3,51 @@
 namespace Rapidez\Statamic;
 
 use Illuminate\Foundation\Bootstrap\BootProviders;
-use Rapidez\Statamic\Extend\Link\MagentoRunwayLinkType;
-use Statamic\Fieldtypes\Link;
-use StatamicRadPack\Runway\ResourceLinkType;
-use StatamicRadPack\Runway\Runway;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View as RenderedView;
-use Rapidez\Statamic\Actions\GenerateSitemapsAction;
 use Rapidez\Core\Facades\Rapidez;
+use Rapidez\Statamic\Actions\GenerateSitemapsAction;
+use Rapidez\Statamic\Actions\ImportBrands as ImportBrandsAction;
 use Rapidez\Statamic\Commands\ImportBrands;
 use Rapidez\Statamic\Commands\InstallCommand;
 use Rapidez\Statamic\Commands\InvalidateCacheCommand;
-use Rapidez\Statamic\Contracts\ImportsBrands;
-use Rapidez\Statamic\Actions\ImportBrands as ImportBrandsAction;
 use Rapidez\Statamic\Commands\MigrateCmsPages;
+use Rapidez\Statamic\Contracts\ImportsBrands;
+use Rapidez\Statamic\Extend\Link\MagentoRunwayLinkType;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
 use Rapidez\Statamic\Forms\JsDrivers\Vue;
 use Rapidez\Statamic\Http\ViewComposers\ConfigComposer;
 use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
 use Rapidez\Statamic\Listeners\ClearNavTreeCache;
 use Rapidez\Statamic\Listeners\SetCollectionsForNav;
+use Rapidez\Statamic\StaticCaching\CustomInvalidator;
 use Rapidez\Statamic\Tags\Alternates;
+use Rapidez\Statamic\Widgets\Indexer;
 use Statamic\Events\GlobalSetDeleted;
+use Statamic\Events\GlobalVariablesSaved;
 use Statamic\Events\NavCreated;
 use Statamic\Events\NavTreeSaved;
+use Statamic\Facades\Blueprint;
 use Statamic\Facades\Entry;
+use Statamic\Facades\Permission;
 use Statamic\Facades\Site;
+use Statamic\Facades\Site as SiteFacade;
+use Statamic\Fieldtypes\Link;
 use Statamic\Http\Controllers\FrontendController;
-use Statamic\Sites\Sites;
-use Statamic\StaticCaching\Middleware\Cache as StaticCache;
 use Statamic\Http\Middleware\RedirectAbsoluteDomains;
+use Statamic\Sites\Sites;
+use Statamic\Statamic;
+use Statamic\StaticCaching\Middleware\Cache as StaticCache;
+use Statamic\View\Cascade as StatamicCascade;
+use StatamicRadPack\Runway\ResourceLinkType;
+use StatamicRadPack\Runway\Runway;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use TorMorten\Eventy\Facades\Eventy;
-use Statamic\Facades\Site as SiteFacade;
-use Statamic\View\Cascade as StatamicCascade;
-use Rapidez\Statamic\StaticCaching\CustomInvalidator;
-use Statamic\Events\GlobalVariablesSaved;
-use Statamic\Facades\Blueprint;
-use Statamic\Statamic;
 
 class RapidezStatamicServiceProvider extends ServiceProvider
 {
@@ -91,7 +94,12 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             ->bootStaticCaching()
             ->bootTranslations()
             ->bootRunwayLinkTypes()
-            ->bootUncacheable();
+            ->bootUncacheable()
+            ->bootPermissions()
+            ->bootWidgets()
+            ->bootCpRoutes()
+            ->bootVite()
+            ->bootDashboardIndexerWidget();
 
         Vue::register();
         Alternates::register();
@@ -99,7 +107,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
     protected function bootTranslations(): self
     {
-        $this->loadTranslationsFrom(__DIR__ . '/../lang', 'rapidez-statamic');
+        $this->loadTranslationsFrom(__DIR__.'/../lang', 'rapidez-statamic');
 
         return $this;
     }
@@ -114,28 +122,28 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         return $this;
     }
 
-    public function bootCommands() : self
+    public function bootCommands(): self
     {
         $this->commands([
             ImportBrands::class,
             InstallCommand::class,
             InvalidateCacheCommand::class,
-            MigrateCmsPages::class
+            MigrateCmsPages::class,
         ]);
 
         return $this;
     }
 
-    public function bootConfig() : self
+    public function bootConfig(): self
     {
         $this->mergeConfigFrom(__DIR__.'/../config/rapidez/statamic.php', 'rapidez.statamic');
-        $this->mergeConfigFrom(__DIR__ . '/../config/rapidez/statamic/builder.php', 'rapidez.statamic.builder');
-        $this->mergeConfigFrom(__DIR__ . '/../config/rapidez/statamic/migration.php', 'rapidez.statamic.migration');
+        $this->mergeConfigFrom(__DIR__.'/../config/rapidez/statamic/builder.php', 'rapidez.statamic.builder');
+        $this->mergeConfigFrom(__DIR__.'/../config/rapidez/statamic/migration.php', 'rapidez.statamic.migration');
 
         return $this;
     }
 
-    public function bootRoutes() : self
+    public function bootRoutes(): self
     {
         if (config('rapidez.statamic.routes') && $this->currentSiteIsEnabled()) {
             Rapidez::addFallbackRoute([FrontendController::class, 'index']);
@@ -144,34 +152,34 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         return $this;
     }
 
-    public function bootViews() : self
+    public function bootViews(): self
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'rapidez-statamic');
 
         return $this;
     }
 
-    public function bootListeners() : self
+    public function bootListeners(): self
     {
         if ($this->currentSiteIsEnabled()) {
             Event::listen([GlobalVariablesSaved::class, GlobalSetDeleted::class], function () {
-                Cache::forget('statamic-globals-' . Site::selected()->handle());
+                Cache::forget('statamic-globals-'.Site::selected()->handle());
             });
 
             Event::listen(NavCreated::class, SetCollectionsForNav::class);
             Event::listen(NavTreeSaved::class, ClearNavTreeCache::class);
 
-            Eventy::addFilter('rapidez.statamic.category.entry.data', fn($category) => [
+            Eventy::addFilter('rapidez.statamic.category.entry.data', fn ($category) => [
                 'title' => $category->name,
                 'slug' => trim($category->url_key),
             ]);
 
-            Eventy::addFilter('rapidez.statamic.product.entry.data', fn($product) => [
+            Eventy::addFilter('rapidez.statamic.product.entry.data', fn ($product) => [
                 'title' => $product->name,
                 'slug' => trim($product->url_key),
             ]);
 
-            Eventy::addFilter('rapidez.statamic.brand.entry.data', fn($brand) => [
+            Eventy::addFilter('rapidez.statamic.brand.entry.data', fn ($brand) => [
                 'title' => $brand->value_store,
                 'slug' => trim($brand->value_admin),
             ]);
@@ -180,7 +188,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         return $this;
     }
 
-    public function bootRunway() : self
+    public function bootRunway(): self
     {
         if (config('rapidez.statamic.runway.configure') && $this->currentSiteIsEnabled()) {
             config(['runway.resources' => array_merge(
@@ -199,7 +207,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         return $this;
     }
 
-    public function bootComposers() : self
+    public function bootComposers(): self
     {
         if (config('rapidez.statamic.fetch.product') && $this->currentSiteIsEnabled()) {
             View::composer('rapidez::product.overview', function (RenderedView $view) {
@@ -235,7 +243,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         return $this;
     }
 
-    public function bootPublishables() : self
+    public function bootPublishables(): self
     {
         $this->publishes([
             __DIR__.'/../resources/content/assets' => base_path('content/assets'),
@@ -249,27 +257,31 @@ class RapidezStatamicServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__.'/../config/rapidez/statamic.php' => config_path('rapidez/statamic.php'),
-            __DIR__ . '/../config/rapidez/statamic/builder.php' => config_path('rapidez/statamic/builder.php'),
-            __DIR__ . '/../config/rapidez/statamic/migration.php' => config_path('rapidez/statamic/migration.php'),
+            __DIR__.'/../config/rapidez/statamic/builder.php' => config_path('rapidez/statamic/builder.php'),
+            __DIR__.'/../config/rapidez/statamic/migration.php' => config_path('rapidez/statamic/migration.php'),
         ], 'config');
 
         $this->publishes([
             __DIR__.'/../src/Models/User.php' => app_path('Models/User.php'),
         ], 'rapidez-user-model');
 
+        $this->publishes([
+            __DIR__.'/../resources/dist/build' => public_path('vendor/rapidez/statamic/build'),
+        ], 'rapidez-statamic-cp');
+
         return $this;
     }
 
     public function bootSitemaps(): static
     {
-        Eventy::addAction('rapidez.sitemap.generate', fn() => GenerateSitemapsAction::generate(), 20, 1);
+        Eventy::addAction('rapidez.sitemap.generate', fn () => GenerateSitemapsAction::generate(), 20, 1);
 
         return $this;
     }
 
     public function bootStaticCaching(): static
     {
-        if (!config('statamic.static_caching.invalidation.class')) {
+        if (! config('statamic.static_caching.invalidation.class')) {
             config()->set(
                 'statamic.static_caching.invalidation.class',
                 CustomInvalidator::class
@@ -283,6 +295,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     {
         Eventy::addFilter('uncacheable.response', function (SymfonyResponse $response) {
             $response->header('X-Statamic-Uncacheable', 'true');
+
             return $response;
         });
 
@@ -293,7 +306,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
     {
         Statamic::booted(function (): void {
             Runway::discoverResources();
-            
+
             foreach (['product', 'category'] as $handle) {
                 if (Runway::hasResource($handle)) {
                     Link::extend(ResourceLinkType::PREFIX.$handle, MagentoRunwayLinkType::class);
@@ -304,15 +317,95 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         return $this;
     }
 
+    protected function bootPermissions(): self
+    {
+        Permission::extend(function () {
+            Permission::group('rapidez', 'Rapidez', function () {
+                Permission::register('run rapidez indexer')
+                    ->label(__('rapidez-statamic::messages.permission_run_indexer'));
+            });
+        });
+
+        return $this;
+    }
+
+    protected function bootWidgets(): self
+    {
+        Indexer::register();
+
+        return $this;
+    }
+
+    protected function bootCpRoutes(): self
+    {
+        Statamic::pushCpRoutes(function () {
+            require __DIR__.'/../routes/cp.php';
+        });
+
+        return $this;
+    }
+
+    protected function bootVite(): self
+    {
+        $source = realpath(__DIR__.'/../resources/dist/build');
+        $target = public_path('vendor/rapidez/statamic/build');
+
+        if ($source && ! file_exists($target)) {
+            File::ensureDirectoryExists(dirname($target));
+            File::link($source, $target);
+        }
+
+        Statamic::vite('rapidez/statamic', [
+            'hotFile' => __DIR__.'/../resources/dist/hot',
+            'buildDirectory' => 'vendor/rapidez/statamic/build',
+            'input' => [
+                'resources/js/cp.js',
+            ],
+        ]);
+
+        return $this;
+    }
+
+    protected function bootDashboardIndexerWidget(): self
+    {
+        if (! config('rapidez.statamic.dashboard_indexer_widget', true)) {
+            return $this;
+        }
+
+        $widgets = collect(config('statamic.cp.widgets', []));
+
+        $alreadyPresent = $widgets->contains(function (mixed $widget): bool {
+            $type = is_string($widget) ? $widget : ($widget['type'] ?? null);
+
+            return $type === 'indexer';
+        });
+
+        if ($alreadyPresent) {
+            return $this;
+        }
+
+        config([
+            'statamic.cp.widgets' => $widgets
+                ->push([
+                    'type' => 'indexer',
+                    'width' => 50,
+                    'can' => 'run rapidez indexer',
+                ])
+                ->all(),
+        ]);
+
+        return $this;
+    }
+
     public function currentSiteIsEnabled(): bool
     {
-        return !config('statamic.sites.sites.' . Site::current()->handle() . '.attributes.disabled', false);
+        return ! config('statamic.sites.sites.'.Site::current()->handle().'.attributes.disabled', false);
     }
 
     public function getSiteHandleByStoreId(): string
     {
         $site = Site::all()
-            ->filter(fn($_site) => ($_site?->attributes()['magento_store_id'] ?? null) == config('rapidez.store'))
+            ->filter(fn ($_site) => ($_site?->attributes()['magento_store_id'] ?? null) == config('rapidez.store'))
             ->first();
 
         return $site?->handle() ?? config('rapidez.store_code');

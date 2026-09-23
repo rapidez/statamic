@@ -4,6 +4,7 @@ namespace Rapidez\Statamic\Widgets;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Rapidez\Statamic\Support\IndexerFilters;
 use Statamic\Facades\User;
 use Statamic\Widgets\VueComponent;
 use Statamic\Widgets\Widget;
@@ -16,26 +17,15 @@ class Indexer extends Widget
             return null;
         }
 
+        $labels = __('rapidez-statamic::messages.indexer');
+
         return VueComponent::render('rapidez-indexer-widget', [
-            'title' => __('rapidez-statamic::messages.indexer_widget_title'),
+            'title' => $labels['title'],
             'runUrl' => cp_route('rapidez.indexer.run'),
             'lastIndexedAt' => $this->lastIndexedAt(),
-            'labels' => [
-                'description' => __('rapidez-statamic::messages.indexer_description'),
-                'run' => __('rapidez-statamic::messages.indexer_run'),
-                'last_run' => __('rapidez-statamic::messages.indexer_last_run'),
-                'never_run' => __('rapidez-statamic::messages.indexer_never_run'),
-                'confirm' => [
-                    'title' => __('rapidez-statamic::messages.indexer_confirm_title'),
-                    'body' => __('rapidez-statamic::messages.indexer_confirm_body'),
-                    'button' => __('rapidez-statamic::messages.indexer_confirm_button'),
-                ],
-                'success' => [
-                    'queued' => __('rapidez-statamic::messages.indexer_success_queued'),
-                    'completed' => __('rapidez-statamic::messages.indexer_success_completed'),
-                ],
-                'error' => __('rapidez-statamic::messages.indexer_error'),
-            ],
+            'typeOptions' => IndexerFilters::typeOptions(),
+            'storeOptions' => IndexerFilters::storeOptions(),
+            'labels' => $labels,
         ]);
     }
 

@@ -8,6 +8,7 @@ use Statamic\Fieldtypes\Link;
 use StatamicRadPack\Runway\ResourceLinkType;
 use StatamicRadPack\Runway\Runway;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\View;
@@ -80,6 +81,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         $this
             ->bootCommands()
             ->bootConfig()
+            ->bootDirectives()
             ->bootRoutes()
             ->bootViews()
             ->bootListeners()
@@ -131,6 +133,15 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/rapidez/statamic.php', 'rapidez.statamic');
         $this->mergeConfigFrom(__DIR__ . '/../config/rapidez/statamic/builder.php', 'rapidez.statamic.builder');
         $this->mergeConfigFrom(__DIR__ . '/../config/rapidez/statamic/migration.php', 'rapidez.statamic.migration');
+
+        return $this;
+    }
+
+    protected function bootDirectives(): static
+    {
+        Blade::directive('nocacheScoped', function (string $expression): string {
+            return '<?php echo app("Statamic\StaticCaching\NoCache\BladeDirective")->handle(' . $expression . '); ?>';
+        });
 
         return $this;
     }

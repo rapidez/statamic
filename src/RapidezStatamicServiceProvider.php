@@ -8,6 +8,7 @@ use Statamic\Fieldtypes\Link;
 use StatamicRadPack\Runway\ResourceLinkType;
 use StatamicRadPack\Runway\Runway;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\View;

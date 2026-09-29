@@ -145,5 +145,9 @@ return [
 
     'sitemap' => [
         'prefix' => env('STATAMIC_SITEMAP_PREFIX', 'statamic_sitemap_')
-    ]
+    ],
+
+    // Automatically add the Indexer widget to the CP dashboard.
+    'dashboard_indexer_widget' => env('RAPIDEZ_STATAMIC_DASHBOARD_INDEXER_WIDGET', true),
 ];
+

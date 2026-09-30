@@ -42,11 +42,12 @@ class SitesLinkedToMagentoStores extends Sites
                         continue;
                     }
 
-                    Rapidez::setStore($store['store_id']);
+                    [$locale, $url] = Rapidez::withStore($store['store_id'], fn() => [
+                        $configModel::getCachedByPath('general/locale/code'),
+                        $configModel::getCachedByPath('web/secure/base_url'),
+                    ]);
 
-                    $locale = $configModel::getCachedByPath('general/locale/code');
                     $lang = explode('_', $locale)[0] ?? '';
-                    $url = $configModel::getCachedByPath('web/secure/base_url');
 
                     $sites[$store['code']] = [
                         'name' => $store['name'] ?? $store['code'],

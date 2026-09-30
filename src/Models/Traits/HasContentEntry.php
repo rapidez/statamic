@@ -38,7 +38,7 @@ trait HasContentEntry
                     ->keys();
 
                 $models->each(function ($model) use ($fieldsOnRunwayResource) {
-                    $entryData = $model->getRelationValue('entry')?->data ?? [];
+                    $entryData = $model->entry->data ?? [];
                     $filteredFields = $fieldsOnRunwayResource
                         ->filter(fn ($key) => boolval($entryData[$key] ?? null))->all();
 

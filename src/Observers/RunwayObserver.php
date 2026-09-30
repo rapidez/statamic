@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Statamic\Eloquent\Entries\Entry as StatamicEntry;
 use Statamic\Facades\Entry;
 use Statamic\Facades\Site;
-use Statamic\Support\Arr;
 
 class RunwayObserver
 {
@@ -42,45 +41,6 @@ class RunwayObserver
         Entry::save($entry);
 
         return false;
-    }
-
-    public function retrieved(Model $model)
-    {
-        if (!$model->exists) {
-            return;
-        }
-
-        $fieldsOnRunwayResource = $model
-            ->runwayResource()
-            ->blueprint()
-            ->fields()
-            ->all()
-            // Filter all read_only variables because they should always come from magento
-            ->filter(fn($option, $key) =>
-                $option->visibility() !== 'read_only' && $model->getKeyName() !== $key
-            )
-            ->keys()
-            ->filter(function($key) use ($model) {
-                if (!$model->entry) {
-                    return false;
-                }
-                
-                // Entry is an Eloquent EntryModel with data property (array), not a method
-                // Check if entry has data property and if the key exists
-                $entryData = $model->entry->data ?? [];
-                
-                return boolval($entryData[$key] ?? null);
-            })
-            ->toArray();
-
-        // Exclude the potential duplicated keys
-        // Ignore the Magento values in that case
-        $filteredAttributes = Arr::except(
-            $model->getAttributes(),
-            $fieldsOnRunwayResource
-        );
-
-        $model->setRawAttributes($filteredAttributes);
     }
 
     // Just to make sure you can't create or delete

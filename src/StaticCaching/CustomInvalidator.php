@@ -3,9 +3,10 @@
 namespace Rapidez\Statamic\StaticCaching;
 
 use Illuminate\Support\Facades\Cache;
-use Statamic\Eloquent\Globals\GlobalSet;
-use Statamic\Eloquent\Structures\Nav;
-use Statamic\Eloquent\Structures\NavTree;
+use Statamic\Contracts\Globals\GlobalSet;
+use Statamic\Contracts\Globals\Variables;
+use Statamic\Contracts\Structures\Nav;
+use Statamic\Contracts\Structures\NavTree;
 use Statamic\Entries\Entry;
 use Statamic\Forms\Form;
 use Statamic\StaticCaching\DefaultInvalidator;
@@ -17,6 +18,7 @@ class CustomInvalidator extends DefaultInvalidator
     {
         if (
             $item instanceof GlobalSet
+            || $item instanceof Variables
             || $item instanceof Nav
             || $item instanceof NavTree
             || $item instanceof Form
@@ -29,7 +31,7 @@ class CustomInvalidator extends DefaultInvalidator
         $urls = [];
 
         if ($item instanceof Entry && $item->collectionHandle() === 'categories' && $item->linked_category) {
-            $urls[] = Str::ensureLeft($item->linked_category['url_path'], '/');
+            $urls[] = Str::ensureLeft($item->linked_category['url'], '/');
         }
 
         if (count($urls) >= 1) {

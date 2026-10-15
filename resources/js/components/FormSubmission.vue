@@ -77,14 +77,22 @@ export default {
 
             if (response.ok) {
                 this.success = true
-                Notify(window.config.statamic.translations.form.success, 'success')
+
+                if (!this.redirectUrl) {
+                    Notify(window.config.statamic.translations.form.success, 'success')
+                }
 
                 if (this.callback) {
                     await this.callback()
                 }
 
                 if (this.redirectUrl) {
-                    window.location.href = this.redirectUrl
+                    document.addEventListener(
+                        'vue:loaded',
+                        () => Notify(window.config.statamic.translations.form.success, 'success'),
+                        { once: true },
+                    )
+                    Turbo.visit(window.url(this.redirectUrl))
                 }
             } else {
                 this.error = true

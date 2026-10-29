@@ -5,6 +5,7 @@ namespace Rapidez\Statamic\Models;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use StatamicRadPack\Runway\Traits\HasRunwayResource;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute as CastAttribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +15,7 @@ use Rapidez\Statamic\Models\Traits\HasContentEntry;
 use Rapidez\Statamic\Observers\RunwayObserver;
 use Rapidez\Statamic\Facades\RapidezStatamic;
 use Rapidez\Statamic\Models\QueryBuilder\EntryFieldSortableBuilder;
+use Statamic\Facades\Entry as EntryFacade;
 
 #[ObservedBy([RunwayObserver::class])]
 class Brand extends Model
@@ -63,6 +65,11 @@ class Brand extends Model
                 });
             }
         });
+    }
+
+    protected function url(): CastAttribute
+    {
+        return CastAttribute::get(fn (): ?string => $this->entry ? EntryFacade::find($this->entry->id)?->url() : null);
     }
 
     public function scopeRunwaySearch(Builder $query, string $search)

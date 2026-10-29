@@ -133,10 +133,15 @@ return [
         // settings and it will always be right.
         'allowed_collections' => [
             'pages',
-            'brand',
-            'category',
-            'product',
-        ]
+        ],
+
+        // The link fields on navigation items that will be used as url when filled.
+        // Products, categories and brands can be selected within a link field.
+        // Use dot notation for link fields within a group.
+        'link_fields' => [
+            'link',
+            'link.link',
+        ],
     ],
 
     'disabled_sites' => [

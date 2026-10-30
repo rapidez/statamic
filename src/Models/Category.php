@@ -20,13 +20,6 @@ class Category extends CoreCategory
     public string $linkField = 'linked_category';
     public string $collection = 'categories';
 
-    protected static function booting(): void
-    {
-        parent::booting();
-
-        static::addGlobalScope(fn ($builder) => $builder->with('entry'));
-    }
-
     public function newEloquentBuilder($query): Builder
     {
         return new EntryFieldSortableBuilder($query);

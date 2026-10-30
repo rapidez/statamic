@@ -3,9 +3,9 @@
 namespace Rapidez\Statamic\Observers;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Statamic\Eloquent\Entries\Entry as StatamicEntry;
 use Statamic\Facades\Entry;
-use Statamic\Facades\Site;
 use Statamic\StaticCaching\Invalidator;
 use Statamic\Support\Arr;
 
@@ -16,7 +16,7 @@ class RunwayObserver
         if (!$model->entry || !$entry = StatamicEntry::fromModel($model->entry)) {
             $entry = Entry::make()
                 ->collection($model->collection)
-                ->locale(Site::selected()->handle())
+                ->locale($model->getSiteHandle())
                 ->data([$model->linkField => $model->{$model->linkKey ?? $model->getKeyName()}]);
         }
 
@@ -41,7 +41,10 @@ class RunwayObserver
         // of title and slug, we want this because there's no blueprint
         // for the collection. We don't need this for now.
         Entry::save($entry);
-        app(Invalidator::class)->refresh($entry);
+
+        // The entry has no route, the page lives on the url of the model. Runway
+        // saves within a transaction, so wait for that before (re)caching.
+        DB::afterCommit(fn () => app(Invalidator::class)->refresh($model));
 
         return false;
     }

@@ -4,8 +4,10 @@ namespace Rapidez\Statamic\StaticCaching;
 
 use Illuminate\Support\Arr;
 use Rapidez\Core\Facades\Rapidez;
-use Statamic\Eloquent\Globals\GlobalSet;
-use Statamic\Eloquent\Structures\Nav;
+use Statamic\Contracts\Globals\GlobalSet;
+use Statamic\Contracts\Globals\Variables;
+use Statamic\Contracts\Structures\Nav;
+use Statamic\Contracts\Structures\NavTree;
 use Statamic\Entries\Entry;
 use Statamic\Facades\URL;
 use Statamic\Forms\Form;
@@ -15,7 +17,14 @@ class CustomInvalidator extends DefaultInvalidator
 {
     public function invalidate($item)
     {
-        if ($item instanceof GlobalSet || $item instanceof Nav || $item instanceof Form || $this->rules === 'all') {
+        if (
+            $item instanceof GlobalSet
+            || $item instanceof Variables
+            || $item instanceof Nav
+            || $item instanceof NavTree
+            || $item instanceof Form
+            || $this->rules === 'all'
+        ) {
             return $this->cacher->flush();
         }
 

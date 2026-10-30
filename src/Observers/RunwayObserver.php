@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Statamic\Eloquent\Entries\Entry as StatamicEntry;
 use Statamic\Facades\Entry;
 use Statamic\Facades\Site;
+use Statamic\StaticCaching\Invalidator;
 
 class RunwayObserver
 {
@@ -39,6 +40,7 @@ class RunwayObserver
         // of title and slug, we want this because there's no blueprint
         // for the collection. We don't need this for now.
         Entry::save($entry);
+        app(Invalidator::class)->refresh($entry);
 
         return false;
     }

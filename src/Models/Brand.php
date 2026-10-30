@@ -5,6 +5,7 @@ namespace Rapidez\Statamic\Models;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use StatamicRadPack\Runway\Traits\HasRunwayResource;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute as CastAttribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -63,6 +64,11 @@ class Brand extends Model
                 });
             }
         });
+    }
+
+    protected function url(): CastAttribute
+    {
+        return CastAttribute::get(fn (): ?string => $this->entry?->url);
     }
 
     public function scopeRunwaySearch(Builder $query, string $search)

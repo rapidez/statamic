@@ -15,7 +15,6 @@ use Rapidez\Statamic\Models\Traits\HasContentEntry;
 use Rapidez\Statamic\Observers\RunwayObserver;
 use Rapidez\Statamic\Facades\RapidezStatamic;
 use Rapidez\Statamic\Models\QueryBuilder\EntryFieldSortableBuilder;
-use Statamic\Facades\Entry as EntryFacade;
 
 #[ObservedBy([RunwayObserver::class])]
 class Brand extends Model
@@ -69,7 +68,7 @@ class Brand extends Model
 
     protected function url(): CastAttribute
     {
-        return CastAttribute::get(fn (): ?string => $this->entry ? EntryFacade::find($this->entry->id)?->url() : null);
+        return CastAttribute::get(fn (): ?string => $this->entry?->url);
     }
 
     public function scopeRunwaySearch(Builder $query, string $search)

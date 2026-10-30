@@ -2,16 +2,18 @@
 
 namespace Rapidez\Statamic;
 
-use ArrayAccess;
 use Illuminate\Support\Facades\Cache;
 use Rapidez\Statamic\Exceptions\NavException;
 use Statamic\Facades\Site as SiteFacade;
 use Statamic\Fields\Value;
-use Statamic\Fieldtypes\Link\ArrayableLink;
+use Statamic\Fieldtypes\Group;
+use Statamic\Fieldtypes\Link;
 use Statamic\Statamic;
 
 class RapidezStatamic
 {
+    protected array $resolvedLinks = [];
+
     public static function getCurrentStoreId(): string
     {
         return once(fn() => (Statamic::isCpRoute()
@@ -33,6 +35,8 @@ class RapidezStatamic
 
     protected function buildMenu(string $key): array
     {
+        $this->resolvedLinks = [];
+
         return $this->buildTree(Statamic::tag($key)->fetch());
     }
 
@@ -58,23 +62,37 @@ class RapidezStatamic
 
     protected function resolveUrl(array $item): string
     {
-        foreach (config('rapidez.statamic.navigation.link_fields', ['link', 'link.link']) as $field) {
-            $link = $item;
-
-            foreach (explode('.', $field) as $key) {
-                $link = $link instanceof Value ? $link->value() : $link;
-                $link = is_array($link) || $link instanceof ArrayAccess ? ($link[$key] ?? null) : null;
-            }
-
-            $link = $link instanceof Value ? $link->value() : $link;
-
-            if ($link instanceof ArrayableLink && $url = $link->url()) {
-                return (string) $url;
+        foreach ($item as $value) {
+            if ($url = $this->linkUrl($value)) {
+                return $url;
             }
         }
 
         $url = $item['url'] ?? '';
 
         return (string) ($url instanceof Value ? $url->value() : $url);
+    }
+
+    protected function linkUrl(mixed $value): ?string
+    {
+        if (! $value instanceof Value || ! $value->raw()) {
+            return null;
+        }
+
+        if ($value->fieldtype() instanceof Group) {
+            foreach ($value->value() as $groupValue) {
+                if ($url = $this->linkUrl($groupValue)) {
+                    return $url;
+                }
+            }
+
+            return null;
+        }
+
+        if (! $value->fieldtype() instanceof Link) {
+            return null;
+        }
+
+        return $this->resolvedLinks[$value->raw()] ??= $value->value()?->url() ?: null;
     }
 }

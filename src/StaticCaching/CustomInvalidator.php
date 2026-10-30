@@ -5,6 +5,8 @@ namespace Rapidez\Statamic\StaticCaching;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Rapidez\Core\Facades\Rapidez;
+use Rapidez\Core\Models\Category;
+use Rapidez\Core\Models\Product;
 use Statamic\Contracts\Globals\GlobalSet;
 use Statamic\Contracts\Globals\Variables;
 use Statamic\Contracts\Structures\Nav;
@@ -45,7 +47,14 @@ class CustomInvalidator extends DefaultInvalidator
     // Runway models like products and categories, brands for example don't have a page.
     protected function getModelUrls(Model $model): array
     {
-        if (! $model->hasAttribute('url') || ! method_exists($model, 'getSiteHandle')) {
+        // The configured Rapidez models, as projects could have their own url logic.
+        $rapidezModel = match (true) {
+            $model instanceof Product => config('rapidez.models.product'),
+            $model instanceof Category => config('rapidez.models.category'),
+            default => null,
+        };
+
+        if (! $rapidezModel || ! method_exists($model, 'getSiteHandle')) {
             return [];
         }
 
@@ -57,7 +66,7 @@ class CustomInvalidator extends DefaultInvalidator
         // the request domain, so we fetch it again within the store of the site.
         $url = Rapidez::withStore(
             $site->attributes()['magento_store_id'] ?? config('rapidez.store'),
-            fn () => $model->newQuery()->whereKey($model->getKey())->first()?->url
+            fn () => $rapidezModel::query()->whereKey($model->getKey())->first()?->url
         );
 
         return $url ? [URL::tidy($site->absoluteUrl() . '/' . $url)] : [];

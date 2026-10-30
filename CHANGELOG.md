@@ -1,6 +1,19 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/8.2.0...8.2.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/8.3.0...8.3.0)
+## [8.3.0](https://github.com/rapidez/statamic/releases/tag/8.3.0) - 2026-10-20
+
+### Added
+
+- Control panel indexer widget (#218)
+- Added the nocacheScoped directive (#219)
+
+### Fixed
+
+- Fix sitemap url (#217)
+- Fix setStore issue (#221)
+- Bugfixes: notifications, product slider, tree cache clear and category cache invalidation (#222)
+
 ## [8.2.0](https://github.com/rapidez/statamic/releases/tag/8.2.0) - 2026-08-11
 
 ### Added

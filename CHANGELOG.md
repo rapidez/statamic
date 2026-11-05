@@ -1,6 +1,14 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/8.3.0...8.3.0)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/8.3.1...8.3.1)
+## [8.3.1](https://github.com/rapidez/statamic/releases/tag/8.3.1) - 2026-11-05
+
+### Fixed
+
+- Invalidate category and products static caches correctly (#225)
+- Form field fallbacks (#227)
+- Avoid N+1 in lazy loading of entry content (#220)
+
 ## [8.3.0](https://github.com/rapidez/statamic/releases/tag/8.3.0) - 2026-10-20
 
 ### Added

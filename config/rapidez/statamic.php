@@ -133,10 +133,7 @@ return [
         // settings and it will always be right.
         'allowed_collections' => [
             'pages',
-            'brand',
-            'category',
-            'product',
-        ]
+        ],
     ],
 
     'disabled_sites' => [

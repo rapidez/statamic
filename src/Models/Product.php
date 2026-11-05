@@ -32,8 +32,6 @@ class Product extends CoreProduct
         static::addGlobalScope(function (Builder $builder) {
             $builder->whereInAttribute('visibility', config('rapidez.statamic.runway.product_visibility'));
         });
-
-        static::addGlobalScope(fn ($builder) => $builder->with('entry'));
     }
 
     #[Override]

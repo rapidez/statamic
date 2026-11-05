@@ -43,6 +43,7 @@ use Statamic\Http\Controllers\FrontendController;
 use Statamic\Http\Middleware\RedirectAbsoluteDomains;
 use Statamic\Sites\Sites;
 use Statamic\Statamic;
+use Statamic\StaticCaching\Cacher;
 use Statamic\StaticCaching\Middleware\Cache as StaticCache;
 use Statamic\View\Cascade as StatamicCascade;
 use StatamicRadPack\Runway\ResourceLinkType;
@@ -298,6 +299,12 @@ class RapidezStatamicServiceProvider extends ServiceProvider
                 CustomInvalidator::class
             );
         }
+
+        // Statamic only passes the configured rules to the DefaultInvalidator.
+        $this->app->bind(CustomInvalidator::class, fn ($app) => new CustomInvalidator(
+            $app[Cacher::class],
+            $app['config']['statamic.static_caching.invalidation.rules']
+        ));
 
         return $this;
     }

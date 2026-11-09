@@ -23,7 +23,7 @@ trait HasContentEntry
             ->afterQuery(function ($models) {
                 $first = $models->first();
 
-                if (! $first instanceof self) {
+                if (! $first instanceof self || ! method_exists($first, 'runwayResource')) {
                     return;
                 }
 

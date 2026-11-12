@@ -18,6 +18,7 @@ use Rapidez\Statamic\Commands\ImportBrands;
 use Rapidez\Statamic\Commands\InstallCommand;
 use Rapidez\Statamic\Commands\InvalidateCacheCommand;
 use Rapidez\Statamic\Commands\MigrateCmsPages;
+use Rapidez\Statamic\Commands\MigrateProductSkus;
 use Rapidez\Statamic\Contracts\ImportsBrands;
 use Rapidez\Statamic\Extend\Link\MagentoRunwayLinkType;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
@@ -132,6 +133,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             InstallCommand::class,
             InvalidateCacheCommand::class,
             MigrateCmsPages::class,
+            MigrateProductSkus::class,
         ]);
 
         return $this;

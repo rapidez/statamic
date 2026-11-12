@@ -18,7 +18,9 @@ use Rapidez\Statamic\Commands\ImportBrands;
 use Rapidez\Statamic\Commands\InstallCommand;
 use Rapidez\Statamic\Commands\InvalidateCacheCommand;
 use Rapidez\Statamic\Commands\MigrateCmsPages;
+use Rapidez\Statamic\Commands\MigrateNavLinks;
 use Rapidez\Statamic\Contracts\ImportsBrands;
+use Rapidez\Statamic\Extend\Link\BrandLinkType;
 use Rapidez\Statamic\Extend\Link\MagentoRunwayLinkType;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
 use Rapidez\Statamic\Forms\JsDrivers\Vue;
@@ -132,6 +134,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             InstallCommand::class,
             InvalidateCacheCommand::class,
             MigrateCmsPages::class,
+            MigrateNavLinks::class,
         ]);
 
         return $this;
@@ -325,9 +328,15 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         Statamic::booted(function (): void {
             Runway::discoverResources();
 
-            foreach (['product', 'category'] as $handle) {
+            $linkTypes = [
+                'product' => MagentoRunwayLinkType::class,
+                'category' => MagentoRunwayLinkType::class,
+                'brand' => BrandLinkType::class,
+            ];
+
+            foreach ($linkTypes as $handle => $linkType) {
                 if (Runway::hasResource($handle)) {
-                    Link::extend(ResourceLinkType::PREFIX.$handle, MagentoRunwayLinkType::class);
+                    Link::extend(ResourceLinkType::PREFIX.$handle, $linkType);
                 }
             }
         });

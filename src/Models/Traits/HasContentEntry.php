@@ -7,11 +7,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Rapidez\Statamic\Models\BaseEntry;
+use Statamic\Facades\Collection;
 use Statamic\Facades\Site;
+use Statamic\Fieldtypes\Assets\Assets;
 use Statamic\Statamic;
 
 trait HasContentEntry
 {
+    protected array $augmentedEntryValues = [];
+
     public static function bootHasContentEntry(): void
     {
         static::addGlobalScope('entry', fn (Builder $builder) => $builder->with('entry'));
@@ -85,9 +89,23 @@ trait HasContentEntry
     public function throwMissingAttributeExceptionIfApplicable($key)
     {
         if ($this->relationLoaded('entry') && $this->entry && array_key_exists($key, $this->entry->data ?? [])) {
-            return $this->entry->data[$key];
+            return $this->augmentedEntryValues[$key] ??= $this->augmentEntryValue($key, $this->entry->data[$key]);
         }
 
         return parent::throwMissingAttributeExceptionIfApplicable($key);
+    }
+
+    protected function augmentEntryValue(string $key, mixed $value): mixed
+    {
+        $fieldtype = Collection::find($this->entry->collection)
+            ?->entryBlueprint($this->entry->blueprint)
+            ?->field($key)
+            ?->fieldtype();
+
+        if (! $fieldtype || $fieldtype->isRelationship() || $fieldtype instanceof Assets) {
+            return $value;
+        }
+
+        return $fieldtype->augment($value);
     }
 }

@@ -3,6 +3,7 @@
 namespace Rapidez\Statamic\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 use Rapidez\Statamic\Models\Product;
 use Statamic\Facades\Entry;
 use Statamic\Facades\GlobalSet;
@@ -21,11 +22,11 @@ class MigrateProductSkus extends Command
 
     protected $description = 'Replace product SKUs with entity ids in Runway product fields';
 
-    protected array $resources = [];
+    protected Collection $resources;
 
-    protected array $entityIds = [];
+    protected Collection $entityIds;
 
-    protected array $unknown = [];
+    protected Collection $unknown;
 
     protected int $converted = 0;
 
@@ -35,11 +36,9 @@ class MigrateProductSkus extends Command
     {
         $this->resources = Runway::allResources()
             ->filter(fn ($resource) => $resource->model() instanceof Product)
-            ->map->handle()
-            ->values()
-            ->all();
+            ->map->handle();
 
-        if (! $this->resources) {
+        if ($this->resources->isEmpty()) {
             $this->error('No Runway resource found for ' . Product::class);
 
             return static::FAILURE;
@@ -47,6 +46,7 @@ class MigrateProductSkus extends Command
 
         $product = new Product;
         $this->entityIds = Product::withoutGlobalScopes()->pluck('entity_id', 'sku');
+        $this->unknown = collect();
 
         foreach (Entry::query()->lazy() as $entry) {
             $this->migrate(
@@ -56,7 +56,7 @@ class MigrateProductSkus extends Command
             );
         }
 
-        foreach (GlobalSet::all() as $globalSet) {
+        foreach(GlobalSet::all() as $globalSet) {
             foreach ($globalSet->localizations() as $variables) {
                 $this->migrate(
                     $variables->blueprint()->fields(),
@@ -68,8 +68,8 @@ class MigrateProductSkus extends Command
 
         $this->info(($this->option('dry-run') ? 'Would convert ' : 'Converted ') . $this->converted . ' SKUs in ' . $this->changed . ' items.');
 
-        if ($this->unknown) {
-            $this->warn('These string values are not a known SKU and were not changed: ' . implode(', ', array_keys($this->unknown)));
+        if ($this->unknown->isNotEmpty()) {
+            $this->warn('These string values are not a known SKU and were not changed: ' . $this->unknown->unique()->implode(', '));
         }
 
         return static::SUCCESS;
@@ -77,10 +77,10 @@ class MigrateProductSkus extends Command
 
     protected function migrate(Fields $fields, $item, string $label): void
     {
-        $original = $item->data()->all();
-        $data = $this->convertFields($fields, $original);
+        $converted = $this->converted;
+        $data = $this->convertFields($fields, $item->data());
 
-        if ($data === $original) {
+        if ($this->converted === $converted) {
             return;
         }
 
@@ -91,18 +91,15 @@ class MigrateProductSkus extends Command
             return;
         }
 
-        $item->data($data)->saveQuietly();
+        $item->data($data->toArray())->saveQuietly();
     }
 
-    protected function convertFields(Fields $fields, array $data): array
+    protected function convertFields(Fields $fields, Collection $data): Collection
     {
-        foreach ($fields->all() as $handle => $field) {
-            if (array_key_exists($handle, $data)) {
-                $data[$handle] = $this->convertField($field, $data[$handle]);
-            }
-        }
-
-        return $data;
+        return $data->map(fn ($value, $handle) => $fields->has($handle)
+            ? $this->convertField($fields->get($handle), $value)
+            : $value
+        );
     }
 
     protected function convertField(Field $field, mixed $value): mixed
@@ -110,13 +107,13 @@ class MigrateProductSkus extends Command
         $fieldtype = $field->fieldtype();
 
         return match (true) {
-            $fieldtype instanceof BaseFieldtype => in_array($field->get('resource'), $this->resources, true)
+            $fieldtype instanceof BaseFieldtype => $this->resources->contains($field->get('resource'))
                 ? $this->convertValue($value)
                 : $value,
             $fieldtype instanceof Bard => $this->convertBard($fieldtype, $value),
             $fieldtype instanceof Replicator => $this->convertReplicator($fieldtype, $value),
             $fieldtype instanceof Grid => $this->convertGrid($fieldtype, $value),
-            $fieldtype instanceof Group => is_array($value) ? $this->convertFields($fieldtype->fields(), $value) : $value,
+            $fieldtype instanceof Group => is_array($value) ? $this->convertFields($fieldtype->fields(), collect($value)) : $value,
             default => $value,
         };
     }
@@ -124,7 +121,7 @@ class MigrateProductSkus extends Command
     protected function convertValue(mixed $value): mixed
     {
         if (is_array($value)) {
-            return array_map($this->convertSku(...), $value);
+            return collect($value)->map($this->convertSku(...));
         }
 
         return $this->convertSku($value);
@@ -136,15 +133,15 @@ class MigrateProductSkus extends Command
             return $value;
         }
 
-        if (! isset($this->entityIds[$value])) {
-            $this->unknown[$value] = true;
+        if (! $this->entityIds->has($value)) {
+            $this->unknown->push($value);
 
             return $value;
         }
 
         $this->converted++;
 
-        return (int) $this->entityIds[$value];
+        return (int) $this->entityIds->get($value);
     }
 
     protected function convertReplicator(Replicator $fieldtype, mixed $value): mixed
@@ -153,13 +150,10 @@ class MigrateProductSkus extends Command
             return $value;
         }
 
-        foreach ($value as $index => $set) {
-            if (is_array($set) && is_string($set['type'] ?? null)) {
-                $value[$index] = $this->convertFields($fieldtype->fields($set['type'], $index), $set);
-            }
-        }
-
-        return $value;
+        return collect($value)->map(fn ($set, $index) => is_array($set) && is_string($set['type'] ?? null)
+            ? $this->convertFields($fieldtype->fields($set['type'], $index), collect($set))
+            : $set
+        );
     }
 
     protected function convertBard(Bard $fieldtype, mixed $value): mixed
@@ -168,15 +162,15 @@ class MigrateProductSkus extends Command
             return $value;
         }
 
-        foreach ($value as $index => $node) {
+        return collect($value)->map(function ($node, $index) use ($fieldtype) {
             $values = $node['attrs']['values'] ?? null;
 
             if (($node['type'] ?? null) === 'set' && is_array($values) && is_string($values['type'] ?? null)) {
-                $value[$index]['attrs']['values'] = $this->convertFields($fieldtype->fields($values['type'], $index), $values);
+                $node['attrs']['values'] = $this->convertFields($fieldtype->fields($values['type'], $index), collect($values));
             }
-        }
 
-        return $value;
+            return $node;
+        });
     }
 
     protected function convertGrid(Grid $fieldtype, mixed $value): mixed
@@ -185,12 +179,9 @@ class MigrateProductSkus extends Command
             return $value;
         }
 
-        foreach ($value as $index => $row) {
-            if (is_array($row)) {
-                $value[$index] = $this->convertFields($fieldtype->fields($index), $row);
-            }
-        }
-
-        return $value;
+        return collect($value)->map(fn ($row, $index) => is_array($row)
+            ? $this->convertFields($fieldtype->fields($index), collect($row))
+            : $row
+        );
     }
 }

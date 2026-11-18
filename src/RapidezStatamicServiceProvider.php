@@ -22,6 +22,7 @@ use Rapidez\Statamic\Contracts\ImportsBrands;
 use Rapidez\Statamic\Extend\Link\MagentoRunwayLinkType;
 use Rapidez\Statamic\Extend\SitesLinkedToMagentoStores;
 use Rapidez\Statamic\Forms\JsDrivers\Vue;
+use Rapidez\Statamic\Http\Middleware\SetStoreFromSelectedSite;
 use Rapidez\Statamic\Http\ViewComposers\ConfigComposer;
 use Rapidez\Statamic\Http\ViewComposers\StatamicGlobalDataComposer;
 use Rapidez\Statamic\Listeners\ClearNavTreeCache;
@@ -72,6 +73,7 @@ class RapidezStatamicServiceProvider extends ServiceProvider
             $router = app(Router::class);
             $router->pushMiddlewareToGroup('web', StaticCache::class);
             $router->pushMiddlewareToGroup('web', RedirectAbsoluteDomains::class);
+            $router->pushMiddlewareToGroup('statamic.cp.authenticated', SetStoreFromSelectedSite::class);
         });
         $this->app->afterBootstrapping(BootProviders::class, function () {
             // Prevent infinite locks by removing the static cache from the statamic.web middleware.

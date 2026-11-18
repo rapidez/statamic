@@ -1,6 +1,17 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/statamic/compare/8.3.1...8.3.1)
+[Unreleased changes](https://github.com/rapidez/statamic/compare/8.4.0...8.4.0)
+## [8.4.0](https://github.com/rapidez/statamic/releases/tag/8.4.0) - 2026-11-18
+
+### Changed
+
+- Augment values in entries properly for relations (#230)
+
+### Fixed
+
+- Check if runwayResource exists so we don't run it incorrectly (#228)
+- Exclude frontend build files from dist (#233)
+
 ## [8.3.1](https://github.com/rapidez/statamic/releases/tag/8.3.1) - 2026-11-05
 
 ### Fixed

@@ -27,6 +27,8 @@ class BaseUser extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'preferences' => 'json',
+            'two_factor_confirmed_at' => 'datetime',
         ];
     }
 

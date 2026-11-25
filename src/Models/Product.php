@@ -6,7 +6,6 @@ use Override;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
-use Rapidez\Core\Models\Product as CoreProduct;
 use Rapidez\Statamic\Models\Traits\HasContentEntry;
 use Rapidez\Statamic\Observers\RunwayObserver;
 use StatamicRadPack\Runway\Traits\HasRunwayResource;
@@ -15,14 +14,17 @@ use Rapidez\Core\Models\Attribute as EavAttribute;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 #[ObservedBy([RunwayObserver::class])]
-class Product extends CoreProduct
+class Product extends EavProduct
 {
     use HasRunwayResource, HasContentEntry;
 
-    protected $primaryKey = 'entity_id';
+    protected $primaryKey = 'sku';
+    protected $keyType = 'string';
+    public $incrementing = false;
+
+    public static ?string $modelName = 'runway_product';
 
     public string $linkField = 'linked_product';
-    public string $linkKey = 'sku';
     public string $collection = 'products';
 
     protected static function booting(): void
@@ -86,7 +88,7 @@ class Product extends CoreProduct
                 ->orWhere($table.'.sku', 'like', $term);
 
             if (is_numeric($searchQuery)) {
-                $q->orWhere($q->getModel()->getQualifiedKeyName(), $searchQuery);
+                $q->orWhere($q->getModel()->qualifyColumn('entity_id'), $searchQuery);
             }
         });
     }

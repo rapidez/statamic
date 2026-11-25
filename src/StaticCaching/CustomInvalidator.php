@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Rapidez\Core\Facades\Rapidez;
 use Rapidez\Core\Models\Category;
-use Rapidez\Core\Models\Product;
+use Rapidez\Statamic\Models\Product;
 use Statamic\Contracts\Globals\GlobalSet;
 use Statamic\Contracts\Globals\Variables;
 use Statamic\Contracts\Structures\Nav;
@@ -66,7 +66,7 @@ class CustomInvalidator extends DefaultInvalidator
         // the request domain, so we fetch it again within the store of the site.
         $url = Rapidez::withStore(
             $site->attributes()['magento_store_id'] ?? config('rapidez.store'),
-            fn () => $rapidezModel::query()->whereKey($model->getKey())->first()?->url
+            fn () => $rapidezModel::query()->whereKey($model->entity_id)->first()?->url
         );
 
         return $url ? [URL::tidy($site->absoluteUrl() . '/' . $url)] : [];

@@ -3,24 +3,22 @@
 namespace Rapidez\Statamic;
 
 use Illuminate\Support\Facades\Cache;
-use Rapidez\BladeDirectives\OptionalDeep;
-use Statamic\Statamic;
-use Statamic\Eloquent\Entries\Entry;
-use Rapidez\Core\Facades\Rapidez;
 use Rapidez\Statamic\Exceptions\NavException;
-use Statamic\Structures\Page;
-use Statamic\Facades\Site;
-use Illuminate\Support\Str;
+use Statamic\Facades\Site as SiteFacade;
+use Statamic\Fields\Value;
+use Statamic\Fieldtypes\Group;
+use Statamic\Fieldtypes\Link;
+use Statamic\Statamic;
 
 class RapidezStatamic
 {
-    protected array $navCache = [];
+    protected array $resolvedLinks = [];
 
     public static function getCurrentStoreId(): string
     {
         return once(fn() => (Statamic::isCpRoute()
-            ? (Site::selected()->attributes['magento_store_id'] ?? '1')
-            : (Site::current()->attributes['magento_store_id'] ?? '1')
+            ? (SiteFacade::selected()->attributes['magento_store_id'] ?? '1')
+            : (SiteFacade::current()->attributes['magento_store_id'] ?? '1')
         ));
     }
 
@@ -37,27 +35,24 @@ class RapidezStatamic
 
     protected function buildMenu(string $key): array
     {
-        $nav = Statamic::tag($key)->fetch();
+        $this->resolvedLinks = [];
 
-        $cacheKey = $key . '-' . config('rapidez.store');
-        $this->navCache[$key] = Cache::get($cacheKey, []);
-
-        return $this->buildTree($nav, $key);
+        return $this->buildTree(Statamic::tag($key)->fetch());
     }
 
-    protected function buildTree(array $items, string $nav): array
+    protected function buildTree(array $items): array
     {
         $tree = [];
 
         foreach ($items as $item) {
             if ($item['children']) {
-                $children = $this->buildTree($item['children'], $nav);
+                $children = $this->buildTree($item['children']);
                 if ($children) {
                     $item['children'] = $children;
                 }
             }
 
-            $item['url'] = $this->determineEntryUrl($item['entry_id']->augmentable(), $nav);
+            $item['url'] = $this->resolveUrl($item);
 
             $tree[] = $item;
         }
@@ -65,45 +60,39 @@ class RapidezStatamic
         return $tree;
     }
 
-    public function determineEntryUrl(Entry|Page|string|OptionalDeep $entry, string $nav = 'global-link'): string
+    protected function resolveUrl(array $item): string
     {
-        $cacheKey = $nav . '-' . config('rapidez.store');
-
-        if ($entry instanceof OptionalDeep) {
-            $entry = $entry->get();
+        foreach ($item as $value) {
+            if ($url = $this->linkUrl($value)) {
+                return $url;
+            }
         }
 
-        if (is_string($entry)) {
-            return $entry;
+        $url = $item['url'] ?? '';
+
+        return (string) ($url instanceof Value ? $url->value() : $url);
+    }
+
+    protected function linkUrl(mixed $value): ?string
+    {
+        if (! $value instanceof Value || ! $value->raw()) {
+            return null;
         }
 
-        if ( ! isset($this->navCache[$nav][$entry->id()])) {
-            $linkedRunwayResourceKey = $entry
-                ->data()
-                ->keys()
-                ->firstWhere(fn($field) => collect([
-                    ...config('rapidez.statamic.navigation.allowed_collections'),
-                    'linked_',
-                ])->firstWhere(fn($key) => str($field)->startsWith($key)));
-
-            if (!$linkedRunwayResourceKey || !$entry->{$linkedRunwayResourceKey} || $entry->slug()) {
-                return $entry->url() ?? '';
+        if ($value->fieldtype() instanceof Group) {
+            foreach ($value->value() as $groupValue) {
+                if ($url = $this->linkUrl($groupValue)) {
+                    return $url;
+                }
             }
 
-            if (!isset($entry->{$linkedRunwayResourceKey}['url'])) {
-                $this->navCache[$nav][$entry->id()] = '';
-
-                return '';
-            }
-
-            $siteUrl = Str::finish(Site::current()->absoluteUrl(), '/');
-            $urlPath = ltrim($entry->{$linkedRunwayResourceKey}['url'], '/');
-
-            $this->navCache[$nav][$entry->id()] = $siteUrl . $urlPath;
-
-            Cache::forever($cacheKey, $this->navCache[$nav]);
+            return null;
         }
 
-        return $this->navCache[$nav][$entry->id()];
+        if (! $value->fieldtype() instanceof Link) {
+            return null;
+        }
+
+        return $this->resolvedLinks[$value->raw()] ??= $value->value()?->url() ?: null;
     }
 }

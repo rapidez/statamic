@@ -3,6 +3,7 @@
 namespace Rapidez\Statamic\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Rapidez\Core\Models\Model;
 use Rapidez\Core\Models\Traits\Searchable;
 use Statamic\Eloquent\Entries\Entry;
@@ -56,6 +57,11 @@ class BaseEntry extends Model
         ];
 
         return Eventy::filter('index.' . static::getModelName() . '.data', array_merge($data, $this->getAdditionalIndexData($entry)), $entry);
+    }
+
+    protected function url(): Attribute
+    {
+        return Attribute::get(fn (): ?string => Entry::fromModel($this)->url());
     }
 
     protected function getAdditionalIndexData(Entry $entry): array

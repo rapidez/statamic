@@ -266,6 +266,20 @@ class RapidezStatamicServiceProvider extends ServiceProvider
         ], 'rapidez-statamic-content');
 
         $this->publishes([
+            __DIR__.'/../resources/content/collections' => base_path('content/collections'),
+            __DIR__.'/../resources/content/trees' => base_path('content/trees'),
+            __DIR__.'/../resources/blueprints/collections/pages' => resource_path('blueprints/collections/pages'),
+        ], 'rapidez-statamic-pages');
+
+        $this->publishes([
+            __DIR__.'/../resources/users/roles.yaml' => resource_path('users/roles.yaml'),
+        ], 'rapidez-statamic-roles');
+
+        $this->publishes([
+            __DIR__.'/../database/migrations/create_users_table.php.stub' => database_path('migrations/0001_01_01_000000_create_users_table.php'),
+        ], 'rapidez-statamic-users-migration');
+
+        $this->publishes([
             __DIR__.'/../resources/views' => resource_path('views/vendor/rapidez-statamic'),
         ], 'views');
 

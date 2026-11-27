@@ -4,6 +4,7 @@ namespace Rapidez\Statamic\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 use Rapidez\Core\Facades\Rapidez;
 use Statamic\Facades\Site;
 
@@ -18,6 +19,10 @@ class SetStoreFromSelectedSite
 
             if ($storeId) {
                 Rapidez::setStore($storeId);
+
+                // Make sure the root url stays the same.
+                URL::forceRootUrl($request->root());
+                config()->set('frontend.base_url', url('/'));
             }
         }
 
